@@ -36,6 +36,11 @@ def All_parameters():
     #---------------------------------------------------------------------------
     #Sample parameters
 
+    #Box définition
+    x_box_min = -230 #µm
+    x_box_max = 230 #µm
+    y_box_min = -130 #µm
+
     #spatial discretisation
     x_min = -230
     x_max = 230
@@ -55,7 +60,10 @@ def All_parameters():
     'grain_discretisation' : grain_discretisation,
     'Emec_M' : np.array(np.zeros((len(y_L),len(x_L)))),
     'Eche_M' : np.array(np.zeros((len(y_L),len(x_L)))),
-    'Ed_M' : np.array(np.zeros((len(y_L),len(x_L))))
+    'Ed_M' : np.array(np.zeros((len(y_L),len(x_L)))),
+    'x_box_min' : x_box_min,
+    'x_box_max' : x_box_max,
+    'y_box_min' : y_box_min
     }
 
     #---------------------------------------------------------------------------
@@ -70,15 +78,21 @@ def All_parameters():
     dt_PF_level1 = dt_PF_init/2
     dt_PF_level2 = dt_PF_level1/2
     dt_PF_level3 = dt_PF_level2/2
-
     #criteria to switch level
     Ed_level1 = 10
     Ed_level2 = 20
     Ed_level3 = 25
 
-    #Visual parameters
-    c_min = 0
-    c_max = 0.08
+    #DEM parameters
+    dt_DEM_crit = math.pi*min(min(L_Dimension)/2,min(L_R))/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
+    dt_DEM = dt_DEM_crit/8 #s time step during DEM simulation
+    factor_neighborhood = 1.5 #margin to detect a grain into a neighborhood
+    i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
+    #Stop criteria of the DEM
+    i_DEM_stop = 3000 #maximum iteration for one DEM simulation
+    Ecin_ratio = 0.0002
+    n_window_stop = 50
+    dy_box_max_stop = 0.5
 
     #Margin for sphericity study
     sphericity_margin = 0.05
@@ -86,13 +100,20 @@ def All_parameters():
     n_spatial_inscribing = 100
 
     #List of plot to do
+    Debug = True #plot configuration before and after DEM simulation
+    Debug_DEM = False #plot configuration inside DEM
+    i_print_plot = 200 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, C_at_P, Diff_Solute, dt, Ed, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Sint_MinEtai, Sphericity, sum_Ed
     L_flag_plot = ['Config', 'C_at_P', 'Diff_Solute', 'dt', 'Sphericity', 'Kc', 'Movie', 'sum_Ed']
+    #Visual parameters (for plot Config)
+    c_min = 0
+    c_max = 0.08
 
-    #Find a simulation ame
-    template = 'PS_Long_Run' #template of the name of the simulation
+    #Save the simulation
     SaveData = True #Save data or not
+    clean_memory = True #delete Data, Input, Output at the end of the simulation
     foldername = 'Data_2G_ACS' #name of the folder where data are saved
+    template = 'PS_Long_Run' #template of the name of the simulation
     if SaveData :
         i_run = 1
         folderpath = Path('../'+foldername+'/'+template+'_'+str(i_run))
@@ -109,6 +130,12 @@ def All_parameters():
     'sphericity_margin' : sphericity_margin,
     'n_spatial_inscribing' : n_spatial_inscribing,
     'np_proc' : np_proc,
+    'Debug' : Debug,
+    'Debug_DEM' : Debug_DEM,
+    'i_print_plot' : i_print_plot,
+    'factor_neighborhood' : factor_neighborhood,
+    'factor_distribution_etai' : factor_distribution_etai,
+    'clean_memory' : clean_memory,
     'SaveData' : SaveData,
     'namefile' : namefile,
     'dt_PF' : dt_PF_init,
@@ -120,6 +147,12 @@ def All_parameters():
     'Ed_level2' : Ed_level2,
     'Ed_level3' : Ed_level3,
     'n_t_PF' : n_t_PF,
+    'dt_DEM' : dt_DEM,
+    'i_update_neighborhoods': i_update_neighborhoods,
+    'i_DEM_stop' : i_DEM_stop,
+    'Ecin_ratio' : Ecin_ratio,
+    'n_window_stop' : n_window_stop,
+    'dy_box_max_stop' : dy_box_max_stop,
     'foldername' : foldername,
     'n_t_PFDEM' : n_t_PFDEM,
     'L_flag_plot' : L_flag_plot
@@ -151,10 +184,14 @@ def All_parameters():
     method_to_compute_kc = 'wfd' #dilation, wfd or interpolation
     #Definition of the evolution of the penalty term inside a grain (for interpolation)
     tau_kappa_c = 5 #kc = kc0 e(-(R_i-d)/R_i/tau_kappa_c)
-    #Define the spring value
-    Y = 70*10**9*10**(-6*2)
-    nu = 0.3
-
+    #DEM
+    Y = 70*(10**9)*(10**6)*(10**(-12)) #Young Modulus µN/µm2
+    nu = 0.3 #Poisson's ratio
+    rho = 2500*10**(-6*3) #density kg/µm3
+    rho_surf = 4/3*rho*R_mean #kg/µm2
+    mu_friction_gg = 0.5 #grain-grain
+    mu_friction_gw = 0 #grain-wall
+    coeff_restitution = 0.2 #1 is perfect elastic
 
     dict_material = {
     'w' : width_int,
@@ -165,7 +202,12 @@ def All_parameters():
     'method_to_compute_kc' : method_to_compute_kc,
     'Energy_barrier' : Energy_barrier,
     'Y' : Y,
-    'nu' : nu
+    'nu' : nu,
+    'rho' : rho,
+    'rho_surf' : rho_surf,
+    'mu_friction_gg' : mu_friction_gg,
+    'mu_friction_gw' : mu_friction_gw,
+    'coeff_restitution' : coeff_restitution
     }
 
     #---------------------------------------------------------------------------

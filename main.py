@@ -19,6 +19,8 @@ import math
 
 #Own functions and classes
 import Grain
+import Contact_gg
+import Contact_gw
 import Owntools
 import Owntools.Compute
 import Owntools.PFtoDEM_Multi
@@ -54,9 +56,93 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     simulation_report.write_and_print(f"\nITERATION {dict_algorithm['i_PFDEM']} / {dict_algorithm['n_t_PFDEM']}\n\n",f"\nITERATION {dict_algorithm['i_PFDEM']} / {dict_algorithm['n_t_PFDEM']}\n")
     os.mkdir('Output/Ite_'+str(dict_algorithm['i_PFDEM']))
 
+    # Saving center to compute a rigid body motion
+    L_center_g = []
+    for grain in dict_sample['L_g']:
+        L_center_g.append(grain.center.copy())
+
     #---------------------------------------------------------------------------
-    #move grains
+    #DEM to move grains
     #---------------------------------------------------------------------------
+
+    DEM_loop_statut = True
+    dict_algorithm['i_DEM'] = 0
+    while DEM_loop_statut :
+        # update element in dict
+        dict_algorithm['i_DEM'] = dict_algorithm['i_DEM'] + 1
+
+        #Initialize the grain kinematic
+        for grain in dict_sample['L_g']:
+            grain.init_f_control(dict_sollicitations)
+
+        # Detection of contacts between grains
+        if dict_algorithm['i_DEM'] % dict_algorithm['i_update_neighborhoods']  == 0:
+            Contact_gg.Update_Neighborhoods(dict_algorithm,dict_sample)
+        Contact_gg.Grains_Polyhedral_contact_Neighborhoods(dict_material,dict_sample)
+
+        # Detection of contacts between grain and walls
+        if dict_algorithm['i_DEM'] % dict_algorithm['i_update_neighborhoods']  == 0:
+            Contact_gw.Update_wall_Neighborhoods(dict_algorithm, dict_sample)
+        Contact_gw.Grains_Polyhedral_Wall_contact_Neighborhood(dict_material,dict_sample)
+
+        #Compute contact interactions (g-g and g-w)
+        for contact in dict_sample['L_contact']:
+            contact.DEM_gg_Polyhedral_normal()
+            contact.DEM_gg_Polyhedral_tangential(dict_algorithm['dt_DEM'])
+        for contact in dict_sample['L_contact_gw'] :
+            contact.DEM_gw_Polyhedral_normal()
+            contact.DEM_gw_Polyhedral_tangential(dict_algorithm['dt_DEM'])
+
+        #Move particles and trackers
+        #Semi implicit euler scheme
+        Ecin = 0
+        Force_applied = 0
+        for grain in dict_sample['L_g']:
+            a_i = grain.f/grain.mass
+            v_i = grain.v + a_i*dict_algorithm['dt_DEM']
+            dw_i = grain.mz/grain.inertia
+            w_i = grain.w + dw_i*dict_algorithm['dt_DEM']
+            grain.update_geometry_kinetic(v_i,a_i,w_i,dict_algorithm['dt_DEM']) #Move grains
+            Ecin = Ecin + 0.5*grain.mass*np.linalg.norm(grain.v)**2/len(dict_sample['L_g'])
+
+        #Control the y_max to verify vertical confinement
+        Owntools.Control_y_max_NR(dict_sample,dict_sollicitations)
+        #trackers
+        dict_tracker['Ecin'].append(Ecin)
+        dict_tracker['y_box_max'].append(dict_sample['y_box_max'])
+        dict_tracker['Force_on_upper_wall'].append(dict_sollicitations['Force_on_upper_wall'])
+
+        if dict_algorithm['i_DEM'] % dict_algorithm['i_print_plot'] == 0:
+            print('\nPF '+str(dict_algorithm['i_PF'])+' -> i_DEM '+str(dict_algorithm['i_DEM']+1)+' / '+str(dict_algorithm['i_DEM_stop']+1)+' (max)')
+            print('Ecin',int(Ecin),'/',int(dict_algorithm['Ecin_stop']),'('+str(int(100*Ecin/dict_algorithm['Ecin_stop'])),' %)')
+            print('F_confinement',int(dict_sollicitations['Force_on_upper_wall']),'/',int(dict_sollicitations['Vertical_Confinement_Force']),'('+str(int(100*dict_sollicitations['Force_on_upper_wall']/dict_sollicitations['Vertical_Confinement_Force'])),' %)')
+
+            if dict_algorithm['Debug_DEM'] :
+                Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
+                Owntools.Write.Write_txt(dict_algorithm,dict_sample)
+
+        #-----------------------------------------------------------------------------
+        # Stop conditions
+        #-----------------------------------------------------------------------------
+
+        if dict_algorithm['i_DEM'] >= dict_algorithm['i_DEM_stop'] :
+            DEM_loop_statut = False
+            print("DEM loop stopped by too many iterations.")
+            simulation_report.write('/!\ End of DEM steps with '+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+'/!\ \n')
+        if Ecin < dict_algorithm['Ecin_stop'] and dict_algorithm['i_DEM'] > dict_algorithm['n_window_stop'] and (dict_sollicitations['Vertical_Confinement_Force']*0.95<dict_sollicitations['Force_on_upper_wall'] and dict_sollicitations['Force_on_upper_wall']<dict_sollicitations['Vertical_Confinement_Force']*1.05):
+            y_box_max_window = dict_tracker['y_box_max'][dict_algorithm['i_DEM']+1-dict_algorithm['n_window_stop']:dict_algorithm['i_DEM']+1]
+            if max(y_box_max_window) - min(y_box_max_window) < dict_algorithm['dy_box_max_stop']:
+                DEM_loop_statut = False
+                print("DEM loop stopped by steady state reached.")
+                simulation_report.write("DEM loop stopped by steady state reached with "+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+"\n")
+
+    #---------------------------------------------------------------------------
+    #Compute and apply rigid boby motion
+    #---------------------------------------------------------------------------
+
+
+
+
 
     Grain.Compute_overlap_2_grains(dict_sample)
     Grain.Apply_overlap_target(dict_material,dict_sample,dict_sollicitation,dict_tracker)
@@ -289,6 +375,9 @@ if '__main__' == __name__:
 
     #create the two grains
     User.Add_2grains(dict_material,dict_sample)
+
+    #change here -> Create_IC from PFDEM_AC
+
     #Compute initial sum_eta
     Owntools.Compute.Compute_sum_eta(dict_sample)
     #Compute the sphericity initially for the first grain

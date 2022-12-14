@@ -271,18 +271,21 @@ class Grain:
                   box_max_y = p[1]
 
       N_MonteCarlo = 3000 #The larger it is, the more accurate it is
-      sigma = 1
+      sigma = self.rho_surf
       M_Mass = 0
       M_Center_Mass = np.array([0,0])
+      M_Inertia = 0
 
       for i in range(N_MonteCarlo):
           P = np.array([random.uniform(box_min_x,box_max_x),random.uniform(box_min_y,box_max_y)])
           if self.P_is_inside(P):
               M_Mass = M_Mass + sigma
               M_Center_Mass = M_Center_Mass + sigma*P
+              M_Inertia = M_Inertia + sigma*np.dot(P,P)
 
       Mass = (box_max_x-box_min_x)*(box_max_y-box_min_y)/N_MonteCarlo*M_Mass
       Center_Mass = (box_max_x-box_min_x)*(box_max_y-box_min_y)/N_MonteCarlo*M_Center_Mass/Mass
+      Inertia = (box_max_x-box_min_x)*(box_max_y-box_min_y)/N_MonteCarlo*M_Inertia-Mass*np.dot(Center_Mass,Center_Mass)
 
       #-------------------------------------------------------------------------------
       #Updating the grain geometry and properties
@@ -315,7 +318,9 @@ class Grain:
       self.r_mean = np.mean(L_R)
       self.l_r = L_R
       self.l_theta_r = L_theta_R
+      self.mass = Mass
       self.surface = Mass/sigma
+      self.inertia = Inertia
       self.center = Center_Mass
       self.l_border_x = L_border_x
       self.l_border_y = L_border_y
@@ -631,6 +636,71 @@ class Grain:
                 for c in range(len(dict_sample['x_L'])-1):
                     self.etai_M[l][c] = (etai_M_old[l][c]*(dx-disp_x_remainder) + etai_M_old[l][c+1]*disp_x_remainder)/dx
                 self.etai_M[l][0] = 0 #no information to translate so put equal to 0
+
+    #-------------------------------------------------------------------------------
+
+    def update_geometry_kinetic(self, V, A, W, DT):
+        """
+        Update the acceleration and the velocity of a grain. Update geometrical parameters as border and center nodes.
+
+            Input :
+                itself (a grain)
+                a speed (a 1 x 2 numpy array)
+                an acceleration (a 1 x 2 numpy array)
+                an angular speed (a float)
+                a time step (a float)
+            Ouput :
+                Nothing, but the position of the grain is updated
+        """
+        #translation
+        self.v = V
+        self.a = A
+        for i in range(len(self.l_border)):
+            self.l_border[i] = self.l_border[i] + self.v*DT
+            self.l_border_x[i] = self.l_border_x[i] + self.v[0]*DT
+            self.l_border_y[i] = self.l_border_y[i] + self.v[1]*DT
+        self.center = self.center + self.v*DT
+
+        #rotation
+        self.w = W
+        self.theta = self.theta + self.w*DT
+
+        for i_theta_r in range(len(self.l_theta_r)) :
+            theta_r = self.l_theta_r[i_theta_r]
+            theta_r = theta_r + self.w*DT
+            while theta_r >= 2*math.pi:
+                theta_r = theta_r - 2*math.pi
+            while theta_r < 0 :
+                theta_r = theta_r + 2*math.pi
+            self.l_theta_r[i_theta_r] = theta_r
+
+        for i in range(len(self.l_border)):
+            p = self.l_border[i] - self.center
+            Rot_Matrix = np.array([[math.cos(self.w*DT), -math.sin(self.w*DT)],
+                                   [math.sin(self.w*DT),  math.cos(self.w*DT)]])
+            p = np.dot(Rot_Matrix,p)
+            self.l_border[i] = p + self.center
+            self.l_border_x[i] = p[0] + self.center[0]
+            self.l_border_y[i] = p[1] + self.center[1]
+
+    #-------------------------------------------------------------------------------
+
+    def init_f_control(self,dict_sollicitations):
+        """
+        Initialize the force applied to the grain.
+
+        A gravity of g is applied.
+
+            Input :
+                itself (a grain)
+                a sollicitations dictionnary (a dict)
+            Ouput :
+                Nothing, but the force applied on the grain is initialized
+        """
+        self.fx = 0
+        self.fy = -dict_sollicitations['gravity']*self.mass
+        self.f = np.array([self.fx,self.fy])
+        self.mz = 0
 
 #-------------------------------------------------------------------------------
 #Functions
