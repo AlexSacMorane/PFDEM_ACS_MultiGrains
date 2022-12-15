@@ -34,6 +34,19 @@ def All_parameters():
             a sollicitation dictionnary (a dictionnary)
     '''
     #---------------------------------------------------------------------------
+    #Geometry parameters
+
+    R0
+    L_R = []
+    L_percentage_R = []
+    R_mean = 0
+    for i_R in L_R:
+        R_mean = R_mean + L_R[i_R]*L_percentage_R[i_R]
+
+    #add thing here!!!
+
+
+    #---------------------------------------------------------------------------
     #Sample parameters
 
     #Box définition
