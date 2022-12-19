@@ -36,15 +36,23 @@ def All_parameters():
     #---------------------------------------------------------------------------
     #Geometry parameters
 
-    R0
-    L_R = []
-    L_percentage_R = []
+    N_grain = 300 #total number of grains
+
+    R0 = 350 #µm radius to compute the grain distribution
+    L_R = [1.2*R_mean,1.1*R_mean,0.9*R_mean,0.8*R_mean] #from larger to smaller
+    L_percentage_R = [1/6,1/3,1/3,1/6] #distribution of the different radius
+    #Recompute the mean radius
     R_mean = 0
-    for i_R in L_R:
-        R_mean = R_mean + L_R[i_R]*L_percentage_R[i_R]
+    for i in range(len(L_R)):
+        R_mean = R_mean + L_R[i]*L_percentage_R[i]
 
-    #add thing here!!!
-
+    #write dict
+    dict_geometry = {
+    'N_grain' : N_grain,
+    'R_mean' : R_mean,
+    'L_R' : L_R,
+    'L_percentage_R' : L_percentage_R
+    }
 
     #---------------------------------------------------------------------------
     #Sample parameters
@@ -222,6 +230,37 @@ def All_parameters():
     'mu_friction_gw' : mu_friction_gw,
     'coeff_restitution' : coeff_restitution
     }
+
+    #---------------------------------------------------------------------------
+    #Initial condition parameters
+
+    n_generation = 2 #number of grains generation
+    factor_ymax_box = 2.5 #margin to generate grains
+    N_test_max = 5000 # maximum number of tries to generate a grain without overlap
+    i_DEM_stop_IC = 2000 #stop criteria for DEM during IC
+    Debug_DEM_IC = False #plot configuration inside DEM during IC
+    i_print_plot_IC = 200 #frenquency of the print and plot (if Debug_DEM_IC) for IC
+    dt_DEM_IC = dt_DEM_crit/5 #s time step during IC
+    Ecin_ratio_IC = 0.0005
+    factor_neighborhood_IC = 1.5 #margin to detect a grain into a neighborhood
+    i_update_neighborhoods_gen = 5 #the frequency of the update of the neighborhood of the grains and the walls during IC generations
+    i_update_neighborhoods_com = 100 #the frequency of the update of the neighborhood of the grains and the walls during IC combination
+
+    #write dict
+    dict_ic = {
+    'n_generation' : n_generation,
+    'i_update_neighborhoods_gen': i_update_neighborhoods_gen,
+    'i_update_neighborhoods_com': i_update_neighborhoods_com,
+    'factor_ymax_box' : factor_ymax_box,
+    'i_DEM_stop_IC' : i_DEM_stop_IC,
+    'Debug_DEM' : Debug_DEM_IC,
+    'dt_DEM_IC' : dt_DEM_IC,
+    'Ecin_ratio_IC' : Ecin_ratio_IC,
+    'i_print_plot_IC' : i_print_plot_IC,
+    'factor_neighborhood_IC' : factor_neighborhood_IC,
+    'N_test_max' : N_test_max
+    }
+
 
     #---------------------------------------------------------------------------
 
