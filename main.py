@@ -27,6 +27,10 @@ import Owntools.PFtoDEM_Multi
 import Owntools.Plot
 import Owntools.Save
 import Owntools.Write
+import Create_IC
+import Create_IC.Grain_ic
+import Create_IC.Contact_gg_ic
+import Create_IC.Contact_gw_ic
 import User
 import Report
 
@@ -354,7 +358,7 @@ if '__main__' == __name__:
     simulation_report.tic_tempo(datetime.now())
 
     #general parameters
-    dict_algorithm, dict_material, dict_sample, dict_sollicitation = User.All_parameters()
+    dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation = User.All_parameters()
     if dict_algorithm['SaveData']:
         if not Path('../'+dict_algorithm['foldername']).exists():
             os.mkdir('../'+dict_algorithm['foldername'])
@@ -364,6 +368,7 @@ if '__main__' == __name__:
     #prepare plot
     if 'Config' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Configuration')
+        os.mkdir('Debug/Configuration/Init')
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Comparison_Init_Current')
     if 'Ed' in dict_algorithm['L_flag_plot']:
@@ -374,8 +379,9 @@ if '__main__' == __name__:
         os.mkdir('Debug/Diff_Solute')
 
     #create the two grains
-    User.Add_2grains(dict_material,dict_sample)
+    Create_IC.LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation, simulation_report)
 
+    raise valueError('Stoooop')
     #change here -> Create_IC from PFDEM_AC
 
     #Compute initial sum_eta

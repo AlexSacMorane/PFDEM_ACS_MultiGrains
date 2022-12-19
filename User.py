@@ -36,10 +36,10 @@ def All_parameters():
     #---------------------------------------------------------------------------
     #Geometry parameters
 
-    N_grain = 300 #total number of grains
+    N_grain = 100 #total number of grains
 
     R0 = 350 #µm radius to compute the grain distribution
-    L_R = [1.2*R_mean,1.1*R_mean,0.9*R_mean,0.8*R_mean] #from larger to smaller
+    L_R = [1.2*R0,1.1*R0,0.9*R0,0.8*R0] #from larger to smaller
     L_percentage_R = [1/6,1/3,1/3,1/6] #distribution of the different radius
     #Recompute the mean radius
     R_mean = 0
@@ -48,19 +48,19 @@ def All_parameters():
 
     #write dict
     dict_geometry = {
-    'N_grain' : N_grain,
     'R_mean' : R_mean,
     'L_R' : L_R,
-    'L_percentage_R' : L_percentage_R
+    'L_percentage_R' : L_percentage_R,
+    'N_grain' : N_grain
     }
 
     #---------------------------------------------------------------------------
     #Sample parameters
 
     #Box définition
-    x_box_min = -230 #µm
-    x_box_max = 230 #µm
-    y_box_min = -130 #µm
+    x_box_min = 0 #µm
+    x_box_max = 2*R_mean*math.sqrt(N_grain/0.6) #µm
+    y_box_min = 0 #µm
 
     #spatial discretisation
     x_min = -230
@@ -85,109 +85,6 @@ def All_parameters():
     'x_box_min' : x_box_min,
     'x_box_max' : x_box_max,
     'y_box_min' : y_box_min
-    }
-
-    #---------------------------------------------------------------------------
-    #Algorithm parameters
-
-    np_proc = 4 #number of processor used
-    n_t_PFDEM = 200 #number of cycle PF-DEM
-
-    #Time step for phase field
-    n_t_PF = 8
-    dt_PF_init = 0.3
-    dt_PF_level1 = dt_PF_init/2
-    dt_PF_level2 = dt_PF_level1/2
-    dt_PF_level3 = dt_PF_level2/2
-    #criteria to switch level
-    Ed_level1 = 10
-    Ed_level2 = 20
-    Ed_level3 = 25
-
-    #DEM parameters
-    dt_DEM_crit = math.pi*min(min(L_Dimension)/2,min(L_R))/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
-    dt_DEM = dt_DEM_crit/8 #s time step during DEM simulation
-    factor_neighborhood = 1.5 #margin to detect a grain into a neighborhood
-    i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
-    #Stop criteria of the DEM
-    i_DEM_stop = 3000 #maximum iteration for one DEM simulation
-    Ecin_ratio = 0.0002
-    n_window_stop = 50
-    dy_box_max_stop = 0.5
-
-    #Margin for sphericity study
-    sphericity_margin = 0.05
-    #Discretisation to find the inscribing (number of nodes in one direction)
-    n_spatial_inscribing = 100
-
-    #List of plot to do
-    Debug = True #plot configuration before and after DEM simulation
-    Debug_DEM = False #plot configuration inside DEM
-    i_print_plot = 200 #frenquency of the print and plot (if Debug_DEM) in DEM step
-    # Config, C_at_P, Diff_Solute, dt, Ed, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Sint_MinEtai, Sphericity, sum_Ed
-    L_flag_plot = ['Config', 'C_at_P', 'Diff_Solute', 'dt', 'Sphericity', 'Kc', 'Movie', 'sum_Ed']
-    #Visual parameters (for plot Config)
-    c_min = 0
-    c_max = 0.08
-
-    #Save the simulation
-    SaveData = True #Save data or not
-    clean_memory = True #delete Data, Input, Output at the end of the simulation
-    foldername = 'Data_2G_ACS' #name of the folder where data are saved
-    template = 'PS_Long_Run' #template of the name of the simulation
-    if SaveData :
-        i_run = 1
-        folderpath = Path('../'+foldername+'/'+template+'_'+str(i_run))
-        while folderpath.exists():
-            i_run = i_run + 1
-            folderpath = Path('../'+foldername+'/'+template+'_'+str(i_run))
-        namefile = template+'_'+str(i_run)
-    else :
-        namefile = template
-
-    dict_algorithm = {
-    'c_min' : c_min,
-    'c_max' : c_max,
-    'sphericity_margin' : sphericity_margin,
-    'n_spatial_inscribing' : n_spatial_inscribing,
-    'np_proc' : np_proc,
-    'Debug' : Debug,
-    'Debug_DEM' : Debug_DEM,
-    'i_print_plot' : i_print_plot,
-    'factor_neighborhood' : factor_neighborhood,
-    'factor_distribution_etai' : factor_distribution_etai,
-    'clean_memory' : clean_memory,
-    'SaveData' : SaveData,
-    'namefile' : namefile,
-    'dt_PF' : dt_PF_init,
-    'dt_PF_init' : dt_PF_init,
-    'dt_PF_level1' : dt_PF_level1,
-    'dt_PF_level2' : dt_PF_level2,
-    'dt_PF_level3' : dt_PF_level3,
-    'Ed_level1' : Ed_level1,
-    'Ed_level2' : Ed_level2,
-    'Ed_level3' : Ed_level3,
-    'n_t_PF' : n_t_PF,
-    'dt_DEM' : dt_DEM,
-    'i_update_neighborhoods': i_update_neighborhoods,
-    'i_DEM_stop' : i_DEM_stop,
-    'Ecin_ratio' : Ecin_ratio,
-    'n_window_stop' : n_window_stop,
-    'dy_box_max_stop' : dy_box_max_stop,
-    'foldername' : foldername,
-    'n_t_PFDEM' : n_t_PFDEM,
-    'L_flag_plot' : L_flag_plot
-    }
-
-    #---------------------------------------------------------------------------
-    #External sollicitation parameters
-
-    overlap_target = 10 #overlap verified before each phase field iteration
-    chi = 0.5 #coefficient applied to the chemical energy
-
-    dict_sollicitation = {
-    'overlap_target' : overlap_target,
-    'chi' : chi
     }
 
     #---------------------------------------------------------------------------
@@ -232,13 +129,120 @@ def All_parameters():
     }
 
     #---------------------------------------------------------------------------
+    #Algorithm parameters
+
+    np_proc = 4 #number of processor used
+    n_t_PFDEM = 200 #number of cycle PF-DEM
+
+    #Time step for phase field
+    n_t_PF = 8
+    dt_PF_init = 0.3
+    dt_PF_level1 = dt_PF_init/2
+    dt_PF_level2 = dt_PF_level1/2
+    dt_PF_level3 = dt_PF_level2/2
+    #criteria to switch level
+    Ed_level1 = 10
+    Ed_level2 = 20
+    Ed_level3 = 25
+
+    #DEM parameters
+    dt_DEM_crit = math.pi*min(L_R)/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
+    dt_DEM = dt_DEM_crit/8 #s time step during DEM simulation
+    factor_neighborhood = 1.5 #margin to detect a grain into a neighborhood
+    i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
+    #Stop criteria of the DEM
+    i_DEM_stop = 3000 #maximum iteration for one DEM simulation
+    Ecin_ratio = 0.0002
+    n_window_stop = 50
+    dy_box_max_stop = 0.5
+
+    #Margin for sphericity study
+    sphericity_margin = 0.05
+    #Discretisation to find the inscribing (number of nodes in one direction)
+    n_spatial_inscribing = 100
+
+    #List of plot to do
+    Debug = True #plot configuration before and after DEM simulation
+    Debug_DEM = False #plot configuration inside DEM
+    i_print_plot = 200 #frenquency of the print and plot (if Debug_DEM) in DEM step
+    # Config, C_at_P, Diff_Solute, dt, Ed, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Sint_MinEtai, Sphericity, sum_Ed
+    L_flag_plot = ['Config', 'Sphericity', 'Movie', 'sum_Ed']
+    #Visual parameters (for plot Config)
+    c_min = 0
+    c_max = 0.08
+
+    #Save the simulation
+    SaveData = True #Save data or not
+    clean_memory = True #delete Data, Input, Output at the end of the simulation
+    foldername = 'Data_2G_ACS' #name of the folder where data are saved
+    template = 'PS_Long_Run' #template of the name of the simulation
+    if SaveData :
+        i_run = 1
+        folderpath = Path('../'+foldername+'/'+template+'_'+str(i_run))
+        while folderpath.exists():
+            i_run = i_run + 1
+            folderpath = Path('../'+foldername+'/'+template+'_'+str(i_run))
+        namefile = template+'_'+str(i_run)
+    else :
+        namefile = template
+
+    dict_algorithm = {
+    'c_min' : c_min,
+    'c_max' : c_max,
+    'sphericity_margin' : sphericity_margin,
+    'n_spatial_inscribing' : n_spatial_inscribing,
+    'np_proc' : np_proc,
+    'Debug' : Debug,
+    'Debug_DEM' : Debug_DEM,
+    'i_print_plot' : i_print_plot,
+    'factor_neighborhood' : factor_neighborhood,
+    'clean_memory' : clean_memory,
+    'SaveData' : SaveData,
+    'namefile' : namefile,
+    'dt_PF' : dt_PF_init,
+    'dt_PF_init' : dt_PF_init,
+    'dt_PF_level1' : dt_PF_level1,
+    'dt_PF_level2' : dt_PF_level2,
+    'dt_PF_level3' : dt_PF_level3,
+    'Ed_level1' : Ed_level1,
+    'Ed_level2' : Ed_level2,
+    'Ed_level3' : Ed_level3,
+    'n_t_PF' : n_t_PF,
+    'dt_DEM' : dt_DEM,
+    'i_update_neighborhoods': i_update_neighborhoods,
+    'i_DEM_stop' : i_DEM_stop,
+    'Ecin_ratio' : Ecin_ratio,
+    'n_window_stop' : n_window_stop,
+    'dy_box_max_stop' : dy_box_max_stop,
+    'foldername' : foldername,
+    'n_t_PFDEM' : n_t_PFDEM,
+    'L_flag_plot' : L_flag_plot
+    }
+
+    #---------------------------------------------------------------------------
+    #External sollicitation parameters
+
+    overlap_target = 10 #overlap verified before each phase field iteration
+    chi = 0.5 #coefficient applied to the chemical energy
+    gravity = 0
+    Vertical_Confinement_Linear_Force = Y*2*R_mean/1000 #µN/µm used to compute the Vertical_Confinement_Force
+    Vertical_Confinement_Force = Vertical_Confinement_Linear_Force*(x_box_max-x_box_min) #µN
+
+    dict_sollicitation = {
+    'overlap_target' : overlap_target,
+    'chi' : chi,
+    'gravity' : gravity,
+    'Vertical_Confinement_Force' : Vertical_Confinement_Force
+    }
+
+    #---------------------------------------------------------------------------
     #Initial condition parameters
 
     n_generation = 2 #number of grains generation
     factor_ymax_box = 2.5 #margin to generate grains
     N_test_max = 5000 # maximum number of tries to generate a grain without overlap
     i_DEM_stop_IC = 2000 #stop criteria for DEM during IC
-    Debug_DEM_IC = False #plot configuration inside DEM during IC
+    Debug_DEM_IC = True #plot configuration inside DEM during IC
     i_print_plot_IC = 200 #frenquency of the print and plot (if Debug_DEM_IC) for IC
     dt_DEM_IC = dt_DEM_crit/5 #s time step during IC
     Ecin_ratio_IC = 0.0005
@@ -264,7 +268,7 @@ def All_parameters():
 
     #---------------------------------------------------------------------------
 
-    return dict_algorithm, dict_material, dict_sample, dict_sollicitation
+    return dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation
 
 #-------------------------------------------------------------------------------
 

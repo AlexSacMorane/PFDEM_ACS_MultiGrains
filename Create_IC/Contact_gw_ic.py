@@ -11,9 +11,10 @@ This file contains ??.nt functions used in the simulation.
 #-------------------------------------------------------------------------------
 
 import numpy  as np
+import math
 
 #Own
-import Grain_ic
+import Create_IC.Grain_ic
 
 #-------------------------------------------------------------------------------
 #Class
@@ -42,7 +43,7 @@ class Contact_gw_Tempo:
     self.id = ID
     self.g = G
     factor = 5 #factor just to increase the stiffness
-    self.k = factor*4/3*self.g.y/(1-self.g.nu*self.g.nu)*math.sqrt(self.g.r_max) #Hertz law
+    self.k = factor*4/3*self.g.y/(1-self.g.nu*self.g.nu)*math.sqrt(self.g.radius) #Hertz law
     self.kt = 0
     self.ft = 0
     self.limit = Limit
@@ -280,7 +281,7 @@ def Grains_Polyhedral_Wall_contact_Neighborhood(wall_neighborhood,x_box_min,x_bo
       p_x_min = grain.center[0] - grain.radius
       p_x_max = grain.center[0] + grain.radius
       p_y_min = grain.center[1] - grain.radius
-      p_y_max = grain.center[0] + grain.radius
+      p_y_max = grain.center[1] + grain.radius
 
       #grain-wall x_min
       if p_x_min < x_box_min and (grain.id,-1) not in L_ij_contact_gw:

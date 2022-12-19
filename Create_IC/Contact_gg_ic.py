@@ -11,9 +11,10 @@ This file contains ??.nt functions used in the simulation.
 #-------------------------------------------------------------------------------
 
 import numpy as np
+import math
 
 #Own
-import Grain_ic
+import Create_IC.Grain_ic
 
 #-------------------------------------------------------------------------------
 #Class
@@ -76,7 +77,7 @@ class Contact_Tempo:
 
         #Spring term
         Y_eq = 1/((1-self.g1.nu*self.g1.nu)/self.g1.y+(1-self.g2.nu*self.g2.nu)/self.g2.y)
-        R_eq = 1/(1/np.linalg.norm(self.g1.center-self.g1.l_border[self.ij_min[0]])+1/np.linalg.norm(self.g2.center-self.g2.l_border[self.ij_min[1]]))
+        R_eq = 1/(1/self.g1.radius+1/self.g2.radius)
         k = 4/3*Y_eq*math.sqrt(R_eq)
         F_2_1_n = -k * overlap**(3/2)  #unlinear spring
         F_2_1 = F_2_1_n * PC_normal
@@ -171,7 +172,7 @@ def Grains_contact_f(g1,g2):
     Output :
         a Boolean, True if there is contact between the two grains (a Boolean)
   """
-  return np.linalg.norm(g1.center-g2.center) < g1.radius+g2.radius:
+  return np.linalg.norm(g1.center-g2.center) < g1.radius+g2.radius
 
 #-------------------------------------------------------------------------------
 

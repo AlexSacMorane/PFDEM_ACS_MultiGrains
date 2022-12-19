@@ -10,6 +10,9 @@ This file contains ??.nt functions used in the simulation.
 #Librairy
 #-------------------------------------------------------------------------------
 
+import math
+import numpy as np
+
 #-------------------------------------------------------------------------------
 #Class
 #-------------------------------------------------------------------------------
@@ -47,7 +50,7 @@ class Grain_Tempo:
         L_border.append(p)
         L_border_x.append(p[0])
         L_border_y.append(p[1])
-        L_r.append(Lenght)
+        L_r.append(Radius)
         L_theta_r.append(theta)
     L_border.append(L_border[0])
     L_border_x.append(L_border_x[0])
@@ -127,12 +130,8 @@ class Grain_Tempo:
     #translation
     a_i = np.array([self.fx,self.fy])/self.mass
     self.v = self.v + a_i*dt_DEM
-    if self.type == 'Disk':
-        if np.linalg.norm(self.v) > self.radius*factor/dt_DEM: #limitation of the speed
-            self.v = self.v * self.radius*factor/dt_DEM/np.linalg.norm(self.v)
-    elif self.type == 'Square':
-        if np.linalg.norm(self.v) > self.dimension*factor/dt_DEM: #limitation of the speed
-            self.v = self.v * self.dimension*factor/dt_DEM/np.linalg.norm(self.v)
+    if np.linalg.norm(self.v) > self.radius*factor/dt_DEM: #limitation of the speed
+        self.v = self.v * self.radius*factor/dt_DEM/np.linalg.norm(self.v)
     for i in range(len(self.l_border)):
         self.l_border[i] = self.l_border[i] + self.v*dt_DEM
         self.l_border_x[i] = self.l_border_x[i] + self.v[0]*dt_DEM

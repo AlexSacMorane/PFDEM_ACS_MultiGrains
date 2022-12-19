@@ -10,10 +10,15 @@ This file contains ??.nt functions used in the simulation.
 #Librairy
 #-------------------------------------------------------------------------------
 
+import numpy as np
+import random
+import math
+import matplotlib.pyplot as plt
+
 #Own
-import Grain_ic
-import Contact_gg_ic
-import Contact_gw_ic
+import Create_IC.Grain_ic
+import Create_IC.Contact_gg_ic
+import Create_IC.Contact_gw_ic
 
 #-------------------------------------------------------------------------------
 #Function
@@ -38,7 +43,7 @@ def LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample,
     radius_mean = 0
     for i in range(len(dict_geometry['L_R'])):
         radius_mean = radius_mean + dict_geometry['L_R'][i]*dict_geometry['L_percentage_R'][i]
-    dy_creation = N_grain_disk/dict_ic['n_generation']*dict_ic['factor_ymax_box']*(2*radius_mean)**2/(dict_sample['x_box_max']-dict_sample['x_box_min'])
+    dy_creation = dict_geometry['N_grain']/dict_ic['n_generation']*dict_ic['factor_ymax_box']*(2*radius_mean)**2/(dict_sample['x_box_max']-dict_sample['x_box_min'])
     dict_sample['dy_creation'] = dy_creation
 
     #plan the grains generation
@@ -83,7 +88,7 @@ def LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample,
         #add element in dict
         dict_sample['y_box_max'] = y_max
 
-        DEM_loading(dict_ic, dict_material, dict_sample, dict_sollicitations, simulation_report)
+        DEM_loading(dict_algorithm, dict_ic, dict_material, dict_sample, dict_sollicitations, simulation_report)
 
         #update element in dict
         dict_sample['y_box_min_ic'] = dict_sample['y_box_max']
@@ -92,23 +97,20 @@ def LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample,
 
     print('Combine generations of grains')
 
-    dict_ic['i_generation'] == dict_ic['n_generation']+1
+    dict_ic['i_generation'] = dict_ic['n_generation']+1
 
     dict_ic['L_g_tempo'] = []
     for L_g_tempo in dict_ic['L_L_g_tempo']:
         for g_tempo in L_g_tempo:
             dict_ic['L_g_tempo'].append(g_tempo)
 
-    DEM_loading(dict_ic, dict_material, dict_sample, dict_sollicitations, simulation_report)
-
-    #update element in dict
-    dict_sample['y_box_max'] = dict_ic['y_box_max']
+    DEM_loading(dict_algorithm, dict_ic, dict_material, dict_sample, dict_sollicitations, simulation_report)
 
     simulation_report.write_and_print(str(len(dict_ic['L_g_tempo']))+' / '+str(dict_geometry['N_grain'])+' grains have been created\n','\n'+str(len(dict_ic['L_g_tempo']))+' / '+str(dict_geometry['N_grain'])+' grains have been created\n')
 
 #-------------------------------------------------------------------------------
 
-def DEM_loading(dict_ic, dict_material, dict_sample, dict_sollicitations, simulation_report):
+def DEM_loading(dict_algorithm, dict_ic, dict_material, dict_sample, dict_sollicitations, simulation_report):
     """
     Loading the granular system.
 
@@ -150,7 +152,7 @@ def DEM_loading(dict_ic, dict_material, dict_sample, dict_sollicitations, simula
     Ymax_stop = 0
     for grain in dict_ic['L_g_tempo']:
         Force_stop = Force_stop + 0.5*grain.mass*dict_sollicitations['gravity']
-        Ecin_stop = Ecin_stop + 0.5*grain.mass*(dict_ic['Ecin_ratio_IC']*grain.r_max/dict_ic['dt_DEM_IC'])**2
+        Ecin_stop = Ecin_stop + 0.5*grain.mass*(dict_ic['Ecin_ratio_IC']*grain.radius/dict_ic['dt_DEM_IC'])**2
 
     while DEM_loop_statut :
 
@@ -208,7 +210,7 @@ def DEM_loading(dict_ic, dict_material, dict_sample, dict_sollicitations, simula
                 print('i_DEM',dict_ic['i_DEM_IC'],'and Ecin',int(100*Ecin/Ecin_stop),'% and Force',int(100*F/Force_stop),'% and Confinement',int(100*Fv/dict_sollicitations['Vertical_Confinement_Force']),'%')
             else :
                 print('i_DEM',dict_ic['i_DEM_IC'],'and Ecin',int(100*Ecin/Ecin_stop),'% and Confinement',int(100*Fv/dict_sollicitations['Vertical_Confinement_Force']),'%')
-            if dict_ic['Debug_DEM']:
+            if dict_ic['Debug_DEM'] and 'Config' in dict_algorithm['L_flag_plot']:
                 Plot_Config_Loaded(dict_ic['L_g_tempo'],dict_sample['x_box_min'],dict_sample['x_box_max'],y_min,dict_sample['y_box_max'],dict_ic['i_DEM_IC'])
 
         #Check stop conditions for DEM
@@ -218,7 +220,7 @@ def DEM_loading(dict_ic, dict_material, dict_sample, dict_sollicitations, simula
             if Ecin < Ecin_stop and F < Force_stop and (0.95*dict_sollicitations['Vertical_Confinement_Force']<Fv and Fv<1.05*dict_sollicitations['Vertical_Confinement_Force']):
                   DEM_loop_statut = False
         else:
-            if Ecin < Ecin_stop and dict_ic['i_DEM_IC'] >= i_DEM_stop*0.1 + i_DEM_0 and (0.95*dict_sollicitations['Vertical_Confinement_Force']<Fv and Fv<1.05*dict_sollicitations['Vertical_Confinement_Force']):
+            if Ecin < Ecin_stop and dict_ic['i_DEM_IC'] >= dict_ic['i_DEM_stop_IC']*0.1 + i_DEM_0 and (0.95*dict_sollicitations['Vertical_Confinement_Force']<Fv and Fv<1.05*dict_sollicitations['Vertical_Confinement_Force']):
                 DEM_loop_statut = False
         if dict_ic['L_g_tempo'] == []:
             DEM_loop_statut = False
@@ -253,12 +255,12 @@ def Create_grains(dict_ic, dict_geometry, dict_sample, dict_material, simulation
     else :
         L_n_grain_radius = dict_ic['L_n_grain_radius_final']
 
-    for i in range(len(dict_geometry['L_radius'])):
-        radius = dict_geometry['L_radius'][i]
+    for i in range(len(dict_geometry['L_R'])):
+        radius = dict_geometry['L_R'][i]
         n_grain = L_n_grain_radius[i]
         n_grain_done = dict_ic['L_n_grain_radius_done'][i]
         last_id_grain_created = dict_ic['last_id']
-        for id_grain in range(last_id_grain_created, last_id_grain_created + n_grain - n_grain_done):
+        for id_grain in range(last_id_grain_created, int(last_id_grain_created + n_grain - n_grain_done)):
             i_test = 0
             grain_created = False
             while (not grain_created) and i_test < dict_ic['N_test_max']:
@@ -457,7 +459,7 @@ def Plot_Config_Loaded(L_g,x_min,x_max,y_min,y_max,i):
         L_v.append(grain.fy)
     plt.plot([x_min,x_min,x_max,x_max,x_min],[y_max,y_min,y_min,y_max,y_max],'k')
     plt.axis('equal')
-    plt.savefig('Debug/DEM_ite/Init/Config_Loaded_'+str(i)+'.png')
+    plt.savefig('Debug/Configuration/Init/Config_Loaded_'+str(i)+'.png')
     plt.close(1)
 
 #-------------------------------------------------------------------------------
