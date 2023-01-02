@@ -413,7 +413,7 @@ if '__main__' == __name__:
         Owntools.Plot.Plot_mesh(dict_sample)
 
     #Distribution of the etai and plot
-    Etai.etai_distribution(dict_algorithm, dict_sample)
+    Etai.etai_distribution(dict_algorithm, dict_sample, simulation_report)
     if 'Etai_distribution' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_etai_distribution(dict_sample)
 
