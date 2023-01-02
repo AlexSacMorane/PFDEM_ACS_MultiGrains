@@ -307,18 +307,6 @@ def Compute_mean_sphericity(dict_algorithm, dict_sample):
     L_perimeter_sphericity = []
     L_width_to_length_ratio_sphericity = []
     for grain in dict_sample['L_g']:
-        print(grain.id)
-
-
-        plt.figure(1)
-        im = plt.imshow(grain.etai_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])], vmin = 0, vmax = 1)
-        plt.colorbar(im)
-        plt.plot(grain.l_border_x,grain.l_border_y,'r')
-        plt.title(f'Grain {grain.id}')
-        plt.savefig('Debug/grain.png')
-        plt.close(1)
-
-
         grain.geometric_study(dict_sample)
         grain.Compute_sphericity(dict_algorithm)
         #sphericities
