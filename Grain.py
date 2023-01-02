@@ -554,30 +554,6 @@ class Grain:
 
     #---------------------------------------------------------------------------
 
-    def move_grain_rebuild(self,displacement,dict_material,dict_sample):
-        '''
-        Move the grain by updating the phase field of the grain.
-
-        The grain is deconstructed and then rebuilt. The mass conservation can not well verified.
-        It is advised to work with move_grain_interpolation().
-
-            Input :
-                itself (a grain)
-                the displacement asked (a 2 x 1 numpy array)
-                a material dictionnary (a dictionnary)
-                a sample dictionnary (a dictionnary)
-            Output :
-                Nothing but the grain gets an updated attribute (a n_y x n_x numpy array)
-        '''
-        self.center = self.center + displacement
-        for i in range(len(self.l_border)):
-            self.l_border[i] = self.l_border[i] + displacement
-            self.l_border_x[i] = self.l_border_x[i] + displacement[0]
-            self.l_border_y[i] = self.l_border_y[i] + displacement[1]
-        self.build_etai_M(dict_material,dict_sample)
-
-    #---------------------------------------------------------------------------
-
     def move_grain_interpolation(self,displacement,dict_sample):
         '''
         Move the grain by updating the phase field of the grain.
