@@ -63,7 +63,7 @@ def All_parameters():
     y_box_min = 0 #µm
 
     #spatial discretisation
-    nx = int(30*math.sqrt(N_grain*0.6)) #approx 30 nodes per grain
+    nx = int(30*math.sqrt(N_grain*0.6)) #approx 30 nodes per grain with a mean radius
     ny = int(0.6*nx)
 
     #approximatively the number of vertices for one grain during DEM simulation
@@ -153,7 +153,7 @@ def All_parameters():
     #List of plot to do
     Debug = True #plot configuration before and after DEM simulation
     Debug_DEM = False #plot configuration inside DEM
-    i_print_plot = 200 #frenquency of the print and plot (if Debug_DEM) in DEM step
+    i_print_plot = 10 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, C_at_P, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sint_MinEtai, Sphericity, sum_Ed
     L_flag_plot = ['Config', 'Sphericity', 'Movie', 'sum_Ed', 'Mesh', 'Etai_distribution']
     #Visual parameters (for plot Config)
