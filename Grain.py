@@ -117,6 +117,8 @@ class Grain:
                 R = self.l_r[L_theta_R_i.index(min(L_theta_R_i))]
                 #build etai_M
                 self.etai_M[l][c] = Owntools.Cosine_Profile(R,r,dict_material['w'])
+                if self.id == 0 :
+                    print(R,r,dict_material['w'],Owntools.Cosine_Profile(R,r,dict_material['w']))
 
     #---------------------------------------------------------------------------
 
