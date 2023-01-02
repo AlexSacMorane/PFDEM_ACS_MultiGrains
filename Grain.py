@@ -695,7 +695,7 @@ class Grain:
 
     #-------------------------------------------------------------------------------
 
-      def update_f(self, Fx, Fy, p_application):
+    def update_f(self, Fx, Fy, p_application):
         """
         Add a force to the grain.
 
