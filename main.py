@@ -156,16 +156,23 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         L_rbm_rotation.append(0)
 
     #---------------------------------------------------------------------------
+    #Recreate the etai
+    #---------------------------------------------------------------------------
+
+    for etai in dict_sample['L_etai'] :
+        etai.update_etai_M(dict_sample['L_g'])
+
+    #---------------------------------------------------------------------------
     #prepare phase field simulation
     #---------------------------------------------------------------------------
+
+    raise ValueError('Stoooop')
 
     #Compute parameters needed
     Owntools.Compute.Compute_sum_min_etai(dict_sample, dict_sollicitation) #the sum of the minimum of etai
     Owntools.Compute.Compute_Emec(dict_sample, dict_sollicitation) #the mechanical energy
     if dict_material['method_to_compute_kc'] == 'dilation':
         Owntools.Compute.Compute_kc_dil(dict_material, dict_sample) #the solute diffusion
-    elif dict_material['method_to_compute_kc'] == 'wfd':
-        Owntools.Compute.Compute_kc_wfd(dict_material, dict_sample) #the solute diffusion
     if dict_material['method_to_compute_kc'] == 'interpolation':
         Owntools.Compute.Compute_kc_int(dict_material, dict_sample) #the solute diffusion
     dict_tracker['S_int_L'].append(dict_sample['S_int'])
@@ -250,8 +257,8 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #postprocess
     #---------------------------------------------------------------------------
 
-    #Compute the sphericity for the first grain
-    dict_sample['L_g'][0].Compute_sphericity(dict_algorithm)
+    #Compute the mean sphericities
+    area_sphericity_mean, diameter_sphericity_mean, circle_ratio_sphericity_mean, perimeter_sphericity_mean, width_to_length_ratio_sphericity_mean = Owntools.Compute.Compute_mean_sphericity(dict_algorithm, dict_sample)
 
     #compute the mass of grain
     Owntools.Compute.Compute_sum_eta(dict_sample)
@@ -268,6 +275,11 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     dict_tracker['L_sum_solute'].append(dict_sample['sum_c'])
     dict_tracker['L_sum_eta'].append(dict_sample['sum_eta'])
     dict_tracker['L_sum_total'].append(dict_sample['sum_c']+dict_sample['sum_eta'])
+    dict_tracker['L_area_sphericity_mean'].append(area_sphericity_mean)
+    dict_tracker['L_diameter_sphericity_mean'].append(diameter_sphericity_mean)
+    dict_tracker['L_circle_ratio_sphericity_mean'].append(circle_ratio_sphericity_mean)
+    dict_tracker['L_perimeter_sphericity_mean'].append(perimeter_sphericity_mean)
+    dict_tracker['L_width_to_length_ratio_sphericity_mean'].append(width_to_length_ratio_sphericity_mean)
     dict_tracker['L_area_sphericity_g0'].append(dict_sample['L_g'][0].area_sphericity)
     dict_tracker['L_diameter_sphericity_g0'].append(dict_sample['L_g'][0].diameter_sphericity)
     dict_tracker['L_circle_ratio_sphericity_g0'].append(dict_sample['L_g'][0].circle_ratio_sphericity)
@@ -402,13 +414,10 @@ if '__main__' == __name__:
     if 'Etai_distribution' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_etai_distribution(dict_sample)
 
-    raise ValueError('Stoooop')
-
     #Compute initial sum_eta
     Owntools.Compute.Compute_sum_eta(dict_sample)
-    #Compute the sphericity initially for the first grain
-    dict_sample['L_g'][0].geometric_study(dict_sample)
-    dict_sample['L_g'][0].Compute_sphericity(dict_algorithm)
+    #Compute the mean sphericities
+    area_sphericity_mean, diameter_sphericity_mean, circle_ratio_sphericity_mean, perimeter_sphericity_mean, width_to_length_ratio_sphericity_mean = Owntools.Compute.Compute_mean_sphericity(dict_algorithm, dict_sample)
     #create the solute
     User.Add_solute(dict_sample)
 
@@ -435,6 +444,11 @@ if '__main__' == __name__:
     'L_circle_ratio_sphericity_g0' : [dict_sample['L_g'][0].circle_ratio_sphericity],
     'L_perimeter_sphericity_g0' : [dict_sample['L_g'][0].perimeter_sphericity],
     'L_width_to_length_ratio_sphericity_g0' : [dict_sample['L_g'][0].width_to_length_ratio_sphericity],
+    'L_area_sphericity_mean' : [area_sphericity_mean],
+    'L_diameter_sphericity_mean' : [diameter_sphericity_mean],
+    'L_circle_ratio_sphericity_mean' : [circle_ratio_sphericity_mean],
+    'L_perimeter_sphericity_mean' : [perimeter_sphericity_mean],
+    'L_width_to_length_ratio_sphericity_mean' : [width_to_length_ratio_sphericity_mean],
     'sum_ed_L': [],
     'sum_Ed_che_L': [],
     'sum_Ed_mec_L': [],

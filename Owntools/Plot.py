@@ -483,6 +483,7 @@ def Plot_sphericity(dict_tracker):
     '''
     plt.figure(1,figsize=(16,9))
 
+    plt.subplot(211)
     plt.plot(dict_tracker['L_t'], dict_tracker['L_area_sphericity_g0'],label='Area sphericity')
     plt.plot(dict_tracker['L_t'], dict_tracker['L_diameter_sphericity_g0'],label='Diameter sphericity')
     plt.plot(dict_tracker['L_t'], dict_tracker['L_circle_ratio_sphericity_g0'],label='Circle sphericity')
@@ -491,7 +492,16 @@ def Plot_sphericity(dict_tracker):
     plt.legend()
     plt.title('2D sphericity of grain 1')
 
-    plt.savefig('Debug/Sphericity_g_1.png')
+    plt.subplot(212)
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_area_sphericity_mean'],label='Area sphericity')
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_diameter_sphericity_mean'],label='Diameter sphericity')
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_circle_ratio_sphericity_mean'],label='Circle sphericity')
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_perimeter_sphericity_mean'],label='Perimeter sphericity')
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_width_to_length_ratio_sphericity_mean'],label='Width to length ratio sphericity')
+    plt.legend()
+    plt.title('Mean 2D sphericity')
+
+    plt.savefig('Debug/Sphericity.png')
     plt.close(1)
 
 #-------------------------------------------------------------------------------
