@@ -78,7 +78,7 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
 
         #Initialize the grain kinematic
         for grain in dict_sample['L_g']:
-            grain.init_f_control(dict_sollicitations)
+            grain.init_f_control(dict_sollicitation)
 
         # Detection of contacts between grains
         if dict_algorithm['i_DEM'] % dict_algorithm['i_update_neighborhoods']  == 0:
@@ -111,16 +111,16 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
             Ecin = Ecin + 0.5*grain.mass*np.linalg.norm(grain.v)**2/len(dict_sample['L_g'])
 
         #Control the y_max to verify vertical confinement
-        Owntools.Control_y_max_NR(dict_sample,dict_sollicitations)
+        Owntools.Control_y_max_NR(dict_sample,dict_sollicitation)
         #trackers
         dict_tracker['Ecin'].append(Ecin)
         dict_tracker['y_box_max'].append(dict_sample['y_box_max'])
-        dict_tracker['Force_on_upper_wall'].append(dict_sollicitations['Force_on_upper_wall'])
+        dict_tracker['Force_on_upper_wall'].append(dict_sollicitation['Force_on_upper_wall'])
 
         if dict_algorithm['i_DEM'] % dict_algorithm['i_print_plot'] == 0:
             print('\nPF '+str(dict_algorithm['i_PF'])+' -> i_DEM '+str(dict_algorithm['i_DEM']+1)+' / '+str(dict_algorithm['i_DEM_stop']+1)+' (max)')
             print('Ecin',int(Ecin),'/',int(dict_algorithm['Ecin_stop']),'('+str(int(100*Ecin/dict_algorithm['Ecin_stop'])),' %)')
-            print('F_confinement',int(dict_sollicitations['Force_on_upper_wall']),'/',int(dict_sollicitations['Vertical_Confinement_Force']),'('+str(int(100*dict_sollicitations['Force_on_upper_wall']/dict_sollicitations['Vertical_Confinement_Force'])),' %)')
+            print('F_confinement',int(dict_sollicitation['Force_on_upper_wall']),'/',int(dict_sollicitation['Vertical_Confinement_Force']),'('+str(int(100*dict_sollicitation['Force_on_upper_wall']/dict_sollicitation['Vertical_Confinement_Force'])),' %)')
 
             if dict_algorithm['Debug_DEM'] :
                 Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
@@ -134,7 +134,7 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
             DEM_loop_statut = False
             print("DEM loop stopped by too many iterations.")
             simulation_report.write('/!\ End of DEM steps with '+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+'/!\ \n')
-        if Ecin < dict_algorithm['Ecin_stop'] and dict_algorithm['i_DEM'] > dict_algorithm['n_window_stop'] and (dict_sollicitations['Vertical_Confinement_Force']*0.95<dict_sollicitations['Force_on_upper_wall'] and dict_sollicitations['Force_on_upper_wall']<dict_sollicitations['Vertical_Confinement_Force']*1.05):
+        if Ecin < dict_algorithm['Ecin_stop'] and dict_algorithm['i_DEM'] > dict_algorithm['n_window_stop'] and (dict_sollicitation['Vertical_Confinement_Force']*0.95<dict_sollicitation['Force_on_upper_wall'] and dict_sollicitation['Force_on_upper_wall']<dict_sollicitation['Vertical_Confinement_Force']*1.05):
             y_box_max_window = dict_tracker['y_box_max'][dict_algorithm['i_DEM']+1-dict_algorithm['n_window_stop']:dict_algorithm['i_DEM']+1]
             if max(y_box_max_window) - min(y_box_max_window) < dict_algorithm['dy_box_max_stop']:
                 DEM_loop_statut = False
