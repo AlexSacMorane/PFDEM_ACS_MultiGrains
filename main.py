@@ -383,16 +383,18 @@ if '__main__' == __name__:
     #create the initial configuration
     Create_IC.LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation, simulation_report)
 
-    #Define the mesh and plot
+    #Define the mesh
     User.Add_mesh(dict_geometry, dict_sample)
-    if 'Mesh' in dict_algorithm['L_flag_plot'] :
-        Owntools.Plot.Plot_mesh(dict_sample)
 
     #Add needed variables
     User.Add_variables_needed(dict_material, dict_sample)
 
     #conversion of the tempo grain to real grain
     Create_IC.From_LG_tempo_to_usable(dict_ic, dict_material, dict_sample)
+
+    #plot mesh
+    if 'Mesh' in dict_algorithm['L_flag_plot'] :
+        Owntools.Plot.Plot_mesh(dict_sample)
 
     raise valueError('Stoooop')
     #change here -> Create_IC from PFDEM_AC
