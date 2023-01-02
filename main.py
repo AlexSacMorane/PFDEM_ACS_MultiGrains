@@ -86,7 +86,7 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         Contact_gg.Grains_Polyhedral_contact_Neighborhoods(dict_material,dict_sample)
 
         # Detection of contacts between grain and walls
-        if dict_algorithm['i_DEM'] % dict_algorithm['i_update_neighborhoods']  == 0:
+        if (dict_algorithm['i_DEM']-1)% dict_algorithm['i_update_neighborhoods']  == 0:
             Contact_gw.Update_wall_Neighborhoods(dict_algorithm, dict_sample)
         Contact_gw.Grains_Polyhedral_Wall_contact_Neighborhood(dict_material,dict_sample)
 
@@ -465,7 +465,15 @@ if '__main__' == __name__:
     #main
     #-------------------------------------------------------------------------------
 
+    # Preparation and add elements in dicts
     dict_algorithm['i_PFDEM'] = 0
+    dict_sample['L_contact_gw'] = []
+    dict_sample['L_ij_contact_gw'] = []
+    dict_sample['id_contact_gw'] = 0
+    dict_sample['L_contact'] = []
+    dict_sample['L_ij_contact'] = []
+    dict_sample['id_contact'] = 0
+
     while not User.Criteria_StopSimulation(dict_algorithm):
 
         iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
