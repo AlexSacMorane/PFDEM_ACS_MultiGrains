@@ -66,12 +66,25 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     for grain in dict_sample['L_g']:
         L_center_g.append(grain.center.copy())
 
+    #initial value
+    DEM_loop_statut = True
+    dict_algorithm['i_DEM'] = 0
+
+    # Compute kinetic energy criteria and update element in dict
+    Ecin_stop = 0
+    for grain in dict_sample['L_g']:
+        Ecin_stop = Ecin_stop + 0.5*grain.mass*(dict_algorithm['Ecin_ratio']*grain.r_mean/dict_algorithm['dt_DEM'])**2/len(dict_sample['L_g'])
+    dict_algorithm['Ecin_stop'] = Ecin_stop
+
+    #Trackers and add element in dict
+    dict_tracker['Ecin'] = []
+    dict_tracker['y_box_max'] = [dict_sample['y_box_max']]
+    dict_tracker['Force_on_upper_wall'] = []
+
     #---------------------------------------------------------------------------
     #DEM to move grains
     #---------------------------------------------------------------------------
 
-    DEM_loop_statut = True
-    dict_algorithm['i_DEM'] = 0
     while DEM_loop_statut :
         # update element in dict
         dict_algorithm['i_DEM'] = dict_algorithm['i_DEM'] + 1
