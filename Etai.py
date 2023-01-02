@@ -15,6 +15,7 @@ import numpy as np
 import random
 
 #Own
+import Report
 import Grain
 
 #-------------------------------------------------------------------------------
@@ -61,7 +62,7 @@ class Etai:
 #Function
 #-------------------------------------------------------------------------------
 
-def etai_distribution(dict_algorithm, dict_sample):
+def etai_distribution(dict_algorithm, dict_sample, simulation_report):
     '''
     Assign grains to etai.
 
@@ -70,6 +71,7 @@ def etai_distribution(dict_algorithm, dict_sample):
         Input :
             an algorithm dictionnary (a dict)
             a sample dictionnary (a dict)
+            a simulation report (a report)
         Output :
             Nothing, but the sample dictionnary is updated with the list of the etai (a list)
     '''
@@ -152,5 +154,7 @@ def etai_distribution(dict_algorithm, dict_sample):
 
     #update the dict
     dict_sample['L_etai'] = L_etai
+    simulation_report.write(f"{len(dict_sample['L_etai'])} phase variables used.\n")
+    simulation_report.write(f"{round(len(dict_sample['L_g'])/len(dict_sample['L_etai']),1)} grains described for one phase variable.\n")
 
 #-------------------------------------------------------------------------------

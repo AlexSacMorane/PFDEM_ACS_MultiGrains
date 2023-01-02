@@ -693,6 +693,7 @@ class Grain:
         self.f = np.array([self.fx,self.fy])
         self.mz = 0
         self.v = 0
+        
     #-------------------------------------------------------------------------------
 
     def update_f(self, Fx, Fy, p_application):
