@@ -693,6 +693,27 @@ class Grain:
         self.f = np.array([self.fx,self.fy])
         self.mz = 0
 
+    #-------------------------------------------------------------------------------
+
+      def update_f(self, Fx, Fy, p_application):
+        """
+        Add a force to the grain.
+
+            Input :
+                itself (a grain)
+                the value x and y of the force (two float)
+                an applicaiton point (a 1 x 2 numpy array)
+            Output :
+                Nothing, but a force is applied to the grain
+        """
+        self.fx = self.fx + Fx
+        self.fy = self.fy + Fy
+        self.f = np.array([self.fx,self.fy])
+
+        v1 = np.array([p_application[0]-self.center[0], p_application[1]-self.center[1], 0])
+        v2 = np.array([Fx, Fy, 0])
+        self.mz = self.mz + np.cross(v1,v2)[2]
+
 #-------------------------------------------------------------------------------
 #Functions
 #-------------------------------------------------------------------------------
