@@ -638,7 +638,7 @@ def Plot_etai_distribution(dict_sample):
     #etai
     for i_etai in range(len(dict_sample['L_etai'])):
         for i_grain in dict_sample['L_etai'][i_etai].l_ig :
-            plt.plot(dict_sample['L_g'][i_grain].l_border_x,dict_sample['L_g'][i_grain].l_border_y,L_color['i_etai'])
+            plt.plot(dict_sample['L_g'][i_grain].l_border_x,dict_sample['L_g'][i_grain].l_border_y,L_color[i_etai])
     plt.title('Etai distribution')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
