@@ -15,7 +15,7 @@ import pickle
 
 #-------------------------------------------------------------------------------
 
-def save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker):
+def save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report):
     '''
     Save dictionnaries at the end of each PFDEM interations.
 
@@ -35,12 +35,13 @@ def save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitat
     dict_save['sample'] = dict_sample
     dict_save['sollicitation'] = dict_sollicitation
     dict_save['tracker'] = dict_tracker
+    dict_save['report'] = simulation_report
     pickle.dump(dict_save,outfile)
     outfile.close()
 
 #-------------------------------------------------------------------------------
 
-def save_dicts_final(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker):
+def save_dicts_final(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report):
     '''
     Save dictionnaries at the end of the simulation.
 
@@ -61,5 +62,6 @@ def save_dicts_final(dict_algorithm, dict_material, dict_sample, dict_sollicitat
     dict_save['sample'] = dict_sample
     dict_save['sollicitation'] = dict_sollicitation
     dict_save['tracker'] = dict_tracker
+    dict_save['report'] = simulation_report
     pickle.dump(dict_save,outfile)
     outfile.close()
