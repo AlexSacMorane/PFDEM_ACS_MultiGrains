@@ -168,6 +168,8 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
 
     raise ValueError('Stoooop')
 
+    #
+
     #Compute parameters needed
     Owntools.Compute.Compute_sum_min_etai(dict_sample, dict_sollicitation) #the sum of the minimum of etai
     Owntools.Compute.Compute_Emec(dict_sample, dict_sollicitation) #the mechanical energy

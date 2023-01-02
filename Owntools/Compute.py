@@ -306,6 +306,7 @@ def Compute_mean_sphericity(dict_algorithm, dict_sample):
     L_perimeter_sphericity = []
     L_width_to_length_ratio_sphericity = []
     for grain in dict_sample['L_g']:
+        print(grain.id)
         grain.geometric_study(dict_sample)
         grain.Compute_sphericity(dict_algorithm)
         #sphericities
