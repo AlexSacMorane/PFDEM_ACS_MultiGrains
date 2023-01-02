@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import Create_IC.Grain_ic
 import Create_IC.Contact_gg_ic
 import Create_IC.Contact_gw_ic
+import Grain
 
 #-------------------------------------------------------------------------------
 #Function
