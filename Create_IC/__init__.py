@@ -494,7 +494,7 @@ def Plot_Config_Loaded_End(L_g,x_min,x_max,y_min,y_max):
 
 #-------------------------------------------------------------------------------
 
-def From_LG_tempo_to_usable(dict_ic, dict_geometry, dict_material, dict_sample):
+def From_LG_tempo_to_usable(dict_material, dict_sample):
     """
     Create a rea lgrain from a temporary grain.
 
@@ -514,19 +514,15 @@ def From_LG_tempo_to_usable(dict_ic, dict_geometry, dict_material, dict_sample):
 
         dict_ic_to_real = {
         'Id' : grain_tempo.id,
-        'Type' : grain_tempo.type,
-        'Y' : grain_tempo.y,
-        'Nu' : grain_tempo.nu,
-        'Rho_surf' : grain_tempo.rho_surf,
         'Center' : grain_tempo.center,
+        'L_r' : grain_tempo.l_r,
+        'L_theta_r' : grain_tempo.l_theta_r,
         'L_border' : grain_tempo.l_border,
         'L_border_x' : grain_tempo.l_border_x,
         'L_border_y' : grain_tempo.l_border_y,
-        'L_r' : grain_tempo.l_r,
-        'L_theta_r' : grain_tempo.l_theta_r,
-        'R_min' : min(grain_tempo.l_r),
-        'R_max' : max(grain_tempo.l_r),
-        'R_mean' : np.mean(grain_tempo.l_r),
+        'Y' : grain_tempo.y,
+        'Nu' : grain_tempo.nu,
+        'Rho_surf' : grain_tempo.rho_surf,
         'Surface' : grain_tempo.surface,
         'Mass' : grain_tempo.mass,
         'Inertia' : grain_tempo.inertia

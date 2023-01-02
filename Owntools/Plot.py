@@ -263,14 +263,14 @@ def Plot_config(dict_algorithm, dict_sample):
     im = plt.imshow(dict_sample['L_g'][0].etai_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])], vmin = 0, vmax = 1)
     plt.colorbar(im)
     plt.plot(dict_sample['L_g'][0].l_border_x,dict_sample['L_g'][0].l_border_y,'r')
-    plt.title(r'$\eta$1')
+    plt.title('Grain 1')
 
     #eta2_M
     plt.subplot(224)
     im = plt.imshow(dict_sample['L_g'][1].etai_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])], vmin = 0, vmax = 1)
     plt.colorbar(im)
     plt.plot(dict_sample['L_g'][1].l_border_x,dict_sample['L_g'][1].l_border_y,'r')
-    plt.title(r'$\eta$2')
+    plt.title('Grain 2')
 
     plt.savefig(name)
     plt.close(1)

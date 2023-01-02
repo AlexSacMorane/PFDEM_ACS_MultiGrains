@@ -216,24 +216,6 @@ class TestUser(unittest.TestCase):
 
     #---------------------------------------------------------------------------
 
-    def test_Add_S0(self):
-        '''
-        Try to compute the initial intersection surface with the function User.Add_solute().
-
-            Output :
-                The result depends on the fact if initial surface is well computed or not (a bool)
-        '''
-        #Acquire data
-        dict_algorithm, dict_material, dict_sample, dict_sollicitation = User.All_parameters()
-        #Create 2 grains
-        User.Add_2grains(dict_material,dict_sample)
-        #try to compute the initial intersection surface
-        User.Add_S0(dict_sample, dict_sollicitation)
-        #check if there is a attribute
-        self.assertTrue('S_int_0' in dict_sample.keys(),'The function User.Add_S0 does not compute an initial intersection surface!')
-
-    #---------------------------------------------------------------------------
-
     def test_Add_solute(self):
         '''
         Try to generate a solute with the function User.Add_solute().
@@ -247,26 +229,6 @@ class TestUser(unittest.TestCase):
         User.Add_solute(dict_sample)
         #check if there are 2 grains
         self.assertTrue('solute_M' in dict_sample.keys(),'The function User.Add_solute does not create a solute!')
-
-    #---------------------------------------------------------------------------
-
-    def test_alpha_emec(self):
-        '''
-        Try to compute the coefficient in front of the mechanical energy term with the function User.Add_alpha_emec().
-
-            Output :
-                The result depends on the fact if the coefficient is well generated or not (a bool)
-        '''
-        #Acquire data
-        dict_algorithm, dict_material, dict_sample, dict_sollicitation = User.All_parameters()
-        #Create 2 grains
-        User.Add_2grains(dict_material,dict_sample)
-        #Compute the initial intersection surface
-        User.Add_S0(dict_sample, dict_sollicitation)
-        #Try to compute the initial coefficient
-        User.Add_alpha_emec(dict_sample, dict_sollicitation)
-        #check if there is a attribute
-        self.assertTrue('alpha' in dict_sollicitation.keys(),'The function User.Add_alpha_emec does not compute a coefficient!')
 
 #-------------------------------------------------------------------------------
 

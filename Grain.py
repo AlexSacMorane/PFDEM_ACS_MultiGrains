@@ -26,7 +26,7 @@ class Grain:
 
     #---------------------------------------------------------------------------
 
-    def __init__(self,id,radius,center,dict_material,dict_sample):
+    def __init__(self, dict_ic_to_real, dict_material, dict_sample):
         '''
         Defining a disk grain
 
@@ -39,37 +39,28 @@ class Grain:
             Output :
                 a grain (a grain)
         '''
-        self.id = id
-        self.center = center
-        L_r = []
-        L_theta_r = []
-        L_border = []
-        L_border_x = []
-        L_border_y = []
-        for i in range(dict_sample['grain_discretisation']):
-            theta = 2*math.pi*i/dict_sample['grain_discretisation']
-            L_r.append(radius)
-            L_theta_r.append(theta)
-            L_border.append(np.array([center[0]+radius*math.cos(theta),center[1]+radius*math.sin(theta)]))
-            L_border_x.append(center[0]+radius*math.cos(theta))
-            L_border_y.append(center[1]+radius*math.sin(theta))
-        L_border.append(L_border[0])
-        L_border_x.append(L_border_x[0])
-        L_border_y.append(L_border_y[0])
+        self.id = dict_ic_to_real['Id']
+        self.center = dict_ic_to_real['Center']
         #save description
-        self.r_mean = radius
-        self.l_r = L_r
-        self.l_theta_r = L_theta_r
-        self.l_border = L_border
-        self.l_border_x = L_border_x
-        self.l_border_y = L_border_y
+        self.r_mean = np.mean(dict_ic_to_real['L_r'])
+        self.r_min = min(dict_ic_to_real['L_r'])
+        self.r_max = np.max(dict_ic_to_real['L_r'])
+        self.l_r = dict_ic_to_real['L_r']
+        self.l_theta_r = dict_ic_to_real['L_theta_r']
+        self.l_border = dict_ic_to_real['L_border']
+        self.l_border_x = dict_ic_to_real['L_border_x']
+        self.l_border_y = dict_ic_to_real['L_border_y']
+        self.surface = dict_ic_to_real['Surface']
+        self.inertia = dict_ic_to_real['Inertia']
         #save initial
         self.center_init = center.copy()
         self.l_border_x_init = L_border_x.copy()
         self.l_border_y_init = L_border_y.copy()
-
+        #material
         self.y = dict_material['Y']
         self.nu = dict_material['nu']
+        self.rho_surf = dict_ic_to_real['Rho_surf']
+        self.mass = dict_ic_to_real['Mass']
 
         self.build_etai_M(dict_material,dict_sample)
 

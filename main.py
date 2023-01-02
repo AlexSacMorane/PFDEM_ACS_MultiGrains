@@ -144,19 +144,21 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #Compute and apply rigid boby motion
     #---------------------------------------------------------------------------
 
-
-
-
-
-    Grain.Compute_overlap_2_grains(dict_sample)
-    Grain.Apply_overlap_target(dict_material,dict_sample,dict_sollicitation,dict_tracker)
+    # translation
+    L_rbm_translation = []
+    for i_grain in range(len(dict_sample['L_g'])):
+        L_rbm_translation.append(dict_sample['L_g'][i_grain].center - L_center_g[i_grain])
+        dict_sample['L_g'][i_grain].move_grain_interpolation(L_rbm_translation[i_grain], dict_sample)
+    #rotation
+    L_rbm_rotation = []
+    for i_grain in range(len(dict_sample['L_g'])):
+        L_rbm_rotation.append(0)
 
     #---------------------------------------------------------------------------
     #prepare phase field simulation
     #---------------------------------------------------------------------------
 
     #Compute parameters needed
-    Owntools.Compute.Compute_S_int(dict_sample) #the intersection surface
     Owntools.Compute.Compute_sum_min_etai(dict_sample, dict_sollicitation) #the sum of the minimum of etai
     Owntools.Compute.Compute_Emec(dict_sample, dict_sollicitation) #the mechanical energy
     if dict_material['method_to_compute_kc'] == 'dilation':
@@ -378,8 +380,17 @@ if '__main__' == __name__:
     if 'Diff_Solute' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Diff_Solute')
 
-    #create the two grains
+    #create the initial configuration
     Create_IC.LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation, simulation_report)
+
+    #Define the mesh
+    User.Add_mesh(dict_geometry, dict_sample)
+
+    #Add needed variables
+    User.Add_variables_needed(dict_material, dict_sample)
+
+    #conversion of the tempo grain to real grain
+    Create_IC.From_LG_tempo_to_usable(dict_material, dict_sample)
 
     raise valueError('Stoooop')
     #change here -> Create_IC from PFDEM_AC
@@ -415,7 +426,6 @@ if '__main__' == __name__:
     'L_circle_ratio_sphericity_g0' : [dict_sample['L_g'][0].circle_ratio_sphericity],
     'L_perimeter_sphericity_g0' : [dict_sample['L_g'][0].perimeter_sphericity],
     'L_width_to_length_ratio_sphericity_g0' : [dict_sample['L_g'][0].width_to_length_ratio_sphericity],
-    'c_at_the_center' : [Owntools.Extract_solute_at_p(dict_sample,(int(len(dict_sample['y_L'])/2),int(len(dict_sample['x_L'])/2)))],
     'sum_ed_L': [],
     'sum_Ed_che_L': [],
     'sum_Ed_mec_L': [],
