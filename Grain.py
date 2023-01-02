@@ -669,7 +669,7 @@ class Grain:
         self.fy = -dict_sollicitations['gravity']*self.mass
         self.f = np.array([self.fx,self.fy])
         self.mz = 0
-        self.v = 0
+        self.v = np.array([0, 0])
         self.w = 0
 
     #-------------------------------------------------------------------------------
