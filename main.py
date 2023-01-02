@@ -385,7 +385,7 @@ if '__main__' == __name__:
     #prepare plot
     if 'Config' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Configuration')
-        if dict_algorithm['Debug_DEM_IC'] :
+        if dict_algorithm['Debug_DEM'] :
             os.mkdir('Debug/Configuration/Init')
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Comparison_Init_Current')
