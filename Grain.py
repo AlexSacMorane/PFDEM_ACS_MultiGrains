@@ -53,9 +53,9 @@ class Grain:
         self.surface = dict_ic_to_real['Surface']
         self.inertia = dict_ic_to_real['Inertia']
         #save initial
-        self.center_init = center.copy()
-        self.l_border_x_init = L_border_x.copy()
-        self.l_border_y_init = L_border_y.copy()
+        self.center_init = self.center.copy()
+        self.l_border_x_init = self.l_border_x.copy()
+        self.l_border_y_init = self.l_border_y.copy()
         #material
         self.y = dict_material['Y']
         self.nu = dict_material['nu']
