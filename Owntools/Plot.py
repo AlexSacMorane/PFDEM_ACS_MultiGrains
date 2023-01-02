@@ -618,3 +618,29 @@ def Plot_mesh(dict_sample):
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.savefig('Debug/Mesh.png')
     plt.close(1)
+
+#-------------------------------------------------------------------------------
+
+def Plot_etai_distribution(dict_sample):
+    '''
+    Plot the distribution of the etai.
+
+        Input :
+            a sample dictionnary (a dict)
+        Output :
+            Nothing but a .png file is generated (file)
+    '''
+    plt.figure(1,figsize=(16,9))
+    #box
+    plt.plot([dict_sample['x_box_min'], dict_sample['x_box_max'], dict_sample['x_box_max'], dict_sample['x_box_min'], dict_sample['x_box_min']],
+             [dict_sample['y_box_min'], dict_sample['y_box_min'], dict_sample['y_box_max'], dict_sample['y_box_max'], dict_sample['y_box_min']], 'k')
+    L_color = ['red', 'royalblue', 'forestgreen', 'gold', 'hotpink', 'skyblue', 'chocolate', 'darkkhaki', 'darkorchid', 'silver']
+    #etai
+    for i_etai in range(len(dict_sample['L_etai'])):
+        for i_grain in dict_sample['L_etai'][i_etai].l_ig :
+            plt.plot(dict_sample['L_g'][i_grain].l_border_x,dict_sample['L_g'][i_grain].l_border_y,L_color['i_etai'])
+    plt.title('Etai distribution')
+    plt.axis('equal')
+    plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
+    plt.savefig('Debug/Etai_distribution.png')
+    plt.close(1)

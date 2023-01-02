@@ -33,6 +33,7 @@ import Create_IC.Contact_gg_ic
 import Create_IC.Contact_gw_ic
 import User
 import Report
+import Etai
 
 #-------------------------------------------------------------------------------
 
@@ -389,12 +390,17 @@ if '__main__' == __name__:
     #Add needed variables
     User.Add_variables_needed(dict_material, dict_sample)
 
-    #conversion of the tempo grain to real grain
+    #Convert the tempo grain to real grain
     Create_IC.From_LG_tempo_to_usable(dict_ic, dict_material, dict_sample)
 
     #plot mesh
     if 'Mesh' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_mesh(dict_sample)
+
+    #Distribution of the etai and plot
+    Etai.etai_distribution(dict_algorithm, dict_sample)
+    if 'Etai_distribution' in dict_algorithm['L_flag_plot'] :
+        Owntools.Plot.Plot_etai_distribution(dict_sample)
 
     raise ValueError('Stoooop')
 
