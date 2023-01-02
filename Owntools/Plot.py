@@ -616,3 +616,5 @@ def Plot_mesh(dict_sample):
     plt.title('Mesh')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
+    plt.savefig('Debug/Mesh.png')
+    plt.close(1)
