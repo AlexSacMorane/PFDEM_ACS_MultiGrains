@@ -182,7 +182,7 @@ class Contact_gg:
 
         #Damping term
         gamma = -math.log(self.coeff_restitution)/math.sqrt(math.pi**2+math.log(self.coeff_restitution)**2)
-        mass_eq = self.g1.m*self.g2.m/(self.g1.m+self.g2.m)
+        mass_eq = self.g1.mass*self.g2.mmass/(self.g1.mmass+self.g2.mmass)
         eta = 2 * gamma * math.sqrt(mass_eq*k)
         F_2_1_damp_n = np.dot(self.g2.v - self.g1.v,PC_normal)*eta
         F_2_1_damp = F_2_1_damp_n *PC_normal
@@ -238,7 +238,7 @@ class Contact_gg:
 
         #Damping term
         gamma = -math.log(self.coeff_restitution)/math.sqrt(math.pi**2+math.log(self.coeff_restitution)**2)
-        mass_eq = self.g1.m*self.g2.m/(self.g1.m+self.g2.m)
+        mass_eq = self.g1.mass*self.g2.mass/(self.g1.mass+self.g2.mass)
         eta = 2 * gamma * math.sqrt(mass_eq*kt)
         F_2_1_damp_t = -Delta_Us/dt_DEM*eta/2
         F_2_1_damp = F_2_1_damp_t *self.pc_tangential

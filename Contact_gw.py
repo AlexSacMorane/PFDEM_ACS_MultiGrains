@@ -107,7 +107,7 @@ class Contact_gw:
         self.g.update_f(Fwg[0],Fwg[1],self.g.l_border[self.g.l_border_y.index(min(self.g.l_border_y))])
         #damping
         gamma = -math.log(self.coeff_restitution)/math.sqrt(math.pi**2+math.log(self.coeff_restitution)**2)
-        mass_eq = self.g.m
+        mass_eq = self.g.mass
         eta = 2 * gamma * math.sqrt(mass_eq*self.k)
         Fwg_damp_n = -np.dot(self.g.v,nwg)*eta
         Fwg_damp = Fwg_damp_n*nwg
@@ -136,7 +136,7 @@ class Contact_gw:
         self.g.update_f(Fwg[0],Fwg[1],self.g.l_border[self.g.l_border_x.index(min(self.g.l_border_x))])
         #damping
         gamma = -math.log(self.coeff_restitution)/math.sqrt(math.pi**2+math.log(self.coeff_restitution)**2)
-        mass_eq = self.g.m
+        mass_eq = self.g.mass
         eta = 2 * gamma * math.sqrt(mass_eq*self.k)
         Fwg_damp_n = -np.dot(self.g.v,nwg)*eta
         Fwg_damp = Fwg_damp_n*nwg
@@ -153,7 +153,7 @@ class Contact_gw:
         self.g.update_f(Fwg[0],Fwg[1],self.g.l_border[self.g.l_border_x.index(max(self.g.l_border_x))])
         #damping
         gamma = -math.log(self.coeff_restitution)/math.sqrt(math.pi**2+math.log(self.coeff_restitution)**2)
-        mass_eq = self.g.m
+        mass_eq = self.g.mass
         eta = 2 * gamma * math.sqrt(mass_eq*self.k)
         Fwg_damp_n = -np.dot(self.g.v,nwg)*eta
         Fwg_damp = Fwg_damp_n*nwg
