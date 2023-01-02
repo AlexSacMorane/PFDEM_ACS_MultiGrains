@@ -131,7 +131,7 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         dict_tracker['Force_on_upper_wall'].append(dict_sollicitation['Force_on_upper_wall'])
 
         if (dict_algorithm['i_DEM']-1) % dict_algorithm['i_print_plot'] == 0:
-            print('\nPF '+str(dict_algorithm['i_PFDEM'])+' -> i_DEM '+str(dict_algorithm['i_PFDEM'])+' / '+str(dict_algorithm['i_DEM_stop'])+' (max)')
+            print('\nPF '+str(dict_algorithm['i_PFDEM'])+' -> i_DEM '+str(dict_algorithm['i_DEM'])+' / '+str(dict_algorithm['i_DEM_stop'])+' (max)')
             print('Ecin',int(Ecin),'/',int(dict_algorithm['Ecin_stop']),'('+str(int(100*Ecin/dict_algorithm['Ecin_stop'])),' %)')
             print('F_confinement',int(dict_sollicitation['Force_on_upper_wall']),'/',int(dict_sollicitation['Vertical_Confinement_Force']),'('+str(int(100*dict_sollicitation['Force_on_upper_wall']/dict_sollicitation['Vertical_Confinement_Force'])),' %)')
 
