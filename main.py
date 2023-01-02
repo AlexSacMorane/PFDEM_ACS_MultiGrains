@@ -82,6 +82,7 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
 
         # Detection of contacts between grains
         if dict_algorithm['i_DEM'] % dict_algorithm['i_update_neighborhoods']  == 0:
+            print('cc')
             Contact_gg.Update_Neighborhoods(dict_algorithm,dict_sample)
         Contact_gg.Grains_Polyhedral_contact_Neighborhoods(dict_material,dict_sample)
 
