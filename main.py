@@ -384,7 +384,7 @@ if '__main__' == __name__:
     Create_IC.LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation, simulation_report)
 
     #conversion of the tempo grain to real grain
-    Create_IC.From_LG_tempo_to_usable(dict_ic, dict_sample)
+    Create_IC.From_LG_tempo_to_usable(dict_ic, dict_material, dict_sample)
 
     #Define the mesh and plot
     User.Add_mesh(dict_geometry, dict_sample)

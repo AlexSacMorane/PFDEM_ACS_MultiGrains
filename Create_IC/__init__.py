@@ -495,7 +495,7 @@ def Plot_Config_Loaded_End(L_g,x_min,x_max,y_min,y_max):
 
 #-------------------------------------------------------------------------------
 
-def From_LG_tempo_to_usable(dict_ic, dict_sample):
+def From_LG_tempo_to_usable(dict_ic, dict_material, dict_sample):
     """
     Create a real grain from a temporary grain.
 
@@ -504,6 +504,7 @@ def From_LG_tempo_to_usable(dict_ic, dict_sample):
 
         Input :
             an initial condition dictionnary (a dict)
+            a material dictionnary (a dict)
             a sample dictionnary (a dict)
         Output :
             Nothing, but the sample dictionnary is updated with the list of real grains
@@ -527,7 +528,7 @@ def From_LG_tempo_to_usable(dict_ic, dict_sample):
         'Inertia' : grain_tempo.inertia
         }
         #create real grain
-        L_g.append(Grain.Grain(dict_ic_to_real))
+        L_g.append(Grain.Grain(dict_ic_to_real, dict_material, dict_sample))
 
     #Add element in dict
     dict_sample['L_g'] = L_g
