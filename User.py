@@ -63,8 +63,8 @@ def All_parameters():
     y_box_min = 0 #µm
 
     #spatial discretisation
-    nx = 180
-    ny = 100
+    nx = int(30*math.sqrt(N_grain*0.6))
+    ny = int(0.6*nx)
 
     #approximatively the number of vertices for one grain during DEM simulation
     grain_discretisation = 20
