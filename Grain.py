@@ -59,6 +59,7 @@ class Grain:
         #material
         self.y = dict_material['Y']
         self.nu = dict_material['nu']
+        self.g = self.y/2/(1+self.nu) #shear modulus
         self.rho_surf = dict_ic_to_real['Rho_surf']
         self.mass = dict_ic_to_real['Mass']
 
@@ -693,7 +694,7 @@ class Grain:
         self.f = np.array([self.fx,self.fy])
         self.mz = 0
         self.v = 0
-        
+
     #-------------------------------------------------------------------------------
 
     def update_f(self, Fx, Fy, p_application):
