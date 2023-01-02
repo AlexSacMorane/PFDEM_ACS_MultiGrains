@@ -39,7 +39,7 @@ class Etai:
         '''
         self.id = ID
         self.l_ig = L_ig
-        self.update(L_g)
+        self.update_etai_M(L_g)
 
     #-------------------------------------------------------------------------------
 
