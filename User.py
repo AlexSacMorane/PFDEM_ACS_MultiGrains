@@ -225,7 +225,7 @@ def All_parameters():
     #Initial condition parameters
 
     n_generation = 2 #number of grains generation
-    factor_ymax_box = 2.5 #margin to generate grains
+    factor_ymax_box = 2 #margin to generate grains
     N_test_max = 5000 # maximum number of tries to generate a grain without overlap
     i_DEM_stop_IC = 2000 #stop criteria for DEM during IC
     Debug_DEM_IC = True #plot configuration inside DEM during IC
@@ -272,8 +272,8 @@ def Add_mesh(dict_geometry, dict_sample):
     x_min = dict_sample['x_box_min'] - 0.1*dict_geometry['R_mean']
     x_max = dict_sample['x_box_max'] + 0.1*dict_geometry['R_mean']
     x_L = np.linspace(x_min,x_max,dict_sample['nx'])
-    y_min = dict_sample['x_box_min'] - 0.1*dict_geometry['R_mean']
-    y_max = dict_sample['x_box_max'] + 0.1*dict_geometry['R_mean']
+    y_min = dict_sample['y_box_min'] - 0.1*dict_geometry['R_mean']
+    y_max = dict_sample['y_box_max'] + 0.1*dict_geometry['R_mean']
     y_L = np.linspace(y_min,y_max,dict_sample['nx'])
 
     #add element in dict

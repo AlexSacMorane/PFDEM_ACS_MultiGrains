@@ -604,7 +604,7 @@ def Plot_mesh(dict_sample):
     plt.figure(1,figsize=(16,9))
     #mesh
     for x in dict_sample['x_L'] :
-        plt.plot([x, x], [min(dict_sample['y_L']), max(dict_sample['y_L'])], 'b')
+        plt.plot([x, x], [min(dict_sample['y_L']), max(dict_sample['y_L'])], 'b', linewidth = 1)
     for y in dict_sample['y_L'] :
         plt.plot([min(dict_sample['x_L']), max(dict_sample['x_L'])], [y, y], 'b')
     #box

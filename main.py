@@ -396,8 +396,7 @@ if '__main__' == __name__:
     if 'Mesh' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_mesh(dict_sample)
 
-    raise valueError('Stoooop')
-    #change here -> Create_IC from PFDEM_AC
+    raise ValueError('Stoooop')
 
     #Compute initial sum_eta
     Owntools.Compute.Compute_sum_eta(dict_sample)
