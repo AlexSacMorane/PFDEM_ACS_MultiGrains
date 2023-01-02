@@ -494,17 +494,15 @@ def Plot_Config_Loaded_End(L_g,x_min,x_max,y_min,y_max):
 
 #-------------------------------------------------------------------------------
 
-def From_LG_tempo_to_usable(dict_material, dict_sample):
+def From_LG_tempo_to_usable(dict_ic, dict_sample):
     """
-    Create a rea lgrain from a temporary grain.
+    Create a real grain from a temporary grain.
 
     The phase variable is built. The distance between the point of the mesh and the particle center determines the value of the variable.
     A cosine profile is applied inside the interface.
 
         Input :
             an initial condition dictionnary (a dict)
-            a geometry dictionnary (a dict)
-            a material dictionnary (a dict)
             a sample dictionnary (a dict)
         Output :
             Nothing, but the sample dictionnary is updated with the list of real grains

@@ -36,7 +36,7 @@ def All_parameters():
     #---------------------------------------------------------------------------
     #Geometry parameters
 
-    N_grain = 100 #total number of grains
+    N_grain = 50 #total number of grains
 
     R0 = 350 #µm radius to compute the grain distribution
     L_R = [1.2*R0,1.1*R0,0.9*R0,0.8*R0] #from larger to smaller
@@ -59,7 +59,7 @@ def All_parameters():
 
     #Box définition
     x_box_min = 0 #µm
-    x_box_max = 2*R_mean*math.sqrt(N_grain/0.6) #µm
+    x_box_max = 2*R_mean*math.sqrt(N_grain*0.6) #µm
     y_box_min = 0 #µm
 
     #spatial discretisation
@@ -151,17 +151,17 @@ def All_parameters():
     Debug = True #plot configuration before and after DEM simulation
     Debug_DEM = False #plot configuration inside DEM
     i_print_plot = 200 #frenquency of the print and plot (if Debug_DEM) in DEM step
-    # Config, C_at_P, Diff_Solute, dt, Ed, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Sint_MinEtai, Sphericity, sum_Ed
-    L_flag_plot = ['Config', 'Sphericity', 'Movie', 'sum_Ed']
+    # Config, C_at_P, Diff_Solute, dt, Ed, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sint_MinEtai, Sphericity, sum_Ed
+    L_flag_plot = ['Config', 'Sphericity', 'Movie', 'sum_Ed', 'Mesh']
     #Visual parameters (for plot Config)
     c_min = 0
     c_max = 0.08
 
     #Save the simulation
-    SaveData = True #Save data or not
+    SaveData = False #Save data or not
     clean_memory = True #delete Data, Input, Output at the end of the simulation
-    foldername = 'Data_2G_ACS' #name of the folder where data are saved
-    template = 'PS_Long_Run' #template of the name of the simulation
+    foldername = 'Data_MG_ACS' #name of the folder where data are saved
+    template = 'PS' #template of the name of the simulation
     if SaveData :
         i_run = 1
         folderpath = Path('../'+foldername+'/'+template+'_'+str(i_run))
