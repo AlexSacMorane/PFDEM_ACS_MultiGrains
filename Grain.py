@@ -61,6 +61,8 @@ class Grain:
         self.nu = dict_material['nu']
         self.rho_surf = dict_ic_to_real['Rho_surf']
         self.mass = dict_ic_to_real['Mass']
+        #kinetic
+        self.v = 0
 
         self.build_etai_M(dict_material,dict_sample)
 
