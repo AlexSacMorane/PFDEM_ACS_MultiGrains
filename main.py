@@ -308,7 +308,7 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #---------------------------------------------------------------------------
 
     if dict_algorithm['SaveData']:
-        Owntools.Save.save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker)
+        Owntools.Save.save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
         shutil.copy('Debug/Report.txt','../'+dict_algorithm['foldername']+'/Report_'+dict_algorithm['namefile']+'_tempo.txt')
 
     simulation_report.tac_tempo(datetime.now(),f"Iteration {dict_algorithm['i_PFDEM']}: from pf to dem")
@@ -340,7 +340,7 @@ def close_main(dict_algorithm, dict_material, dict_sample, dict_sollicitation, d
         print()
         print('Copying data, it can take long times...')
 
-        Owntools.Save.save_dicts_final(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker)
+        Owntools.Save.save_dicts_final(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
         name_actual_folder = os.path.dirname(os.path.realpath(__file__))
         shutil.copytree(name_actual_folder, '../'+dict_algorithm['foldername']+'/'+dict_algorithm['namefile'])
         os.remove('../'+dict_algorithm['foldername']+'/User_'+dict_algorithm['namefile']+'_tempo.txt')
