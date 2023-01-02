@@ -39,7 +39,6 @@ class Etai:
         '''
         self.id = ID
         self.l_ig = L_ig
-        print(L_ig)
         self.update_etai_M(L_g)
 
     #-------------------------------------------------------------------------------
@@ -148,7 +147,7 @@ def etai_distribution(dict_algorithm, dict_sample):
     #Create etai
     L_etai = []
     for i in range(len(L_ig_etai)) :
-        etai = Etai(i, L_ig_etai, dict_sample['L_g'])
+        etai = Etai(i, L_ig_etai[i], dict_sample['L_g'])
         L_etai.append(etai)
 
     #update the dict
