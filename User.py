@@ -320,26 +320,40 @@ def Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollici
     L_r_1 = []
     L_theta_R_1 = []
     L_border_1 = []
+    L_border_x_1 = []
+    L_border_y_1 = []
     for i in range(90):
         theta = 2*math.pi*i/90
         L_r_1.append(dict_geometry['R_mean'])
         L_theta_R_1.append(theta)
         L_border_1.append(np.array(center_1)+np.array([dict_geometry['R_mean']*math.cos(theta),dict_geometry['R_mean']*math.sin(theta)]))
-    dict_ic_to_g1_tempo =  {'Center' : center_1,'L_r' : L_r_1,'L_theta_r' : L_theta_R_1,'L_border' : L_border_1,
-                            'Id' : None,'L_border_x' : [],'L_border_y' : [],'Y' : None,'Nu' : None,'Rho_surf' : None,'Surface' : None,'Mass' : None,'Inertia' : None}
+        L_border_x_1.append(center_1[0]+dict_geometry['R_mean']*math.cos(theta))
+        L_border_y_1.append(center_1[1]+dict_geometry['R_mean']*math.sin(theta))
+    L_border_1.append(L_border_1[0])
+    L_border_x_1.append(L_border_x_1[0])
+    L_border_y_1.append(L_border_y_1[0])
+    dict_ic_to_g1_tempo =  {'Center' : center_1,'L_r' : L_r_1,'L_theta_r' : L_theta_R_1,'L_border' : L_border_1,'L_border_x' : L_border_x_1,'L_border_y' : L_border_y_1,
+                            'Id' : None,'Y' : None,'Nu' : None,'Rho_surf' : None,'Surface' : None,'Mass' : None,'Inertia' : None}
     g1_tempo = Grain.Grain(dict_ic_to_g1_tempo, dict_material, dict_sample)
     #g2
     center_2 = np.array([np.mean(dict_sample['x_L'])+dict_geometry['R_mean']-overlap/2, np.mean(dict_sample['y_L'])])
     L_r_2 = []
     L_theta_R_2 = []
     L_border_2 = []
+    L_border_x_2 = []
+    L_border_y_2 = []
     for i in range(90):
         theta = 2*math.pi*i/90
         L_r_2.append(dict_geometry['R_mean'])
         L_theta_R_2.append(theta)
         L_border_2.append(np.array(center_2)+np.array([dict_geometry['R_mean']*math.cos(theta),dict_geometry['R_mean']*math.sin(theta)]))
-    dict_ic_to_g2_tempo =  {'Center' : center_2,'L_r' : L_r_2,'L_theta_r' : L_theta_R_2,'L_border' : L_border_2,
-                            'Id' : None,'L_border_x' : [],'L_border_y' : [],'Y' : None,'Nu' : None,'Rho_surf' : None,'Surface' : None,'Mass' : None,'Inertia' : None}
+        L_border_x_2.append(center_2[0]+dict_geometry['R_mean']*math.cos(theta))
+        L_border_y_2.append(center_2[1]+dict_geometry['R_mean']*math.sin(theta))
+    L_border_2.append(L_border_2[0])
+    L_border_x_2.append(L_border_x_2[0])
+    L_border_y_2.append(L_border_y_2[0])
+    dict_ic_to_g2_tempo =  {'Center' : center_2,'L_r' : L_r_2,'L_theta_r' : L_theta_R_2,'L_border' : L_border_2,'L_border_x' : L_border_x_2,'L_border_y' : L_border_y_2,
+                            'Id' : None,'Y' : None,'Nu' : None,'Rho_surf' : None,'Surface' : None,'Mass' : None,'Inertia' : None}
     g2_tempo = Grain.Grain(dict_ic_to_g2_tempo, dict_material, dict_sample)
     #compute the sum_min_etai
     #extract a spatial zone
