@@ -221,8 +221,6 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         os.mkdir('Debug/Diff_Solute/Ite_'+str(dict_algorithm['i_PFDEM']))
         Owntools.Plot.Plot_Diffusion_Solute(dict_algorithm, dict_material, dict_sample)
 
-    raise ValueError('Stoooop')
-
     #create i
     Owntools.Write.Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation)
 
@@ -232,6 +230,8 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #---------------------------------------------------------------------------
     #PF simulation
     #---------------------------------------------------------------------------
+
+    raise ValueError('Stoooop')
 
     #run
     os.system('mpiexec -n '+str(dict_algorithm['np_proc'])+' ~/projects/moose/modules/combined/combined-opt -i '+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'.i')

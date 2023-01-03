@@ -45,20 +45,123 @@ def Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation):
       line = line[:-1] + ' ' + str(min(dict_sample['y_L']))+'\n'
     elif j == 10:
       line = line[:-1] + ' ' + str(max(dict_sample['y_L']))+'\n'
+    elif j == 20:
+      line = ''
+      for etai in dict_sample['L_etai']:
+          line = line + '\t[./eta'+str(int(etai.id+1))+']\n'+\
+                        '\t\torder = FIRST\n'+\
+                        '\t\tfamily = LAGRANGE\n'+\
+                        '\t\t[./InitialCondition]\n'+\
+                        '\t\t\ttype = FunctionIC\n'+\
+                        '\t\t\tfunction = eta'+str(int(etai.id+1))+'_txt\n'+\
+                        '\t\t[../]\n'+\
+                        '\t[../]\n'
+    elif j == 30:
+      line = ''
+      for etai in dict_sample['L_etai']:
+          line = line + '\t#\n'+\
+                        '\t# Order parameter eta'+str(int(etai.id+1))+'\n'+\
+                        '\t#\n'+\
+                        '\t[./deta'+str(int(etai.id+1))+'dt]\n'+\
+                        '\t\ttype = TimeDerivative\n'+\
+                        '\t\tvariable = eta'+str(int(etai.id+1))+'\n'+\
+                        '\t[../]\n'+\
+                        '\t[./ACBulk'+str(int(etai.id+1))+']\n'+\
+                        '\t\ttype = AllenCahn\n'+\
+                        '\t\tvariable = eta'+str(int(etai.id+1))+'\n'
+          args_str = ''
+          for etaj in dict_sample['L_etai'] :
+              if etai.id != etaj.id :
+                  args_str = args_str + 'eta'+str(int(etaj.id+1))+' '
+          line = line + "\t\targs = '"+args_str[:-1]+"'\n"+\
+                        '\t\tmob_name = L\n'+\
+                        '\t\tf_name = F_total\n'+\
+                        '\t[../]\n'+\
+                        '\t[./ACInterface'+str(int(etai.id+1))+']\n'+\
+                        '\t\ttype = ACInterface\n'+\
+                        '\t\tvariable = eta'+str(int(etai.id+1))+'\n'+\
+                        '\t\tmob_name = L\n'+\
+                        "\t\tkappa_name = 'kappa_eta'\n"+\
+                        '\t[../]\n'
+    elif j == 38:
+      line = ''
+      for etai in dict_sample['L_etai']:
+          line = line + '\t[./eta'+str(int(etai.id+1))+'_c]\n'+\
+                        '\t\ttype = CoupledTimeDerivative\n'+\
+                        "\t\tv = 'eta"+str(int(etai.id+1))+"'\n"+\
+                        '\t\tvariable = c\n'+\
+                        '\t[../]\n'
+    elif j == 50:
+      line = "\t\tprop_values ='"+str(dict_material['M'])+' '+str(dict_material['kappa_eta'])+"'\n"
+    elif j == 68:
+        args_str = ''
+        for etai in dict_sample['L_etai'] :
+            args_str = args_str + 'eta'+str(int(etai.id+1))+' '
+        line = "\t\targs = '"+args_str[:-1]+"'\n"
+    elif j == 70:
+        line = "\t\tconstant_expressions = '"+str(dict_material['Energy_barrier'])+"'\n"
+    elif j == 71:
+        line = "\t\tfunction = 'h*"
+        etai_str = ''
+        for etai in dict_sample['L_etai']:
+            etai_str = etai_str + 'eta'+str(int(etai.id+1))+'^2*(1-eta'+str(int(etai.id+1))+')^2+'
+        line = line + etai_str[:-1] + ")'\n"
+    elif j == 79:
+        line = "\t\targs = '"
+        etai_str = ''
+        for etai in dict_sample['L_etai']:
+            etai_str = etai_str + 'eta'+str(int(etai.id+1))+' '
+        line = line + etai_str[:-1] + "'\n"
+    elif j == 81:
+        line =  "\t\tfunction = '"
+        etai_str = ''
+        for etai in dict_sample['L_etai']:
+            etai_str = etai_str + 'ep*3*eta'+str(int(etai.id+1))+'^2-ep*2*eta'+str(int(etai.id+1))+'^3+'
+        line = line + etai_str[:-1] + "'\n"
+    elif j == 89:
+        line =  "\t\targs = 'c "
+        etai_str = ''
+        for etai in dict_sample['L_etai']:
+            etai_str = etai_str + 'eta'+str(int(etai.id+1))+' '
+        line = line + etai_str[:-1] + "'\n"
+    elif j == 91 :
+      line = "\t\tconstant_expressions = '"+str(dict_sollicitation['chi'])+"'\n"
+    elif j == 92:
+        line =  "\t\tfunction = '"
+        etai_str = ''
+        for etai in dict_sample['L_etai']:
+            etai_str = etai_str + 'chi*c*(3*eta'+str(int(etai.id+1))+'^2-2*eta'+str(int(etai.id+1))+'^3)+'
+        line = line + etai_str[:-1] + "'\n"
+    elif j == 100:
+        line =  "\t\targs = '"
+        etai_str = ''
+        for etai in dict_sample['L_etai']:
+            etai_str = etai_str + 'eta'+str(int(etai.id+1))+' '
+        line = line + etai_str[:-1] + "'\n"
+    elif j == 101:
+        etai_str = ''
+        for etai in dict_sample['L_etai']:
+            etai_str = etai_str + 'eta'+str(int(etai.id+1))+','
+        line =  "\t\tmaterial_property_names = 'F("+etai_str[:-1]+') Ed_mec('+etai_str[:-1]+') Ed_pre('+etai_str[:-1]+")'\n"
+    elif j == 109:
+        line = ''
+        for etai in dict_sample['L_etai']:
+            line = line + '\t[eta'+str(int(etai.id+1))+'_txt]\n'+\
+                          '\t\ttype = PiecewiseMultilinear\n'+\
+                          '\t\tdata_file = Data/eta'+str(int(etai.id+1))+'_'+str(dict_algorithm['i_PFDEM'])+'.txt\n'+\
+                          '\t[]\n'
+    elif j == 112:
+        line = '\t\tdata_file = Data/c_'+str(dict_algorithm['i_PFDEM'])+'.txt\n'
     elif j == 116:
-      line = line[:-1] + "'"+str(dict_material['M'])+' '+str(dict_material['kappa_eta'])+"'\n"
-    elif j == 136:
-      line = line[:-1] + ' ' + str(dict_material['Energy_barrier'])+"'\n"
-    elif j == 157 :
-      line = line[:-1] + str(dict_sollicitation['chi'])+"'\n"
-    elif j == 177 or j == 181 or j == 185 or j == 189 or j == 193:
-      line = line[:-1] + str(dict_algorithm['i_PFDEM']) + '.txt\n'
-    elif j == 223:
-      line = line[:-1] + ' ' + str(dict_algorithm['dt_PF']*dict_algorithm['n_t_PF']) +'\n'
-    elif j == 227:
-      line = line[:-1] + ' ' + str(dict_algorithm['dt_PF']) +'\n'
-    file_to_write.write(line)
+        line = '\t\tdata_file = Data/ep_'+str(dict_algorithm['i_PFDEM'])+'.txt\n'
+	elif j == 120:
+        line = '\t\tdata_file = Data/kc_'+str(dict_algorithm['i_PFDEM'])+'.txt\n'
+    elif j == 150:
+        line =  '\t\tend_time = '+str(dict_algorithm['dt_PF']*dict_algorithm['n_t_PF'])+'\n'
+    elif j == 154:
+        line =  '\t\tdt = '+str(dict_algorithm['dt_PF']) +'\n'
 
+    file_to_write.write(line)
   file_to_write.close()
 
 #-------------------------------------------------------------------------------
