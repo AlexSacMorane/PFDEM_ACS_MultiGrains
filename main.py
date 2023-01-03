@@ -231,8 +231,6 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #PF simulation
     #---------------------------------------------------------------------------
 
-    raise ValueError('Stoooop')
-
     #run
     os.system('mpiexec -n '+str(dict_algorithm['np_proc'])+' ~/projects/moose/modules/combined/combined-opt -i '+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'.i')
 
@@ -245,6 +243,8 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #---------------------------------------------------------------------------
     #PF to DEM
     #---------------------------------------------------------------------------
+
+    raise ValueError('Stoooop')
 
     #look for the new grains shape
     for grain in dict_sample['L_g']:
