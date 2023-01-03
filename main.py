@@ -295,15 +295,12 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     dict_tracker['L_circle_ratio_sphericity_g0'].append(dict_sample['L_g'][0].circle_ratio_sphericity)
     dict_tracker['L_perimeter_sphericity_g0'].append(dict_sample['L_g'][0].perimeter_sphericity)
     dict_tracker['L_width_to_length_ratio_sphericity_g0'].append(dict_sample['L_g'][0].width_to_length_ratio_sphericity)
-    dict_tracker['c_at_the_center'].append(Owntools.Extract_solute_at_p(dict_sample,(int(len(dict_sample['y_L'])/2),int(len(dict_sample['x_L'])/2))))
 
     #Plot trackers
     if 'Eta_c' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_sum_eta_c(dict_tracker)
     if 'Sphericity' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_sphericity(dict_tracker)
-    if 'C_at_P' in dict_algorithm['L_flag_plot'] :
-        Owntools.Plot.Plot_c_at_p(dict_tracker)
     if 'sum_Ed' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_sum_Ed(dict_tracker)
     if 'dt' in dict_algorithm['L_flag_plot'] :

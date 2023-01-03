@@ -151,7 +151,6 @@ class TestGlobal(unittest.TestCase):
         'L_circle_ratio_sphericity_g0' : [dict_sample['L_g'][0].circle_ratio_sphericity],
         'L_perimeter_sphericity_g0' : [dict_sample['L_g'][0].perimeter_sphericity],
         'L_width_to_length_ratio_sphericity_g0' : [dict_sample['L_g'][0].width_to_length_ratio_sphericity],
-        'c_at_the_center' : [Owntools.Extract_solute_at_p(dict_sample,(int(len(dict_sample['y_L'])/2),int(len(dict_sample['x_L'])/2)))],
         'sum_ed_L': [],
         'sum_Ed_che_L': [],
         'sum_Ed_mec_L': [],

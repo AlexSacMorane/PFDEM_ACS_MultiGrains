@@ -491,24 +491,6 @@ def Plot_sphericity(dict_tracker):
 
 #-------------------------------------------------------------------------------
 
-def Plot_c_at_p(dict_tracker):
-    '''
-    Plot the value of the solute concentration at the point defined.
-
-        Input :
-            a tracker dictionnary (a dict)
-        Output :
-            Nothing but a .png files are generated (files)
-    '''
-    plt.figure(1,figsize=(16,9))
-
-    plt.plot(dict_tracker['L_t'], dict_tracker['c_at_the_center'])
-    plt.title('Value of the solute concentration at the center')
-    plt.savefig('Debug/Solute_Contration_Center.png')
-    plt.close(1)
-
-#-------------------------------------------------------------------------------
-
 def Plot_sum_Ed(dict_tracker):
     '''
     Plot the value of the total energy in the sample.
