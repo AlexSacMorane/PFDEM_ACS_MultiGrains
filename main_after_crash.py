@@ -30,7 +30,6 @@ import main
 #-------------------------------------------------------------------------------
 
 name_to_load = '../Data_2G_ACS/PS_Adaptative_dt_PF_3_save'
-name_report = 'Debug/Report_after_crash'
 
 #-------------------------------------------------------------------------------
 #load data
@@ -44,13 +43,11 @@ dict_material = dict_save['material']
 dict_sample = dict_save['sample']
 dict_sollicitation = dict_save['sollicitation']
 dict_tracker = dict_save['tracker']
+simulation_report = dict_save['report']
 
 #-------------------------------------------------------------------------------
 #Plan the simulation
 #-------------------------------------------------------------------------------
-
-#create a simulation report
-simulation_report = Report.Report(name_report,datetime.now())
 
 #delete last folder
 if Path('Output/Ite_'+str(dict_algorithm['i_PFDEM']+1)).exists():
