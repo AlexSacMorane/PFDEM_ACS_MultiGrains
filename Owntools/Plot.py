@@ -294,7 +294,7 @@ def Plot_mp4(template_name,name_video):
 
 def Plot_Ed(dict_sample):
     '''
-    Plot the energy source configuration at the start of the simultion.
+    Plot the energy source configuration at the start of the simulation.
 
         Input :
             a sample dictionnary (a dict)

@@ -247,11 +247,14 @@ def Compute_sum_Ed_plus_minus(dict_sample, dict_sollicitation):
         for c in range(len(dict_sample['x_L'])):
 
             #Emec
-            Ed_mec = dict_sample['Emec_M'][-1-l][c]
+            Ed_mec = 0
+            for etai in dict_sample['L_etai']:
+                Ed_mec = Ed_mec + Ed_mec*(3*etai.etai_M[-1-l][c]**2-2*etai.etai_M[-1-l][c]**3)
 
             #Eche
-            Ed_che = dict_sollicitation['chi']*dict_sample['solute_M'][-1-l][c]*(3*dict_sample['L_g'][0].etai_M[-1-l][c]**2-2*dict_sample['L_g'][0].etai_M[-1-l][c]**3+\
-                                                                                 3*dict_sample['L_g'][1].etai_M[-1-l][c]**2-2*dict_sample['L_g'][1].etai_M[-1-l][c]**3)
+            Ed_che = 0
+            for etai in dict_sample['L_etai']:
+                Ed_che = Ed_che + dict_sollicitation['chi']*dict_sample['solute_M'][-1-l][c]*(3*etai.etai_M[-1-l][c]**2-2*etai.etai_M[-1-l][c]**3)
 
             #Ed
             Ed = Ed_mec - Ed_che

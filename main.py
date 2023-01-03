@@ -185,10 +185,6 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #Compute the solute diffusion
     Owntools.Compute.Compute_kc_dil(dict_material, dict_sample) #the solute diffusion
 
-    raise ValueError('Stoooop')
-
-
-
     #compute for total energy in the sample and track the value
     Owntools.Compute.Compute_sum_Ed_plus_minus(dict_sample, dict_sollicitation)
     dict_tracker['sum_ed_L'].append(dict_sample['sum_ed'])
@@ -212,6 +208,11 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
     if 'Kc' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_kc(dict_sample)
+    if 'Ed' in dict_algorithm['L_flag_plot']:
+        Owntools.Plot.Plot_Ed(dict_sample)
+
+
+    raise ValueError('Stoooop')
 
     #write data
     Owntools.Write.Write_eta_txt(dict_algorithm, dict_sample)
@@ -219,7 +220,7 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     Owntools.Write.Write_kc_txt(dict_algorithm, dict_sample)
     Owntools.Write.Write_Emec_txt(dict_algorithm, dict_sample)
 
-    #plot the difference of solute conentration in the case of a pure diffusion problem
+    #plot the difference of solute concentration in the case of a pure diffusion problem
     if 'Diff_Solute' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Diff_Solute/Ite_'+str(dict_algorithm['i_PFDEM']))
         Owntools.Plot.Plot_Diffusion_Solute(dict_algorithm, dict_material, dict_sample)
@@ -261,8 +262,6 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_init_current_shape(dict_sample)
-    if 'Ed' in dict_algorithm['L_flag_plot']:
-        Owntools.Plot.Plot_Ed(dict_sample)
 
     #---------------------------------------------------------------------------
     #postprocess
