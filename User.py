@@ -329,7 +329,7 @@ def Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollici
                             'Id' : None,'L_border_x' : None,'L_border_y' : None,'Y' : None,'Nu' : None,'Rho_surf' : None,'Surface' : None,'Mass' : None,'Inertia' : None}
     g1_tempo = Grain.Grain(dict_ic_to_g1_tempo, dict_material, dict_sample)
     #g2
-    center_2 = [np.mean(dict_sample['x_L'])+dict_geometry['R_mean']-overlap/2, np.mean(dict_sample['y_L'])])
+    center_2 = np.array([np.mean(dict_sample['x_L'])+dict_geometry['R_mean']-overlap/2, np.mean(dict_sample['y_L'])])
     L_r_2 = []
     L_theta_R_2 = []
     L_border_2 = []
