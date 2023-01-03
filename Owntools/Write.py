@@ -101,7 +101,7 @@ def Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation):
     elif j == 70:
         line = "\t\tconstant_expressions = '"+str(dict_material['Energy_barrier'])+"'\n"
     elif j == 71:
-        line = "\t\tfunction = 'h*"
+        line = "\t\tfunction = 'h*("
         etai_str = ''
         for etai in dict_sample['L_etai']:
             etai_str = etai_str + 'eta'+str(int(etai.id+1))+'^2*(1-eta'+str(int(etai.id+1))+')^2+'
