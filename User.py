@@ -379,7 +379,7 @@ def Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollici
         for c in range(i_x_min, i_x_max):
             sum_min_etai = sum_min_etai + min(g1_tempo.etai_M[-1-l][c],g2_tempo.etai_M[-1-l][c])
     #Add element in dict
-    dict_sollicitation['alpha'] = 0.2*sum_min_etai
+    dict_sollicitation['alpha'] = 0.04*sum_min_etai
 
 #-------------------------------------------------------------------------------
 
