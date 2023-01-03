@@ -103,6 +103,9 @@ def Compute_Emec(dict_material, dict_sample, dict_sollicitation):
                 Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*min(contact.g1.etai_M[-1-l][c],contact.g2.etai_M[-1-l][c])
     #contact grain-wall part
     for contact in dict_sample['L_contact_gw']:
+
+        raise ValueError('Correct here')
+
         #extract a spatial zone
         x_min = min(contact.g.l_border_x)-dict_material['w']
         x_max = max(contact.g.l_border_x)+dict_material['w']
