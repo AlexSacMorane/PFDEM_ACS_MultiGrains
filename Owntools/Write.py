@@ -68,7 +68,6 @@ def Write_eta_txt(dict_algorithm, dict_sample):
     Write a .txt file needed for MOOSE simulation.
 
     The variables etai are transmitted to the MOOSE simulation.
-    It is assumed the sample is composed by only two grains.
 
         Input :
             an algorithm dictionnary (a dict)
@@ -76,41 +75,28 @@ def Write_eta_txt(dict_algorithm, dict_sample):
         Output :
             Nothing but a .txt file is generated (a file)
     '''
-    grain1 = dict_sample['L_g'][0]
-    grain2 = dict_sample['L_g'][1]
+    for etai in dict_sample['L_etai'] :
+        file_to_write = open('Data/eta'+str(int(etai.id+1))+'_'+str(dict_algorithm['i_PFDEM'])+'.txt','w')
+        file_to_write.write('AXIS X\n')
+        line = ''
+        for x in dict_sample['x_L']:
+            line = line + str(x)+ ' '
+        line = line + '\n'
+        file_to_write.write(line)
 
-    file_to_write_1 = open('Data/eta1_'+str(dict_algorithm['i_PFDEM'])+'.txt','w')
-    file_to_write_2 = open('Data/eta2_'+str(dict_algorithm['i_PFDEM'])+'.txt','w')
-    file_to_write_1.write('AXIS X\n')
-    file_to_write_2.write('AXIS X\n')
-    line = ''
-    for x in dict_sample['x_L']:
-        line = line + str(x)+ ' '
-    line = line + '\n'
-    file_to_write_1.write(line)
-    file_to_write_2.write(line)
+        file_to_write.write('AXIS Y\n')
+        line = ''
+        for y in dict_sample['y_L']:
+            line = line + str(y)+ ' '
+        line = line + '\n'
+        file_to_write.write(line)
 
-    file_to_write_1.write('AXIS Y\n')
-    file_to_write_2.write('AXIS Y\n')
-    line = ''
-    for y in dict_sample['y_L']:
-        line = line + str(y)+ ' '
-    line = line + '\n'
-    file_to_write_1.write(line)
-    file_to_write_2.write(line)
+        file_to_write.write('DATA\n')
+        for l in range(len(dict_sample['y_L'])):
+            for c in range(len(dict_sample['x_L'])):
+                file_to_write.write(str(etai.etai_M[-1-l][c])+'\n')
 
-    file_to_write_1.write('DATA\n')
-    file_to_write_2.write('DATA\n')
-    for l in range(len(dict_sample['y_L'])):
-        for c in range(len(dict_sample['x_L'])):
-
-            #grain 1
-            file_to_write_1.write(str(grain1.etai_M[-1-l][c])+'\n')
-            #grain 2
-            file_to_write_2.write(str(grain2.etai_M[-1-l][c])+'\n')
-
-    file_to_write_1.close()
-    file_to_write_2.close()
+        file_to_write.close()
 
 #-------------------------------------------------------------------------------
 

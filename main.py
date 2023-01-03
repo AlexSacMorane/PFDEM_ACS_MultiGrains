@@ -211,9 +211,6 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     if 'Ed' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_Ed(dict_sample)
 
-
-    raise ValueError('Stoooop')
-
     #write data
     Owntools.Write.Write_eta_txt(dict_algorithm, dict_sample)
     Owntools.Write.Write_solute_txt(dict_algorithm, dict_sample)
@@ -222,8 +219,11 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
 
     #plot the difference of solute concentration in the case of a pure diffusion problem
     if 'Diff_Solute' in dict_algorithm['L_flag_plot']:
+        raise ValueError('This plot is not adapted for multiple grains... WIP !')
         os.mkdir('Debug/Diff_Solute/Ite_'+str(dict_algorithm['i_PFDEM']))
         Owntools.Plot.Plot_Diffusion_Solute(dict_algorithm, dict_material, dict_sample)
+
+    raise ValueError('Stoooop')
 
     #create i
     Owntools.Write.Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation)
