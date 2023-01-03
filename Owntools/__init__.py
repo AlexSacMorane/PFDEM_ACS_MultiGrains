@@ -138,7 +138,7 @@ def error_on_ymax_df(dy,overlap_L,k_L) :
 
 #-------------------------------------------------------------------------------
 
-def Control_y_max_NR(dict_sample,dict_sollicitations):
+def Control_y_max_NR(dict_sample,dict_sollicitation):
     """
     Control the upper wall to apply force.
 
@@ -151,7 +151,7 @@ def Control_y_max_NR(dict_sample,dict_sollicitations):
     """
     #-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
     #load data needed
-    Force_target = dict_sollicitations['Vertical_Confinement_Force']
+    Force_target = dict_sollicitation['Vertical_Confinement_Force']
     #-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 
     F = 0
@@ -189,7 +189,7 @@ def Control_y_max_NR(dict_sample,dict_sollicitations):
             contact.limit = dict_sample['y_box_max']
 
     #Update dict
-    dict_sollicitations['Force_on_upper_wall'] = F
+    dict_sollicitation['Force_on_upper_wall'] = F
 
 #-------------------------------------------------------------------------------
 

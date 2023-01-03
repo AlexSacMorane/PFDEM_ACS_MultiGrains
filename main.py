@@ -410,7 +410,7 @@ if '__main__' == __name__:
     User.Add_mesh(dict_geometry, dict_sample)
 
     #Add needed variables
-    User.Add_variables_needed(dict_material, dict_sample)
+    User.Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollicitation)
 
     #Convert the tempo grain to real grain
     Create_IC.From_LG_tempo_to_usable(dict_ic, dict_material, dict_sample)

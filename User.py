@@ -283,15 +283,22 @@ def Add_mesh(dict_geometry, dict_sample):
 
 #-------------------------------------------------------------------------------
 
-def Add_variables_needed(dict_material, dict_sample):
+def Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollicitation):
     '''
-    Generate the mesh in the sample.
+    Add some variables needed in the simulation.
+
+    3 arrays are generated to represent the mechanical, chemical and total energy.
+    The phase field interface width is computed.
+    The phase field energy barrier is computed.
+    The coefficient alpha applied to the merchanical energy term is computed.
 
         Input :
+            a geometry dictionnary (a dict)
             a material dictionnary (a dict)
-            a sample dictionnary (a dictionnary)
+            a sample dictionnary (a dict)
+            a sollicitation dictionnary (a dict)
         Output :
-            Nothing but the sample dictionnary gets new variables
+            Nothing but dictionnaries get new variables
     '''
     #Arrays with only 0
     dict_sample['Emec_M'] = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
@@ -303,6 +310,62 @@ def Add_variables_needed(dict_material, dict_sample):
 
     #Energy barrier of etai
     dict_material['Energy_barrier'] = 20*dict_material['kappa_eta']/(dict_material['w'])**2
+
+    #Compute the coefficient applied to mechanical energy term
+    #this term is computed considering 2 disk grains under the sollicitation force
+    k = 4/3*dict_material['Y']/2/(1-dict_material['nu']**2
+    overlap = (dict_sollicitation['Vertical_Confinement_Force']/k)**(2/3)
+    #g1
+    center_1 = np.array([np.mean(dict_sample['x_L'])-dict_geometry['R_mean']+overlap/2, np.mean(dict_sample['y_L'])])
+    L_r_1 = []
+    L_theta_R_1 = []
+    L_border_1 = []
+    for i in range(90):
+        theta = 2*math.pi*i/90
+        L_r_1.append(dict_geometry['R_mean'])
+        L_theta_R_1.append(theta)
+        L_border_1.append(np.array(center_1)+np.array([dict_geometry['R_mean']*math.cos(theta),dict_geometry['R_mean']*math.sin(theta)]))
+    dict_ic_to_g1_tempo =  {'Center' : center_1,'L_r' : L_r_1,'L_theta_r' : L_theta_R_1,'L_border' : L_border_1,
+                            'Id' : None,'L_border_x' : None,'L_border_y' : None,'Y' : None,'Nu' : None,'Rho_surf' : None,'Surface' : None,'Mass' : None,'Inertia' : None}
+    g1_tempo = Grain.Grain(dict_ic_to_g1_tempo, dict_material, dict_sample)
+    #g2
+    center_2 = [np.mean(dict_sample['x_L'])+dict_geometry['R_mean']-overlap/2, np.mean(dict_sample['y_L'])])
+    L_r_2 = []
+    L_theta_R_2 = []
+    L_border_2 = []
+    for i in range(90):
+        theta = 2*math.pi*i/90
+        L_r_2.append(dict_geometry['R_mean'])
+        L_theta_R_2.append(theta)
+        L_border_2.append(np.array(center_2)+np.array([dict_geometry['R_mean']*math.cos(theta),dict_geometry['R_mean']*math.sin(theta)]))
+    dict_ic_to_g2_tempo =  {'Center' : center_2,'L_r' : L_r_2,'L_theta_r' : L_theta_R_2,'L_border' : L_border_2,
+                            'Id' : None,'L_border_x' : None,'L_border_y' : None,'Y' : None,'Nu' : None,'Rho_surf' : None,'Surface' : None,'Mass' : None,'Inertia' : None}
+    g2_tempo = Grain.Grain(dict_ic_to_g2_tempo, dict_material, dict_sample)
+    #compute the sum_min_etai
+    #extract a spatial zone
+    x_min = center_1[0]-dict_geometry['R_mean']-dict_material['w']
+    x_max = center_2[0]+dict_geometry['R_mean']+dict_material['w']
+    y_min = center_1[1]-dict_geometry['R_mean']-dict_material['w']
+    y_max = center_1[1]+dict_geometry['R_mean']+dict_material['w']
+    #look for this part inside the global mesh
+    #create search list
+    x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
+    x_L_search_max = abs(np.array(dict_sample['x_L'])-x_max)
+    y_L_search_min = abs(np.array(dict_sample['y_L'])-y_min)
+    y_L_search_max = abs(np.array(dict_sample['y_L'])-y_max)
+    #get index
+    i_x_min = list(x_L_search_min).index(min(x_L_search_min))
+    i_x_max = list(x_L_search_max).index(min(x_L_search_max))
+    i_y_min = list(y_L_search_min).index(min(y_L_search_min))
+    i_y_max = list(y_L_search_max).index(min(y_L_search_max))
+    #Initialisation
+    sum_min_etai = 0
+    #compute the sum over the sample of the minimum of etai
+    for l in range(i_y_min, i_y_max):
+        for c in range(i_x_min, i_x_max):
+            sum_min_etai = sum_min_etai + min(g1_tempo.etai_M[-1-l][c],g2_tempo.etai_M[-1-l][c])
+    #Add element in dict
+    dict_sollicitation['alpha'] = 0.2*sum_min_etai
 
 #-------------------------------------------------------------------------------
 

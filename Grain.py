@@ -653,7 +653,7 @@ class Grain:
 
     #-------------------------------------------------------------------------------
 
-    def init_f_control(self,dict_sollicitations):
+    def init_f_control(self,dict_sollicitation):
         """
         Initialize the force applied to the grain.
 
@@ -666,7 +666,7 @@ class Grain:
                 Nothing, but the force applied on the grain is initialized
         """
         self.fx = 0
-        self.fy = -dict_sollicitations['gravity']*self.mass
+        self.fy = -dict_sollicitation['gravity']*self.mass
         self.f = np.array([self.fx,self.fy])
         self.mz = 0
         self.v = np.array([0, 0])
