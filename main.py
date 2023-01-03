@@ -208,8 +208,6 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
     if 'Kc' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_kc(dict_sample)
-    if 'Ed' in dict_algorithm['L_flag_plot']:
-        Owntools.Plot.Plot_Ed(dict_sample)
 
     #write data
     Owntools.Write.Write_eta_txt(dict_algorithm, dict_sample)
@@ -254,14 +252,16 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         grain.geometric_study(dict_sample)
     #look for the new solute shape
     Owntools.PFtoDEM_Multi.solute_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str,dict_algorithm,dict_sample)
-    #look for the initial external energy sources
-    Owntools.PFtoDEM_Multi.Ed_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_000',dict_algorithm,dict_sample)
 
     #plot
     if 'Config' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_init_current_shape(dict_sample)
+    if 'Ed' in dict_algorithm['L_flag_plot']:
+        #look for the initial external energy sources
+        Owntools.PFtoDEM_Multi.Ed_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_000',dict_algorithm,dict_sample)
+        Owntools.Plot.Plot_Ed(dict_sample)
 
     #---------------------------------------------------------------------------
     #postprocess

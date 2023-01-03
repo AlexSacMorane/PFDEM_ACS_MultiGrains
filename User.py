@@ -302,8 +302,8 @@ def Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollici
     '''
     #Arrays with only 0
     dict_sample['Emec_M'] = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
-    dict_sample['Eche_M'] = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L'])))),
-    dict_sample['Ed_M'] = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L'])))),
+    dict_sample['Eche_M'] = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
+    dict_sample['Ed_M'] = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
 
     #compute the phase field width interface
     dict_material['w'] = math.sqrt((dict_sample['x_L'][4]-dict_sample['x_L'][0])**2+(dict_sample['y_L'][4]-dict_sample['y_L'][0])**2)
