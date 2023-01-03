@@ -313,7 +313,7 @@ def Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollici
 
     #Compute the coefficient applied to mechanical energy term
     #this term is computed considering 2 disk grains under the sollicitation force
-    k = 4/3*dict_material['Y']/2/(1-dict_material['nu']**2
+    k = 4/3*dict_material['Y']/2/(1-dict_material['nu']**2)
     overlap = (dict_sollicitation['Vertical_Confinement_Force']/k)**(2/3)
     #g1
     center_1 = np.array([np.mean(dict_sample['x_L'])-dict_geometry['R_mean']+overlap/2, np.mean(dict_sample['y_L'])])
