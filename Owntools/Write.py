@@ -154,7 +154,7 @@ def Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation):
         line = '\t\tdata_file = Data/c_'+str(dict_algorithm['i_PFDEM'])+'.txt\n'
     elif j == 116:
         line = '\t\tdata_file = Data/ep_'+str(dict_algorithm['i_PFDEM'])+'.txt\n'
-	elif j == 120:
+    elif j == 120:
         line = '\t\tdata_file = Data/kc_'+str(dict_algorithm['i_PFDEM'])+'.txt\n'
     elif j == 150:
         line =  '\t\tend_time = '+str(dict_algorithm['dt_PF']*dict_algorithm['n_t_PF'])+'\n'
