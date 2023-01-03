@@ -60,9 +60,22 @@ if 'Diff_Solute' in dict_algorithm['L_flag_plot']:
 #main
 #-------------------------------------------------------------------------------
 
-while not User.Criteria_StopSimulation(dict_algorithm):
+#crash in the DEM step
+if name_to_load[-5:] == '_save':
+    while not User.Criteria_StopSimulation(dict_algorithm):
+        iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
+        iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
 
-    main.iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
+#crash during the phase-field simulation
+elif name_to_load[-10:] == '_before_pf':
+    iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
+    while not User.Criteria_StopSimulation(dict_algorithm):
+        iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
+        iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
+
+#not a good name
+else :
+    raise ValueError('name_to_load not available!')
 
 #-------------------------------------------------------------------------------
 #close simulation
