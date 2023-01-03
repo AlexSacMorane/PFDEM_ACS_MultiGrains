@@ -374,10 +374,9 @@ def Plot_kc(dict_sample):
     #kc_M
     im = plt.imshow(dict_sample['kc_M'],interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
     plt.colorbar(im)
-    #plot g1 and g2 boundaries
-    plt.plot(dict_sample['L_g'][0].l_border_x,dict_sample['L_g'][0].l_border_y)
-    plt.plot(dict_sample['L_g'][1].l_border_x,dict_sample['L_g'][1].l_border_y)
-
+    #etai
+    for i in range(len(dict_sample['L_g'])):
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,'k')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.title('Diffusion coefficient of the solute')

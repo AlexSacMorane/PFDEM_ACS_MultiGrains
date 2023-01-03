@@ -159,10 +159,10 @@ def All_parameters():
     c_max = 0.08
 
     #Save the simulation
-    SaveData = False #Save data or not
+    SaveData = True #Save data or not
     clean_memory = True #delete Data, Input, Output at the end of the simulation
     foldername = 'Data_MG_ACS' #name of the folder where data are saved
-    template = 'PS' #template of the name of the simulation
+    template = 'PS_MG' #template of the name of the simulation
     if SaveData :
         i_run = 1
         folderpath = Path('../'+foldername+'/'+template+'_'+str(i_run))
