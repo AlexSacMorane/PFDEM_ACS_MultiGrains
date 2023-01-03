@@ -103,9 +103,6 @@ def Compute_Emec(dict_material, dict_sample, dict_sollicitation):
                 Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*min(contact.g1.etai_M[-1-l][c],contact.g2.etai_M[-1-l][c])
     #contact grain-wall part
     for contact in dict_sample['L_contact_gw']:
-
-        raise ValueError('Correct here')
-
         #extract a spatial zone
         x_min = min(contact.g.l_border_x)-dict_material['w']
         x_max = max(contact.g.l_border_x)+dict_material['w']
@@ -124,17 +121,31 @@ def Compute_Emec(dict_material, dict_sample, dict_sollicitation):
         i_y_max = list(y_L_search_max).index(min(y_L_search_max))
         #Initialisation
         sum_min_etai = 0
-        #compute the sum over the sample of the minimum of etai
+        #compute the sum over the sample of the etai outside the box
         for l in range(i_y_min, i_y_max):
             for c in range(i_x_min, i_x_max):
-                sum_min_etai = sum_min_etai + contact.g.etai_M[-1-l][c]
+                if contact.nature == 'gwy_min' and dict_sample['y_L'][l] < contact.limit:
+                    sum_min_etai = sum_min_etai + contact.g.etai_M[-1-l][c]
+                elif contact.nature == 'gwy_max' and dict_sample['y_L'][l] > contact.limit:
+                    sum_min_etai = sum_min_etai + contact.g.etai_M[-1-l][c]
+                elif contact.nature == 'gwx_min' and dict_sample['x_L'][c] < contact.limit:
+                    sum_min_etai = sum_min_etai + contact.g.etai_M[-1-l][c]
+                elif contact.nature == 'gwx_max' and dict_sample['x_L'][c] > contact.limit:
+                    sum_min_etai = sum_min_etai + contact.g.etai_M[-1-l][c]
         #compute the variable e_mec
         e_mec = dict_sollicitation['alpha']/sum_min_etai*5*2*math.sqrt(2) #the term 5 is related to the factor applied to the spring grain - wall
                                                                           #the term 2*math.sqrt(2) is related to the equivalent radius and young modulus
         #compute the distribution of the mechanical energy
         for l in range(i_y_min, i_y_max):
             for c in range(i_x_min, i_x_max):
-                Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*contact.g.etai_M[-1-l][c]
+                if contact.nature == 'gwy_min' and dict_sample['y_L'][l] < contact.limit:
+                    Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*contact.g.etai_M[-1-l][c]
+                elif contact.nature == 'gwy_max' and dict_sample['y_L'][l] > contact.limit:
+                    Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*contact.g.etai_M[-1-l][c]
+                elif contact.nature == 'gwx_min' and dict_sample['x_L'][c] < contact.limit:
+                    Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*contact.g.etai_M[-1-l][c]
+                elif contact.nature == 'gwx_max' and dict_sample['x_L'][c] > contact.limit:
+                    Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*contact.g.etai_M[-1-l][c]
 
     #Update element in dictionnary
     dict_sample['Emec_M'] = Emec_M
