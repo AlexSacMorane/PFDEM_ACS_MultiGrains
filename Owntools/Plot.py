@@ -546,30 +546,6 @@ def Plot_sum_Ed(dict_tracker):
 
 #-------------------------------------------------------------------------------
 
-def Plot_Sint_SumMinEtai(dict_tracker):
-    '''
-    Plot the evolution of the intersection surface and the sum of min of etai.
-
-        Input :
-            a tracker dictionnary (a dict)
-        Output :
-            Nothing but a .png files are generated (files)
-    '''
-    plt.figure(1,figsize=(16,9))
-
-    plt.subplot(211)
-    plt.plot(dict_tracker['L_t'][:-1], dict_tracker['S_int_L'])
-    plt.title('Intersection surface')
-
-    plt.subplot(212)
-    plt.plot(dict_tracker['L_t'][:-1], dict_tracker['sum_min_etai_L'])
-    plt.title('Sum of minimum etai')
-
-    plt.savefig('Debug/Evolution_Sint_SumMinEtai.png')
-    plt.close(1)
-
-#-------------------------------------------------------------------------------
-
 def Plot_dt_used(dict_tracker):
     '''
     Plot the evolution of the time step used in the phase field simulation.

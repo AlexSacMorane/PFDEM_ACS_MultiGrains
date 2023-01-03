@@ -55,51 +55,83 @@ def Compute_S_int(dict_sample):
 
 #-------------------------------------------------------------------------------
 
-def Compute_sum_min_etai(dict_sample, dict_sollicitation):
+def Compute_Emec(dict_material, dict_sample, dict_sollicitation):
     '''
-    Compute the sum over the sample of the minimum of etai.
+    Compute the mechanical energy over the sample.
 
-    This variable is used for Compute_Emec().
+    There is an iteration over all the contacts detected (grain-grain and grain-wall). First, the sum of the minimal grain phase variables is computed.
+    Then, the mechanical energy is computed.
 
         Input :
+            a material dictionnary (a dict)
             a sample dictionnary (a dict)
+            a sollicitation dictionnary (a dict)
         Output :
-            Nothing but the dictionnary gets an updated value (a float)
-            If it is the first call of the function, dictionnaries gets new value (2 floats)
-    '''
-    #Initialisation
-    sum_min_etai = 0
-    #compute the sum over the sample of the minimum of etai
-    for l in range(len(dict_sample['y_L'])):
-        for c in range(len(dict_sample['x_L'])):
-            sum_min_etai = sum_min_etai + min(dict_sample['L_g'][0].etai_M[-1-l][c],dict_sample['L_g'][1].etai_M[-1-l][c])
-
-    #Update element in dictionnary
-    dict_sample['sum_min_etai'] = sum_min_etai
-    #create element in dictionnary if not already created
-    if 'sum_min_etai0' not in dict_sample.keys():
-        dict_sample['sum_min_etai0'] = sum_min_etai
-        dict_sollicitation['alpha'] = 0.2*sum_min_etai
-
-#-------------------------------------------------------------------------------
-
-def Compute_Emec(dict_sample, dict_sollicitation):
-    '''
-    Compute the mechanical energy field in the sample.
-
-        Input :
-            a sample dictionnary (a dict)
-        Output :
-            Nothing but the dictionnary gets an updated value for the mechanical energy map (a nx x ny numpy array)
+            Nothing, but the sample dictionnary gets an updated value for the mechanical term (a nx x ny numpy array)
     '''
     #Initialisation
     Emec_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
-    #compute the variable e_mec
-    e_mec = dict_sollicitation['alpha']/dict_sample['sum_min_etai']
-    #compute the distribution of the mechanical energy
-    for l in range(len(dict_sample['y_L'])):
-        for c in range(len(dict_sample['x_L'])):
-            Emec_M[-1-l][c] = e_mec*min(dict_sample['L_g'][0].etai_M[-1-l][c],dict_sample['L_g'][1].etai_M[-1-l][c])
+    #contact grain-grain part
+    for contact in dict_sample['L_contact']:
+        #extract a spatial zone
+        x_min = min(min(contact.g1.l_border_x),min(contact.g2.l_border_x))-dict_material['w']
+        x_max = max(max(contact.g1.l_border_x),max(contact.g2.l_border_x))+dict_material['w']
+        y_min = min(min(contact.g1.l_border_y),min(contact.g2.l_border_y))-dict_material['w']
+        y_max = max(max(contact.g1.l_border_y),max(contact.g2.l_border_y))+dict_material['w']
+        #look for this part inside the global mesh
+        #create search list
+        x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
+        x_L_search_max = abs(np.array(dict_sample['x_L'])-x_max)
+        y_L_search_min = abs(np.array(dict_sample['y_L'])-y_min)
+        y_L_search_max = abs(np.array(dict_sample['y_L'])-y_max)
+        #get index
+        i_x_min = list(x_L_search_min).index(min(x_L_search_min))
+        i_x_max = list(x_L_search_max).index(min(x_L_search_max))
+        i_y_min = list(y_L_search_min).index(min(y_L_search_min))
+        i_y_max = list(y_L_search_max).index(min(y_L_search_max))
+        #Initialisation
+        sum_min_etai = 0
+        #compute the sum over the sample of the minimum of etai
+        for l in range(i_y_min, i_y_max):
+            for c in range(i_x_min, i_x_max):
+                sum_min_etai = sum_min_etai + min(contact.g1.etai_M[-1-l][c],contact.g2.etai_M[-1-l][c])
+        #compute the variable e_mec
+        e_mec = dict_sollicitation['alpha']/sum_min_etai
+        #compute the distribution of the mechanical energy
+        for l in range(i_y_min, i_y_max):
+            for c in range(i_x_min, i_x_max):
+                Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*min(contact.g1.etai_M[-1-l][c],contact.g2.etai_M[-1-l][c])
+    #contact grain-wall part
+    for contact in dict_sample['L_contact_gw']:
+        #extract a spatial zone
+        x_min = min(contact.g.l_border_x)-dict_material['w']
+        x_max = max(contact.g.l_border_x)+dict_material['w']
+        y_min = min(contact.g.l_border_y)-dict_material['w']
+        y_max = max(contact.g.l_border_y)+dict_material['w']
+        #look for this part inside the global mesh
+        #create search list
+        x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
+        x_L_search_max = abs(np.array(dict_sample['x_L'])-x_max)
+        y_L_search_min = abs(np.array(dict_sample['y_L'])-y_min)
+        y_L_search_max = abs(np.array(dict_sample['y_L'])-y_max)
+        #get index
+        i_x_min = list(x_L_search_min).index(min(x_L_search_min))
+        i_x_max = list(x_L_search_max).index(min(x_L_search_max))
+        i_y_min = list(y_L_search_min).index(min(y_L_search_min))
+        i_y_max = list(y_L_search_max).index(min(y_L_search_max))
+        #Initialisation
+        sum_min_etai = 0
+        #compute the sum over the sample of the minimum of etai
+        for l in range(i_y_min, i_y_max):
+            for c in range(i_x_min, i_x_max):
+                sum_min_etai = sum_min_etai + contact.g.etai_M[-1-l][c]
+        #compute the variable e_mec
+        e_mec = dict_sollicitation['alpha']/sum_min_etai*5*2*math.sqrt(2) #the term 5 is related to the factor applied to the spring grain - wall
+                                                                          #the term 2*math.sqrt(2) is related to the equivalent radius and young modulus
+        #compute the distribution of the mechanical energy
+        for l in range(i_y_min, i_y_max):
+            for c in range(i_x_min, i_x_max):
+                Emec_M[-1-l][c] = Emec_M[-1-l][c] + e_mec*contact.g.etai_M[-1-l][c]
 
     #Update element in dictionnary
     dict_sample['Emec_M'] = Emec_M
@@ -111,8 +143,8 @@ def Compute_kc_dil(dict_material, dict_sample):
     Compute the solute diffusion coefficient field in the sample.
 
     Here, a dilation method is applied. For all node, a Boolean variable is defined.
-    This variable is True if eta_i and eta_j are greater than 0.5 (in the contact zone).
-                  is True if eta_i and eta_j are lower than 0.5 (in the pore zone).
+    This variable is True at least 2 eta_i are greater than 0.5 (in the contact zone).
+                  is True all etai are lower than 0.5 (in the pore zone).
                   is False else.
 
     A dilation method is applied, the size of the structural element is the main case.
@@ -131,11 +163,15 @@ def Compute_kc_dil(dict_material, dict_sample):
     #compute the on off map
     for l in range(len(dict_sample['y_L'])):
         for c in range(len(dict_sample['x_L'])):
-            #at the contact
-            if dict_sample['L_g'][0].etai_M[-1-l][c] > 0.5 and dict_sample['L_g'][1].etai_M[-1-l][c] > 0.5:
+            n_etai_over_0_5 = 0 #counter
+            for etai in dict_sample['L_etai'] :
+                if etai.etai_M[-1-l][c] > 0.5 :
+                    n_etai_over_0_5 = n_etai_over_0_5 + 1
+            #at a contact
+            if n_etai_over_0_5 >= 2:
                 on_off_M[-l-1][c] = True
             #in the pore space
-            elif dict_sample['L_g'][0].etai_M[-1-l][c] < 0.5 and dict_sample['L_g'][1].etai_M[-1-l][c] < 0.5:
+            elif n_etai_over_0_5 == 0:
                 on_off_M[-l-1][c] = True
 
     #dilatation
@@ -148,56 +184,6 @@ def Compute_kc_dil(dict_material, dict_sample):
         for c in range(len(dict_sample['x_L'])):
             if dilated_M[-1-l][c] :
                 kc_M[-1-l][c] = dict_material['kappa_c']
-
-    #Update element in dictionnary
-    dict_sample['kc_M'] = kc_M
-
-#-------------------------------------------------------------------------------
-
-def Compute_kc_int(dict_material, dict_sample):
-    '''
-    Compute the solute diffusion coefficient field in the sample.
-
-    For all nodes in the mesh a diffusion coefficient is computed.
-    If eta_i and eta_j are greater than 0.5 (in the contact zone), the diffusion is kc0.
-    If eta_i and eta_j are lower than 0.5 (in the pore zone), the diffusion is kc0.
-    If eta_i (resp. eta_j) is greater than 0.5 and eta_j (resp. eta_i) is lower than 0.5 (in one grain but not the other), an interpolated diffusion is used.
-
-    This interpolated diffusion is kc = kc0*exp(tau*(d_to_center_i-radius_i)/radius_i).
-
-        Input :
-            a material dictionnary (a dict)
-            a sample dictionnary (a dict)
-        Output :
-            Nothing but the dictionnary gets an updated value for the solute diffusion coefficient map (a nx x ny numpy array)
-    '''
-    #Initialisation
-    kc_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
-
-    #compute the distribution of the solute diffusion coefficient
-    for l in range(len(dict_sample['y_L'])):
-        for c in range(len(dict_sample['x_L'])):
-            #at the contact
-            if dict_sample['L_g'][0].etai_M[-1-l][c] > 0.5 and dict_sample['L_g'][1].etai_M[-1-l][c] > 0.5:
-                kc_M[-l-1][c] = dict_material['kappa_c']
-            #inside g1 and not g2
-            elif dict_sample['L_g'][0].etai_M[-1-l][c] > 0.5 and dict_sample['L_g'][1].etai_M[-1-l][c] < 0.5:
-                P = np.array([dict_sample['x_L'][c], dict_sample['y_L'][-1-l]])
-                Distance = np.linalg.norm(P - dict_sample['L_g'][0].center)
-                #exponential decrease
-                kappa_c_trans = dict_material['kappa_c']*math.exp(-(dict_sample['L_g'][0].r_mean-Distance)/(dict_sample['L_g'][0].r_mean/dict_material['tau_kappa_c']))
-                kc_M[-l-1][c] = kappa_c_trans
-            #inside g2 and not g1
-            elif dict_sample['L_g'][0].etai_M[-1-l][c] < 0.5 and dict_sample['L_g'][1].etai_M[-1-l][c] > 0.5:
-                #compute the distance to g1
-                P = np.array([dict_sample['x_L'][c], dict_sample['y_L'][-1-l]])
-                Distance = np.linalg.norm(P - dict_sample['L_g'][1].center)
-                #exponential decrease
-                kappa_c_trans = dict_material['kappa_c']*math.exp(-(dict_sample['L_g'][1].r_mean-Distance)/(dict_sample['L_g'][1].r_mean/dict_material['tau_kappa_c']))
-                kc_M[-l-1][c] = kappa_c_trans
-            #outside
-            else :
-                kc_M[-l-1][c] = dict_material['kappa_c']
 
     #Update element in dictionnary
     dict_sample['kc_M'] = kc_M

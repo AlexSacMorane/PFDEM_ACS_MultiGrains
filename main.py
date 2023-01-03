@@ -179,19 +179,15 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
     #prepare phase field simulation
     #---------------------------------------------------------------------------
 
+    #Compute the mechanical energy term
+    Owntools.Compute.Compute_Emec(dict_material, dict_sample, dict_sollicitation)
+
+    #Compute the solute diffusion
+    Owntools.Compute.Compute_kc_dil(dict_material, dict_sample) #the solute diffusion
+
     raise ValueError('Stoooop')
 
-    #
 
-    #Compute parameters needed
-    Owntools.Compute.Compute_sum_min_etai(dict_sample, dict_sollicitation) #the sum of the minimum of etai
-    Owntools.Compute.Compute_Emec(dict_sample, dict_sollicitation) #the mechanical energy
-    if dict_material['method_to_compute_kc'] == 'dilation':
-        Owntools.Compute.Compute_kc_dil(dict_material, dict_sample) #the solute diffusion
-    if dict_material['method_to_compute_kc'] == 'interpolation':
-        Owntools.Compute.Compute_kc_int(dict_material, dict_sample) #the solute diffusion
-    dict_tracker['S_int_L'].append(dict_sample['S_int'])
-    dict_tracker['sum_min_etai_L'].append(dict_sample['sum_min_etai'])
 
     #compute for total energy in the sample and track the value
     Owntools.Compute.Compute_sum_Ed_plus_minus(dict_sample, dict_sollicitation)
@@ -311,8 +307,6 @@ def iteration_main(dict_algorithm, dict_material, dict_sample, dict_sollicitatio
         Owntools.Plot.Plot_c_at_p(dict_tracker)
     if 'sum_Ed' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_sum_Ed(dict_tracker)
-    if 'Sint_MinEtai' in dict_algorithm['L_flag_plot'] :
-        Owntools.Plot.Plot_Sint_SumMinEtai(dict_tracker)
     if 'dt' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_dt_used(dict_tracker)
 
@@ -469,9 +463,7 @@ if '__main__' == __name__:
     'sum_Ed_che_L': [],
     'sum_Ed_mec_L': [],
     'sum_ed_plus_L' : [],
-    'sum_ed_minus_L' : [],
-    'S_int_L' : [],
-    'sum_min_etai_L' : []
+    'sum_ed_minus_L' : []
     }
 
     #-------------------------------------------------------------------------------

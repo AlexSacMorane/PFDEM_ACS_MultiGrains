@@ -156,9 +156,7 @@ class TestGlobal(unittest.TestCase):
         'sum_Ed_che_L': [],
         'sum_Ed_mec_L': [],
         'sum_ed_plus_L' : [],
-        'sum_ed_minus_L' : [],
-        'S_int_L' : [],
-        'sum_min_etai_L' : []
+        'sum_ed_minus_L' : []
         }
 
         #Try to run one iteration
