@@ -213,15 +213,16 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
             elif (line[0:end_len] == '        </DataArray>' or  line[0:len('          <InformationKey')] == '          <InformationKey') and id_L != None:
                 id_L = None
 
-            elif line[0:data_jump_len] == '          ' and id_L >= 2: #Read etai
-                line = line[data_jump_len:]
-                c_start = 0
-                for c_i in range(0,len(line)):
-                    if line[c_i]==' ':
-                        c_end = c_i
-                        L_Work[id_L].append(float(line[c_start:c_end]))
-                        c_start = c_i+1
-                L_Work[id_L].append(float(line[c_start:]))
+            elif id_L != None :
+                if line[0:data_jump_len] == '          ' and id_L >= 2: #Read etai
+                    line = line[data_jump_len:]
+                    c_start = 0
+                    for c_i in range(0,len(line)):
+                        if line[c_i]==' ':
+                            c_end = c_i
+                            L_Work[id_L].append(float(line[c_start:c_end]))
+                            c_start = c_i+1
+                    L_Work[id_L].append(float(line[c_start:]))
 
             elif line[0:data_jump_len] == '          ' and id_L == 0: #Read [X, Y, Z]
                 line = line[data_jump_len:]
