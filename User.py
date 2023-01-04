@@ -215,11 +215,13 @@ def All_parameters():
     gravity = 0
     Vertical_Confinement_Linear_Force = Y*2*R_mean/1000 #µN/µm used to compute the Vertical_Confinement_Force
     Vertical_Confinement_Force = Vertical_Confinement_Linear_Force*(x_box_max-x_box_min) #µN
+    contact_gw_for_Emec = False #consider the contact grain - wall to compute Emec
 
     dict_sollicitation = {
     'overlap_target' : overlap_target,
     'chi' : chi,
     'gravity' : gravity,
+    'contact_gw_for_Emec' : contact_gw_for_Emec,
     'Vertical_Confinement_Force' : Vertical_Confinement_Force
     }
 
