@@ -207,6 +207,7 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
 
             if line[0:eta_selector_len] == '        <DataArray type="Float64" Name="eta':
                 id_L = 1 + int(line[eta_selector_len])
+                print(id_L)
 
             elif line[0:XYZ_selector_len] == '        <DataArray type="Float64" Name="Points"':
                 id_L = 0
@@ -215,6 +216,7 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
                 id_L = None
 
             elif id_L != None :
+                print('read etai')
                 if line[0:data_jump_len] == '          ' and id_L >= 2: #Read etai
                     line = line[data_jump_len:]
                     c_start = 0
