@@ -216,8 +216,8 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
                 id_L = None
 
             elif id_L != None :
-                print('read etai')
                 if line[0:data_jump_len] == '          ' and id_L >= 2: #Read etai
+                    print('read etai')
                     line = line[data_jump_len:]
                     c_start = 0
                     for c_i in range(0,len(line)):
