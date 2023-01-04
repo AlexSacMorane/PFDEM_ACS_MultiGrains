@@ -13,6 +13,7 @@ The new class is about the unconserved variables used in phase-field simulation.
 
 import numpy as np
 import random
+import matplotlib.pyplot as plt
 
 #Own
 import Report
