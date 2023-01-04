@@ -80,7 +80,7 @@ class Grain:
             Output :
                 Nothing but the grain gets a new attribute (a n_y x n_x numpy array)
         '''
-        #initilization
+        #initialization
         self.etai_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
 
         #extract a spatial zone
@@ -551,6 +551,44 @@ class Grain:
                 for x_i in dict_sample['x_L'] :
                     L_dx.append(abs(x_i - L_Work[0][i]))
                 self.etai_M[-1-list(L_dy).index(min(L_dy))][list(L_dx).index(min(L_dx))] = L_Work[2][i]
+
+    #---------------------------------------------------------------------------
+
+    def ExtractPF_from_Eta(self, L_etai_M, dict_material, dict_sample):
+        '''
+        Extract from the total phase field the variable associated with the grain.
+
+            Input :
+                itself (a grain)
+                a list of phase field (a neta x nx x ny numpy array)
+                a material dictionnary (a dict)
+                a sample dictionnary (a dict)
+            Output :
+                Nothing but the grain gets an updated attribute (a n_y x n_x numpy array)
+        '''
+        etai_M = L_etai_M[self.etai].copy()
+        #extract a spatial zone
+        x_min = min(self.l_border_x)-2*dict_material['w']
+        x_max = max(self.l_border_x)+2*dict_material['w']
+        y_min = min(self.l_border_y)-2*dict_material['w']
+        y_max = max(self.l_border_y)+2*dict_material['w']
+
+        #look for this part inside the global mesh
+        #create search list
+        x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
+        x_L_search_max = abs(np.array(dict_sample['x_L'])-x_max)
+        y_L_search_min = abs(np.array(dict_sample['y_L'])-y_min)
+        y_L_search_max = abs(np.array(dict_sample['y_L'])-y_max)
+
+        #get index
+        i_x_min = list(x_L_search_min).index(min(x_L_search_min))
+        i_x_max = list(x_L_search_max).index(min(x_L_search_max))
+        i_y_min = list(y_L_search_min).index(min(y_L_search_min))
+        i_y_max = list(y_L_search_max).index(min(y_L_search_max))
+
+        for l in range(i_y_min,i_y_max+1):
+            for c in range(i_x_min,i_x_max+1):
+                self.etai_M[-1-l][c] = etai_M[-1-l][c]
 
     #---------------------------------------------------------------------------
 

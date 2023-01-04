@@ -265,12 +265,11 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     #PF to DEM
     #---------------------------------------------------------------------------
 
-    raise ValueError('Stoooop')
-
     #look for the new grains shape
-    for grain in dict_sample['L_g']:
-        grain.PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str,dict_algorithm,dict_sample)
-        grain.geometric_study(dict_sample)
+    Etai.PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str, dict_algorithm, dict_material, dict_sample)
+    #for grain in dict_sample['L_g']:
+    #    grain.PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str,dict_algorithm,dict_sample)
+    #    grain.geometric_study(dict_sample)
     #look for the new solute shape
     Owntools.PFtoDEM_Multi.solute_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str,dict_algorithm,dict_sample)
 
@@ -283,6 +282,8 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
         #look for the initial external energy sources
         Owntools.PFtoDEM_Multi.Ed_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_000',dict_algorithm,dict_sample)
         Owntools.Plot.Plot_Ed(dict_sample)
+
+        raise ValueError('Stoooop')
 
     #---------------------------------------------------------------------------
     #postprocess
