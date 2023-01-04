@@ -13,6 +13,7 @@ The new class is about the grains
 
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 import random
 
 #Own  functions and classes
@@ -101,7 +102,6 @@ class Grain:
         i_x_max = list(x_L_search_max).index(min(x_L_search_max))
         i_y_min = list(y_L_search_min).index(min(y_L_search_min))
         i_y_max = list(y_L_search_max).index(min(y_L_search_max))
-
 
         for l in range(i_y_min,i_y_max+1):
             for c in range(i_x_min,i_x_max+1):
@@ -585,6 +585,12 @@ class Grain:
         i_x_max = list(x_L_search_max).index(min(x_L_search_max))
         i_y_min = list(y_L_search_min).index(min(y_L_search_min))
         i_y_max = list(y_L_search_max).index(min(y_L_search_max))
+
+        plt.figure(1)
+        plt.imshow(etai_M,interpolation='nearest')
+
+        plt.savefig('grain'+str(int(self.id)))
+        plt.close(1)
 
         for l in range(i_y_min,i_y_max+1):
             for c in range(i_x_min,i_x_max+1):
