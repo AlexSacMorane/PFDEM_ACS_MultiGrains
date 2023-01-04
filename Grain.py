@@ -588,7 +588,6 @@ class Grain:
 
         plt.figure(1)
         plt.imshow(etai_M,interpolation='nearest')
-
         plt.savefig('grain'+str(int(self.id)))
         plt.close(1)
 

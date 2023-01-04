@@ -253,6 +253,12 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
             for j in range(2,len(L_Work)):
                 L_etai_M[j][-1-list(L_dy).index(min(L_dy))][list(L_dx).index(min(L_dx))] = L_Work[j][i]
 
+        for etai in dict_sample['L_etai']:
+            plt.figure(1)
+            plt.imshow(L_etai_M[etai.id],interpolation='nearest')
+            plt.savefig('etai'+str(int(etai.id)))
+            plt.close(1)
+
     #---------------------------------------------------------------------------
     #Transmit data to grains
     #---------------------------------------------------------------------------
