@@ -120,7 +120,7 @@ def All_parameters():
 
     #Time step for phase field
     n_t_PF = 8
-    dt_PF_init = 0.3
+    dt_PF_init = 0.1
     dt_PF_level1 = dt_PF_init/2
     dt_PF_level2 = dt_PF_level1/2
     dt_PF_level3 = dt_PF_level2/2
