@@ -636,6 +636,38 @@ class Grain:
                     self.etai_M[l][c] = (etai_M_old[l][c]*(dx-disp_x_remainder) + etai_M_old[l][c+1]*disp_x_remainder)/dx
                 self.etai_M[l][0] = 0 #no information to translate so put equal to 0
 
+        #displacement over y
+        dy = dict_sample['y_L'][1]-dict_sample['y_L'][0]
+        n_dy_disp_y = int(abs(displacement[1])//dy)
+        disp_y_remainder = abs(displacement[1])%dy
+        etai_M_old = self.etai_M.copy()
+
+        if np.sign(displacement[1]) > 0 : # +y direction
+            #dy*n_dy_disp_y translation
+            if n_dy_disp_y > 0:
+                for c in range(len(dict_sample['x_L'])):
+                    self.etai_M[-n_dy_disp_y:][c] = 0 #no information to translate so put equal to 0
+                    self.etai_M[:-n_dy_disp_y][c] = etai_M_old[n_dy_disp_y:][c]
+            #disp_y_remainder translation
+            etai_M_old = self.etai_M.copy()
+            for c in range(len(dict_sample['x_L'])):
+                for l in range(len(dict_sample['y_L'])-1):
+                    self.etai_M[l][c] = (etai_M_old[l][c]*(dy-disp_y_remainder) + etai_M_old[l+1][c]*disp_y_remainder)/dy
+                self.etai_M[-1][c] = 0 #no information to translate so put equal to 0
+
+        else : # -y direction
+            #dy*n_dy_disp_y translation
+            if n_dy_disp_y > 0:
+                for c in range(len(dict_sample['x_L'])):
+                    self.etai_M[:n_dy_disp_y][c] = 0 #no information to translate so put equal to 0
+                    self.etai_M[n_dy_disp_y:][c] = etai_M_old[:-n_dy_disp_y][c]
+            #disp_y_remainder translation
+            etai_M_old = self.etai_M.copy()
+            for c in range(len(dict_sample['x_L'])):
+                for l in range(1,len(dict_sample['y_L'])):
+                    self.etai_M[l][c] = (etai_M_old[l][c]*(dy-disp_y_remainder) + etai_M_old[l-1][c]*disp_y_remainder)/dy
+                self.etai_M[0][c] = 0 #no information to translate so put equal to 0
+
     #-------------------------------------------------------------------------------
 
     def update_geometry_kinetic(self, V, A, W, DT):
