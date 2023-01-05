@@ -211,7 +211,7 @@ class Grain:
       d_final_mean = np.mean(L_d_final)
       while np.max(L_d_final) > 5 * d_final_mean : #5 here is an user choixe value
           i_error = L_d_final.index(np.max(L_d_final))+1
-          simulation_report.write('Point '+str(L_border[i_error])+' is deleted because it is detected as an error\n')
+          #simulation_report.write('Point '+str(L_border[i_error])+' is deleted because it is detected as an error\n')
           L_border.pop(i_error)
           L_id_used.pop(i_error)
           L_d_final = []
