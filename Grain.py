@@ -568,10 +568,10 @@ class Grain:
         '''
         etai_M = L_etai_M[self.etai].copy()
         #extract a spatial zone
-        x_min = min(self.l_border_x)-2*dict_material['w']
-        x_max = max(self.l_border_x)+2*dict_material['w']
-        y_min = min(self.l_border_y)-2*dict_material['w']
-        y_max = max(self.l_border_y)+2*dict_material['w']
+        x_min = min(self.l_border_x)-dict_material['w']
+        x_max = max(self.l_border_x)+dict_material['w']
+        y_min = min(self.l_border_y)-dict_material['w']
+        y_max = max(self.l_border_y)+dict_material['w']
 
         #look for this part inside the global mesh
         #create search list
