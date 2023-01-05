@@ -659,6 +659,7 @@ class Grain:
             #dy*n_dy_disp_y translation
             if n_dy_disp_y > 0:
                 for c in range(len(dict_sample['x_L'])):
+                    print(n_dy_disp_y)
                     self.etai_M[:n_dy_disp_y][c] = 0 #no information to translate so put equal to 0
                     self.etai_M[n_dy_disp_y:][c] = etai_M_old[:-n_dy_disp_y][c]
             #disp_y_remainder translation
