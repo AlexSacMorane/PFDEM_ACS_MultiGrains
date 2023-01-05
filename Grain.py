@@ -604,12 +604,6 @@ class Grain:
             Output :
                 Nothing but the grain gets an updated attribute (a n_y x n_x numpy array)
         '''
-        self.center = self.center + displacement
-        for i in range(len(self.l_border)):
-            self.l_border[i] = self.l_border[i] + displacement
-            self.l_border_x[i] = self.l_border_x[i] + displacement[0]
-            self.l_border_y[i] = self.l_border_y[i] + displacement[1]
-
         #displacement over x
         dx = dict_sample['x_L'][1]-dict_sample['x_L'][0]
         n_dx_disp_x = int(abs(displacement[0])//dx)
