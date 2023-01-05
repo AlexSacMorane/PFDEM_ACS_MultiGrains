@@ -460,7 +460,7 @@ if '__main__' == __name__:
     dict_tracker = {
     'L_t' : [0],
     'L_dt' : [],
-    'L_y_box_max' : dict_sample['y_box_max'],
+    'L_y_box_max' : [dict_sample['y_box_max']],
     'L_sum_solute' : [0],
     'L_sum_eta' : [dict_sample['sum_eta']],
     'L_sum_total' : [dict_sample['sum_eta']],
