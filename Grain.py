@@ -586,6 +586,8 @@ class Grain:
         i_y_min = list(y_L_search_min).index(min(y_L_search_min))
         i_y_max = list(y_L_search_max).index(min(y_L_search_max))
 
+        print(i_x_min,i_x_max,i_y_min,i_y_max)
+
         for l in range(i_y_min,i_y_max+1):
             for c in range(i_x_min,i_x_max+1):
                 self.etai_M[-1-l][c] = etai_M[-1-l][c]
