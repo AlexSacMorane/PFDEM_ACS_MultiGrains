@@ -292,15 +292,31 @@ def Plot_mp4(template_name,name_video):
 
 #-------------------------------------------------------------------------------
 
-def Plot_Ed(dict_sample):
+def Plot_Ed(dict_sample, dict_sollicitation):
     '''
     Plot the energy source configuration at the start of the simulation.
 
         Input :
             a sample dictionnary (a dict)
+            a sollicitation dictionnary (a dict)
         Output :
             Nothing but a .png file is generated (a file)
     '''
+    #Compute Eche_M, Emec_M, Ed_M
+    Eche_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
+    Emec_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
+    Ed_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
+    for l in range(len(dict_sample['y_L'])):
+        for c in range(len(dict_sample['x_L'])):
+            Eche = 0
+            Emec = 0
+            for etai in dict_sample['L_etai']:
+                Eche = Eche + dict_sollicitation['chi']*dict_sample['solute_M'][l][c]*(3*etai.etai_M[l][c]**2-2*etai.etai_M[l][c]**3)
+                Emec = Emec + dict_sample['Emec_M'][l][c]*(3*etai.etai_M[l][c]**2-2*etai.etai_M[l][c]**3)
+            Ed = Emec - Eche
+            Eche_M[l][c] = Eche
+            Emec_M[l][c] = Emec
+            Ed_M[l][c] = Ed
     #look for the name of the new plot
     template_name = 'Debug/Ed/Ed_'
     j = 0
@@ -315,33 +331,33 @@ def Plot_Ed(dict_sample):
 
     #Ed_M
     plt.subplot(211)
-    im = plt.imshow(dict_sample['Ed_M'],interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
+    im = plt.imshow(Ed_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
     plt.colorbar(im)
     #etai
     for i in range(len(dict_sample['L_g'])):
-        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y)
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,k)
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.title('Ed = Emec - Eche')
 
     #Emec_M
     plt.subplot(223)
-    im = plt.imshow(dict_sample['Emec_M'],interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
+    im = plt.imshow(Emec_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
     plt.colorbar(im)
     #etai
     for i in range(len(dict_sample['L_g'])):
-        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y)
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,k)
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.title('Emec')
 
     #Eche_M
     plt.subplot(224)
-    im = plt.imshow(dict_sample['Eche_M'],interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
+    im = plt.imshow(Eche_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
     plt.colorbar(im)
     #etai
     for i in range(len(dict_sample['L_g'])):
-        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y)
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,k)
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.title('Eche')

@@ -221,10 +221,9 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
         os.mkdir('Debug/Diff_Solute/Ite_'+str(dict_algorithm['i_PFDEM']))
         Owntools.Plot.Plot_Diffusion_Solute(dict_algorithm, dict_material, dict_sample)
     #look for the initial external energy sources
-    if False:
-        if 'Ed' in dict_algorithm['L_flag_plot']:
-            Owntools.PFtoDEM_Multi.Ed_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_000',dict_algorithm,dict_sample)
-            Owntools.Plot.Plot_Ed(dict_sample)
+    if 'Ed' in dict_algorithm['L_flag_plot']:
+        Owntools.PFtoDEM_Multi.Ed_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_000',dict_algorithm,dict_sample)
+        Owntools.Plot.Plot_Ed(dict_sample)
 
     #create i
     Owntools.Write.Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation)
