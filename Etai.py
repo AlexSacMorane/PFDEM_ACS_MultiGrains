@@ -225,22 +225,22 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
                             c_start = c_i+1
                     L_Work[id_L].append(float(line[c_start:]))
 
-            elif line[0:data_jump_len] == '          ' and id_L == 0: #Read [X, Y, Z]
-                line = line[data_jump_len:]
-                XYZ_temp = []
-                c_start = 0
-                for c_i in range(0,len(line)):
-                    if line[c_i]==' ':
-                        c_end = c_i
-                        XYZ_temp.append(float(line[c_start:c_end]))
-                        if len(XYZ_temp)==3:
-                            L_Work[0].append(XYZ_temp[0])
-                            L_Work[1].append(XYZ_temp[1])
-                            XYZ_temp = []
-                        c_start = c_i+1
-                XYZ_temp.append(float(line[c_start:]))
-                L_Work[0].append(XYZ_temp[0])
-                L_Work[1].append(XYZ_temp[1])
+                elif line[0:data_jump_len] == '          ' and id_L == 0: #Read [X, Y, Z]
+                    line = line[data_jump_len:]
+                    XYZ_temp = []
+                    c_start = 0
+                    for c_i in range(0,len(line)):
+                        if line[c_i]==' ':
+                            c_end = c_i
+                            XYZ_temp.append(float(line[c_start:c_end]))
+                            if len(XYZ_temp)==3:
+                                L_Work[0].append(XYZ_temp[0])
+                                L_Work[1].append(XYZ_temp[1])
+                                XYZ_temp = []
+                            c_start = c_i+1
+                    XYZ_temp.append(float(line[c_start:]))
+                    L_Work[0].append(XYZ_temp[0])
+                    L_Work[1].append(XYZ_temp[1])
 
         #Adaptating data and update of etai_M
         for i in range(len(L_Work[0])):
@@ -252,10 +252,7 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
             for x_i in dict_sample['x_L'] :
                 L_dx.append(abs(x_i - L_Work[0][i]))
             for j in range(2,len(L_Work)):
-                print(j)
                 L_etai_M[j-2][-1-list(L_dy).index(min(L_dy))][list(L_dx).index(min(L_dx))] = L_Work[j][i]
-                if L_Work[j][i] > 0.1 :
-                    print(L_Work[j][i])
 
     for etai in dict_sample['L_etai']:
         plt.figure(1)
