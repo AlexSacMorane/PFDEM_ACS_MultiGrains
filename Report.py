@@ -41,7 +41,7 @@ class Report:
             Last_modification = 0
             L_file = os.listdir()
             for file in L_file:
-                if file[-3:] == '.py' and file !='main.py':
+                if file[-3:] == '.py' and file !='User.py':
                     if os.path.getmtime(file) > Last_modification:
                         Last_modification =  os.path.getmtime(file)
 
