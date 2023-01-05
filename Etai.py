@@ -192,7 +192,7 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
                   []] #Y
         for etai in dict_sample['L_etai']:
             L_Work.append([]) #etai
-
+        print(L_Work)
     #---------------------------------------------------------------------------
     #Reading file
     #---------------------------------------------------------------------------
@@ -207,6 +207,7 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
 
             if line[0:eta_selector_len] == '        <DataArray type="Float64" Name="eta':
                 id_L = 1 + int(line[eta_selector_len])
+                print(id_L)
 
             elif line[0:XYZ_selector_len] == '        <DataArray type="Float64" Name="Points"':
                 id_L = 0
@@ -256,11 +257,11 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
                 if L_Work[j][i] > 0.1 :
                     print(L_Work[j][i])
 
-        for etai in dict_sample['L_etai']:
-            plt.figure(1)
-            plt.imshow(L_etai_M[etai.id],interpolation='nearest')
-            plt.savefig('etai'+str(int(etai.id)))
-            plt.close(1)
+    for etai in dict_sample['L_etai']:
+        plt.figure(1)
+        plt.imshow(L_etai_M[etai.id],interpolation='nearest')
+        plt.savefig('etai'+str(int(etai.id)))
+        plt.close(1)
 
     #---------------------------------------------------------------------------
     #Transmit data to grains
