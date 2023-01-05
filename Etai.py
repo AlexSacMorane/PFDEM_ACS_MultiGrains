@@ -192,7 +192,7 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
                   []] #Y
         for etai in dict_sample['L_etai']:
             L_Work.append([]) #etai
-        print(L_Work)
+
     #---------------------------------------------------------------------------
     #Reading file
     #---------------------------------------------------------------------------
@@ -213,6 +213,8 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
                 id_L = 0
 
             elif (line[0:end_len] == '        </DataArray>' or  line[0:len('          <InformationKey')] == '          <InformationKey') and id_L != None:
+                if id_L >= 2:
+                    print(L_Work[id_L])
                 id_L = None
 
             elif id_L != None :
