@@ -207,14 +207,11 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
 
             if line[0:eta_selector_len] == '        <DataArray type="Float64" Name="eta':
                 id_L = 1 + int(line[eta_selector_len])
-                print(id_L)
 
             elif line[0:XYZ_selector_len] == '        <DataArray type="Float64" Name="Points"':
                 id_L = 0
 
             elif (line[0:end_len] == '        </DataArray>' or  line[0:len('          <InformationKey')] == '          <InformationKey') and id_L != None:
-                if id_L >= 2:
-                    print(L_Work[id_L])
                 id_L = None
 
             elif id_L != None :
@@ -255,6 +252,7 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
             for x_i in dict_sample['x_L'] :
                 L_dx.append(abs(x_i - L_Work[0][i]))
             for j in range(2,len(L_Work)):
+                print(j)
                 L_etai_M[j-2][-1-list(L_dy).index(min(L_dy))][list(L_dx).index(min(L_dx))] = L_Work[j][i]
                 if L_Work[j][i] > 0.1 :
                     print(L_Work[j][i])
