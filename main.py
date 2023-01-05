@@ -222,7 +222,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
         Owntools.Plot.Plot_Diffusion_Solute(dict_algorithm, dict_material, dict_sample)
     #look for the initial external energy sources
     if 'Ed' in dict_algorithm['L_flag_plot']:
-        Owntools.Plot.Plot_Ed(dict_sample)
+        Owntools.Plot.Plot_Ed(dict_sample, dict_sollicitation)
 
     #create i
     Owntools.Write.Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation)
