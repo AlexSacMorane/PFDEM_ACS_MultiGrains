@@ -78,7 +78,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
 
     #Trackers and add element in dict
     dict_tracker['Ecin'] = []
-    dict_tracker['y_box_max'] = [dict_sample['y_box_max']]
+    dict_tracker['y_box_max_DEM'] = [dict_sample['y_box_max']]
     dict_tracker['Force_on_upper_wall'] = []
 
     #---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
         Owntools.Control_y_max_NR(dict_sample,dict_sollicitation)
         #trackers
         dict_tracker['Ecin'].append(Ecin)
-        dict_tracker['y_box_max'].append(dict_sample['y_box_max'])
+        dict_tracker['y_box_max_DEM'].append(dict_sample['y_box_max'])
         dict_tracker['Force_on_upper_wall'].append(dict_sollicitation['Force_on_upper_wall'])
 
         if (dict_algorithm['i_DEM']-1) % dict_algorithm['i_print_plot'] == 0:
@@ -148,7 +148,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
             print("DEM loop stopped by too many iterations.")
             simulation_report.write('/!\ End of DEM steps with '+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+'/!\ \n')
         if dict_algorithm['i_DEM'] > 0.05*dict_algorithm['i_DEM_stop'] and Ecin < dict_algorithm['Ecin_stop'] and (dict_sollicitation['Vertical_Confinement_Force']*0.95<dict_sollicitation['Force_on_upper_wall'] and dict_sollicitation['Force_on_upper_wall']<dict_sollicitation['Vertical_Confinement_Force']*1.05):
-            y_box_max_window = dict_tracker['y_box_max'][dict_algorithm['i_DEM']+1-dict_algorithm['n_window_stop']:dict_algorithm['i_DEM']+1]
+            y_box_max_window = dict_tracker['y_box_max_DEM'][dict_algorithm['i_DEM']+1-dict_algorithm['n_window_stop']:dict_algorithm['i_DEM']+1]
             if max(y_box_max_window) - min(y_box_max_window) < dict_algorithm['dy_box_max_stop']:
                 DEM_loop_statut = False
                 print("DEM loop stopped by steady state reached.")
@@ -222,7 +222,6 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
         Owntools.Plot.Plot_Diffusion_Solute(dict_algorithm, dict_material, dict_sample)
     #look for the initial external energy sources
     if 'Ed' in dict_algorithm['L_flag_plot']:
-        Owntools.PFtoDEM_Multi.Ed_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_000',dict_algorithm,dict_sample)
         Owntools.Plot.Plot_Ed(dict_sample)
 
     #create i
@@ -283,8 +282,6 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_init_current_shape(dict_sample)
 
-    raise ValueError('Stoooop')
-
     #---------------------------------------------------------------------------
     #postprocess
     #---------------------------------------------------------------------------
@@ -317,6 +314,7 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     dict_tracker['L_circle_ratio_sphericity_g0'].append(dict_sample['L_g'][0].circle_ratio_sphericity)
     dict_tracker['L_perimeter_sphericity_g0'].append(dict_sample['L_g'][0].perimeter_sphericity)
     dict_tracker['L_width_to_length_ratio_sphericity_g0'].append(dict_sample['L_g'][0].width_to_length_ratio_sphericity)
+    dict_tracker['L_y_box_max'].append(dict_sample['y_box_max'])
 
     #Plot trackers
     if 'Eta_c' in dict_algorithm['L_flag_plot'] :
@@ -462,8 +460,7 @@ if '__main__' == __name__:
     dict_tracker = {
     'L_t' : [0],
     'L_dt' : [],
-    'L_displacement' : [0],
-    'L_int_displacement' : [0],
+    'L_y_box_max' : dict_sample['y_box_max'],
     'L_sum_solute' : [0],
     'L_sum_eta' : [dict_sample['sum_eta']],
     'L_sum_total' : [dict_sample['sum_eta']],

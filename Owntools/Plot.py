@@ -452,7 +452,7 @@ def Plot_sum_eta_c(dict_tracker):
     plt.figure(1,figsize=(16,9))
 
     plt.subplot(211)
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_int_displacement'])
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_y_box_max'])
     plt.title('Total displacement done')
 
     plt.subplot(234)
@@ -535,7 +535,7 @@ def Plot_sum_Ed(dict_tracker):
     plt.title('Repartition of the energy in a + and a -  terms')
 
     plt.subplot(133)
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_int_displacement'])
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_y_box_max'])
     plt.title('Total displacement done')
 
     plt.savefig('Debug/Evolution_sum_Ed.png')

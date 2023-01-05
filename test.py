@@ -141,8 +141,6 @@ class TestGlobal(unittest.TestCase):
         dict_tracker = {
         'L_t' : [0],
         'L_dt' : [],
-        'L_displacement' : [0],
-        'L_int_displacement' : [0],
         'L_sum_solute' : [0],
         'L_sum_eta' : [dict_sample['sum_eta']],
         'L_sum_total' : [dict_sample['sum_eta']],
@@ -556,30 +554,6 @@ class TestGrain(unittest.TestCase):
         #Check if there is not an overlap between those grains
         Grain.Compute_overlap_2_grains(dict_sample)
         self.assertTrue(dict_sample['overlap']==-2,'The overlap between two grains not in contact is not well computed!')
-
-    #---------------------------------------------------------------------------
-
-    def test_Apply_overlap_target(self):
-        '''
-        Try to apply the overlap between two grains with Grain.Apply_overlap_target().
-
-            Output :
-                The result depends on the fact if the overlap are well applied or not (a bool)
-        '''
-        #Acquire data
-        dict_algorithm, dict_material, dict_sample, dict_sollicitation = User.All_parameters()
-        #Create two grain
-        User.Add_2grains(dict_material,dict_sample)
-        #Compute the initial overlap
-        Grain.Compute_overlap_2_grains(dict_sample)
-        #Create the dict_tracker
-        dict_tracker = {'L_displacement': [0], 'L_int_displacement' : [0]}
-        #try to apply a target overlap
-        Grain.Apply_overlap_target(dict_material,dict_sample,dict_sollicitation,dict_tracker)
-        #Compute the current overlap
-        Grain.Compute_overlap_2_grains(dict_sample)
-        #Check if the overlap target is well applied
-        self.assertTrue(dict_sample['overlap']==dict_sollicitation['overlap_target'],'The target overlap between two grains is not well applied!')
 
 #-------------------------------------------------------------------------------
 #main

@@ -759,32 +759,6 @@ def Compute_overlap_2_grains(dict_sample):
 
 #-------------------------------------------------------------------------------
 
-def Apply_overlap_target(dict_material,dict_sample,dict_sollicitation,dict_tracker):
-    '''
-    Move two grains to verify an asked overlap.
-
-    It is assumed the sample is composed  by only 2 grains.
-
-        Input :
-            a material dictionnary (a dictionnary)
-            a sample dictionnary (a dictionnary)
-            a sollicitation dictionnary (a dictionnary)
-        Output :
-            Nothing but the sample dictionnary gets updated values (a grain)
-    '''
-    #compute the difference between real overlap and target value
-    delta_overlap = dict_sollicitation['overlap_target'] - dict_sample['overlap']
-
-    #save in tracker
-    dict_tracker['L_displacement'].append(delta_overlap)
-    dict_tracker['L_int_displacement'].append(dict_tracker['L_int_displacement'][-1] + delta_overlap)
-
-    #move grains to apply target overlap
-    dict_sample['L_g'][0].move_grain_interpolation(np.array([ delta_overlap/2,0]),dict_sample)
-    dict_sample['L_g'][1].move_grain_interpolation(np.array([-delta_overlap/2,0]),dict_sample)
-
-#-------------------------------------------------------------------------------
-
 def FindCircleFromThreePoints(P1,P2,P3):
     '''
     Compute the circumscribing circle of a triangle defined by three points.

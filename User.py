@@ -116,7 +116,7 @@ def All_parameters():
     #Algorithm parameters
 
     np_proc = 4 #number of processor used
-    n_t_PFDEM = 200 #number of cycle PF-DEM
+    n_t_PFDEM = 10 #number of cycle PF-DEM
 
     #Time step for phase field
     n_t_PF = 8
