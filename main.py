@@ -278,13 +278,14 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_init_current_shape(dict_sample)
+
+        raise ValueError('Stoooop')
+
     if 'Ed' in dict_algorithm['L_flag_plot']:
         #look for the initial external energy sources
         Owntools.PFtoDEM_Multi.Ed_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_000',dict_algorithm,dict_sample)
         Owntools.Plot.Plot_Ed(dict_sample)
-
-        raise ValueError('Stoooop')
-
+        
     #---------------------------------------------------------------------------
     #postprocess
     #---------------------------------------------------------------------------

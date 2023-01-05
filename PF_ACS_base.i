@@ -11,10 +11,10 @@
   elem_type = QUAD4
 []
 
-[GlobalParams]
-  # let's output all material properties for demonstration purposes
-  outputs = exodus
-[]
+#[GlobalParams]
+#   let's output all material properties for demonstration purposes
+#  outputs = exodus
+#[]
 
 [Variables]
 
