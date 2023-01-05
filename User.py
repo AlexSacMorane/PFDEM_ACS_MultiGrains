@@ -116,7 +116,7 @@ def All_parameters():
     #Algorithm parameters
 
     np_proc = 4 #number of processor used
-    n_t_PFDEM = 10 #number of cycle PF-DEM
+    n_t_PFDEM = 50 #number of cycle PF-DEM
 
     #Time step for phase field
     n_t_PF = 8
@@ -151,7 +151,7 @@ def All_parameters():
     #List of plot to do
     Debug = True #plot configuration before and after DEM simulation
     Debug_DEM = False #plot configuration inside DEM
-    i_print_plot = 50 #frenquency of the print and plot (if Debug_DEM) in DEM step
+    i_print_plot = 100 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sphericity, sum_Ed
     L_flag_plot = ['Config', 'Sphericity', 'Movie', 'sum_Ed', 'Ed', 'Kc', 'Mesh', 'Etai_distribution']
     #Visual parameters (for plot Config)
