@@ -335,7 +335,7 @@ def Plot_Ed(dict_sample, dict_sollicitation):
     plt.colorbar(im)
     #etai
     for i in range(len(dict_sample['L_g'])):
-        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,k)
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,'k')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.title('Ed = Emec - Eche')
@@ -346,7 +346,7 @@ def Plot_Ed(dict_sample, dict_sollicitation):
     plt.colorbar(im)
     #etai
     for i in range(len(dict_sample['L_g'])):
-        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,k)
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,'k')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.title('Emec')
@@ -357,7 +357,7 @@ def Plot_Ed(dict_sample, dict_sollicitation):
     plt.colorbar(im)
     #etai
     for i in range(len(dict_sample['L_g'])):
-        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,k)
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,'k')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.title('Eche')
