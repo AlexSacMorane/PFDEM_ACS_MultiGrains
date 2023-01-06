@@ -659,6 +659,7 @@ class Grain:
             #dy*n_dy_disp_y translation
             if n_dy_disp_y > 0:
                 for c in range(len(dict_sample['x_L'])):
+                    print(len(self.etai_M),len(self.etai_M[0]))
                     print(n_dy_disp_y)
                     print(self.etai_M[:n_dy_disp_y][c])
                     self.etai_M[:n_dy_disp_y][c] = 0 #no information to translate so put equal to 0
