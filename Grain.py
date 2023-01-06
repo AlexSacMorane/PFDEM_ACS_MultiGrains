@@ -553,13 +553,14 @@ class Grain:
 
     #---------------------------------------------------------------------------
 
-    def ExtractPF_from_Eta(self, L_etai_M, dict_material, dict_sample):
+    def ExtractPF_from_Eta(self, L_etai_M, dict_algorithm, dict_material, dict_sample):
         '''
         Extract from the total phase field the variable associated with the grain.
 
             Input :
                 itself (a grain)
                 a list of phase field (a neta x nx x ny numpy array)
+                an algorithm dictionnary (a dict)
                 a material dictionnary (a dict)
                 a sample dictionnary (a dict)
             Output :
@@ -568,9 +569,13 @@ class Grain:
         etai_M = L_etai_M[self.etai].copy()
         #extract a spatial zone
         x_min = min(self.l_border_x)-dict_material['w']
+        x_min = self.center[0] - dict_algorithm['factor_etai'] * self.r_max
         x_max = max(self.l_border_x)+dict_material['w']
+        x_max = self.center[0] + dict_algorithm['factor_etai'] * self.r_max
         y_min = min(self.l_border_y)-dict_material['w']
+        y_min = self.center[1] - dict_algorithm['factor_etai'] * self.r_max
         y_max = max(self.l_border_y)+dict_material['w']
+        y_max = self.center[1] + dict_algorithm['factor_etai'] * self.r_max
 
         #look for this part inside the global mesh
         #create search list

@@ -258,5 +258,5 @@ def PFtoDEM_Multi(FileToRead,dict_algorithm,dict_material,dict_sample):
     #---------------------------------------------------------------------------
 
     for grain in dict_sample['L_g']:
-        grain.ExtractPF_from_Eta(L_etai_M, dict_material, dict_sample)
+        grain.ExtractPF_from_Eta(L_etai_M, dict_algorithm, dict_material, dict_sample)
         grain.geometric_study(dict_sample)

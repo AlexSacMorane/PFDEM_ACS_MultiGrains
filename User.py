@@ -36,7 +36,7 @@ def All_parameters():
     #---------------------------------------------------------------------------
     #Geometry parameters
 
-    N_grain = 20 #total number of grains
+    N_grain = 60 #total number of grains
 
     R0 = 350 #µm radius to compute the grain distribution
     L_R = [1.2*R0,1.1*R0,0.9*R0,0.8*R0] #from larger to smaller
