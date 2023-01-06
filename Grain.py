@@ -649,8 +649,10 @@ class Grain:
             #dy*n_dy_disp_y translation
             if n_dy_disp_y > 0:
                 for c in range(len(dict_sample['x_L'])):
-                    self.etai_M[-n_dy_disp_y:][c] = 0 #no information to translate so put equal to 0
-                    self.etai_M[:-n_dy_disp_y][c] = etai_M_old[n_dy_disp_y:][c]
+                    for l in range(len(dict_sample['y_L'])-n_dy_disp_y,len(dict_sample['y_L'])):
+                        self.etai_M[l][c] = 0 #no information to translate so put equal to 0
+                    for l in range(len(dict_sample['y_L'])-n_dy_disp_y):
+                        self.etai_M[l][c] = etai_M_old[l+1][c]
             #disp_y_remainder translation
             etai_M_old = self.etai_M.copy()
             for c in range(len(dict_sample['x_L'])):
@@ -662,11 +664,10 @@ class Grain:
             #dy*n_dy_disp_y translation
             if n_dy_disp_y > 0:
                 for c in range(len(dict_sample['x_L'])):
-                    print(len(self.etai_M),len(self.etai_M[0]))
-                    print(n_dy_disp_y)
-                    #print(self.etai_M[:n_dy_disp_y][c])
-                    self.etai_M[:n_dy_disp_y][c] = 0 #no information to translate so put equal to 0
-                    self.etai_M[n_dy_disp_y:][c] = etai_M_old[:-n_dy_disp_y][c]
+                    for l in range(n_dy_disp_y):
+                        self.etai_M[l][c] = 0 #no information to translate so put equal to 0
+                    for l in range(n_dy_disp_y, len(dict_sample['y_L'])):
+                        self.etai_M[l][c] = etai_M_old[l-1][c]
             #disp_y_remainder translation
             etai_M_old = self.etai_M.copy()
             for c in range(len(dict_sample['x_L'])):
