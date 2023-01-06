@@ -610,6 +610,8 @@ class Grain:
         disp_x_remainder = abs(displacement[0])%dx
         etai_M_old = self.etai_M.copy()
 
+        print(len(self.etai_M),len(self.etai_M[0]))
+
         if np.sign(displacement[0]) > 0 : # +x direction
             #dx*n_dx_disp_x translation
             if n_dx_disp_x > 0:
@@ -661,7 +663,7 @@ class Grain:
                 for c in range(len(dict_sample['x_L'])):
                     print(len(self.etai_M),len(self.etai_M[0]))
                     print(n_dy_disp_y)
-                    print(self.etai_M[:n_dy_disp_y][c])
+                    #print(self.etai_M[:n_dy_disp_y][c])
                     self.etai_M[:n_dy_disp_y][c] = 0 #no information to translate so put equal to 0
                     self.etai_M[n_dy_disp_y:][c] = etai_M_old[:-n_dy_disp_y][c]
             #disp_y_remainder translation
