@@ -244,16 +244,34 @@ def Plot_config(dict_algorithm, dict_sample):
         plotpath = Path(template_name+str(j)+'.png')
     name = template_name+str(j)+'.png'
 
+    #Compute the etai
+    etas_M = np.array(np.zeros((dict_sample['L_y'],dict_sample['L_x'])))
+    for etai in dict_sample['L_etai']:
+        etas_M = etas_M + etai.etai_M
+
     #plot
     plt.figure(1,figsize=(16,9))
 
+    plt.subplot(121)
     #solute
     im = plt.imshow(dict_sample['solute_M'],interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])], vmin = dict_algorithm['c_min'], vmax = dict_algorithm['c_max'])
     plt.colorbar(im)
-    #etai
+    #grains
     for i in range(len(dict_sample['L_g'])):
         plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,'r')
     plt.title('Solute c and grains')
+    plt.axis('equal')
+    plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
+
+    plt.subplot(122)
+    L_color = ['red', 'royalblue', 'forestgreen', 'gold', 'hotpink', 'skyblue', 'chocolate', 'darkkhaki', 'darkorchid', 'silver']
+    #etas
+    im = plt.imshow(etas_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])], vmin = 0, vmax = 1)
+    plt.colorbar(im)
+    #grains
+    for i in range(len(dict_sample['L_g'])):
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,color=L_color[dict_sample['L_g'][i].etai])
+    plt.title('Phase field and grains')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
 
