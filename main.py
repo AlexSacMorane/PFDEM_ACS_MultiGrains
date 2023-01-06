@@ -137,7 +137,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
 
             if dict_algorithm['Debug_DEM'] :
                 Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
-                Owntools.Write.Write_txt(dict_algorithm,dict_sample)
+                #Owntools.Write.Write_txt(dict_algorithm,dict_sample)
 
         #-----------------------------------------------------------------------------
         # Stop conditions
