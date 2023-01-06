@@ -77,12 +77,25 @@ class Contact_gg:
         Output :
             Nothing, but attributes are updated
     """
+    #compute angle between grains
+    g1_to_g2 = self.g2.center - self.g1.center
+    if g1_to_g2[1] >= 0 :
+        angle_g1_to_g2 = math.acos(g1_to_g2[0]/np.linalg.norm(g1_to_g2))
+        angle_g2_to_g1 = angle_g1_to_g2 + math.pi
+    else :
+        angle_g1_to_g2 = math.pi + math.acos(-g1_to_g2[0]/np.linalg.norm(g1_to_g2))
+        angle_g2_to_g1 = angle_g1_to_g2 - math.pi
+
+    #extract
+    L_i_vertices_1 = extract_vertices(self.g1, angle_g1_to_g2)
+    L_i_vertices_2 = extract_vertices(self.g2, angle_g2_to_g1)
+
     #looking for the nearest nodes
     d_virtual = max(self.g1.r_max,self.g2.r_max)
     ij_min = [0,0]
     d_ij_min = 100*d_virtual #Large
-    for i in range(len(self.g1.l_border[:-1])):
-        for j in range(len(self.g2.l_border[:-1])):
+    for i in L_i_vertices_1:
+        for j in L_i_vertices_2:
             d_ij = np.linalg.norm(self.g2.l_border[:-1][j]-self.g1.l_border[:-1][i]+d_virtual*(self.g2.center-self.g1.center)/np.linalg.norm(self.g2.center-self.g1.center))
             if d_ij < d_ij_min :
                 d_ij_min = d_ij
@@ -332,3 +345,37 @@ def Grains_Polyhedral_contact_Neighborhoods(dict_material,dict_sample):
                 if (i_grain,j_grain) in dict_sample['L_ij_contact'] : #contact detected previously is not anymore
                        dict_sample['L_contact'].pop(dict_sample['L_ij_contact'].index((i_grain,j_grain)))
                        dict_sample['L_ij_contact'].remove((i_grain,j_grain))
+
+#-------------------------------------------------------------------------------
+
+def extract_vertices(g, angle_g_to_other_g) :
+    """
+    Extract a list of indices of vertices inside a angular window.
+
+        Input :
+            a grain (a grain)
+            an angle (a float)
+        Output :
+            a list of indices (a list)
+    """
+    dtheta = 6*2*math.pi/(len(g.l_border)+1)
+    if dtheta/2<=angle_g_to_other_g and angle_g_to_other_g<2*math.pi-dtheta/2 :
+        L_search = list(abs(np.array(g.l_theta_r[:-1])-angle_g_to_other_g-dtheta/2))
+        i_max = L_search.index(min(L_search))
+        L_search = list(abs(np.array(g.l_theta_r[:-1])-angle_g_to_other_g+dtheta/2))
+        i_min = L_search.index(min(L_search))
+        L_i_vertices = list(range(i_min, i_max+1))
+    elif angle_g_to_other_g<dtheta/2 :
+        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g-dtheta/2+2*math.pi)))
+        i_max = L_search.index(min(L_search))
+        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g+dtheta/2)))
+        i_min = L_search.index(min(L_search))
+        L_i_vertices = list(range(0,i_min+1)) + list(range(i_max,len(g.l_theta_r)-1))
+    elif 2*math.pi-dtheta/2 <= angle_g_to_other_g:
+        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g-dtheta/2)))
+        i_max = L_search.index(min(L_search))
+        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g+dtheta/2-2*math.pi)))
+        i_min = L_search.index(min(L_search))
+        L_i_vertices = list(range(0,i_max+1)) + list(range(i_min,len(g.l_theta_r)-1))
+
+    return L_i_vertices
