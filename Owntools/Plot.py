@@ -245,7 +245,7 @@ def Plot_config(dict_algorithm, dict_sample):
     name = template_name+str(j)+'.png'
 
     #Compute the etai
-    etas_M = np.array(np.zeros((dict_sample['y_L'],dict_sample['x_L'])))
+    etas_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
     for etai in dict_sample['L_etai']:
         etas_M = etas_M + etai.etai_M
 
