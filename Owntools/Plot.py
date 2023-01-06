@@ -270,7 +270,7 @@ def Plot_config(dict_algorithm, dict_sample):
     plt.colorbar(im)
     #grains
     for i in range(len(dict_sample['L_g'])):
-        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,color=L_color[dict_sample['L_g'][i].etai])
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,color=L_color[dict_sample['L_g'][i].etai],linewidth=3)
     plt.title('Phase field and grains')
     plt.axis('equal')
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
