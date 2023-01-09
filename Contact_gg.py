@@ -94,8 +94,8 @@ class Contact_gg:
     d_virtual = max(self.g1.r_max,self.g2.r_max)
     ij_min = [0,0]
     d_ij_min = 100*d_virtual #Large
-    for i in L_i_vertices_1:
-        for j in L_i_vertices_2:
+    for i in range(len(self.g1.l_border[:-1])):
+        for j in range(len(self.g2.l_border[:-1])):
             d_ij = np.linalg.norm(self.g2.l_border[:-1][j]-self.g1.l_border[:-1][i]+d_virtual*(self.g2.center-self.g1.center)/np.linalg.norm(self.g2.center-self.g1.center))
             if d_ij < d_ij_min :
                 d_ij_min = d_ij
