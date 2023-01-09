@@ -139,9 +139,9 @@ def All_parameters():
     i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
     #Stop criteria of the DEM
     i_DEM_stop = 3000 #maximum iteration for one DEM simulation
-    Ecin_ratio = 0.0002
+    Ecin_ratio = 0.0001
     n_window_stop = 50
-    dy_box_max_stop = 0.5
+    dy_box_max_stop = 1
 
     #Margin for sphericity study
     sphericity_margin = 0.05
@@ -151,9 +151,9 @@ def All_parameters():
     #List of plot to do
     Debug = True #plot configuration before and after DEM simulation
     Debug_DEM = False #plot configuration inside DEM
-    i_print_plot = 100 #frenquency of the print and plot (if Debug_DEM) in DEM step
-    # Config, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sphericity, sum_Ed
-    L_flag_plot = ['Config', 'Sphericity', 'Movie', 'sum_Ed', 'Ed', 'Kc', 'Mesh', 'Etai_distribution']
+    i_print_plot = 300 #frenquency of the print and plot (if Debug_DEM) in DEM step
+    # Config, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sphericity, sum_Ed
+    L_flag_plot = ['Config', 'DEM_txt', 'Sphericity', 'sum_Ed', 'Kc', 'Mesh', 'Etai_distribution']
     #Visual parameters (for plot Config)
     c_min = 0
     c_max = 0.08

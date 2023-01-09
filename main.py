@@ -155,6 +155,13 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
                 simulation_report.write("DEM loop stopped by steady state reached with "+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+"\n")
 
     #---------------------------------------------------------------------------
+    #Write DEM data in a .txt
+    #---------------------------------------------------------------------------
+
+    if 'DEM_txt' in dict_algorithm['L_flag_plot']:
+        Owntools.Write.Write_DEM_txt(dict_algorithm,dict_sample)
+
+    #---------------------------------------------------------------------------
     #Compute and apply rigid boby motion
     #---------------------------------------------------------------------------
 
@@ -411,6 +418,8 @@ if '__main__' == __name__:
         os.mkdir('Debug/Configuration')
         if dict_algorithm['Debug_DEM'] :
             os.mkdir('Debug/Configuration/Init')
+    if 'DEM_txt' in dict_algorithm['L_flag_plot']:
+        os.mkdir('Debug/txt')
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Comparison_Init_Current')
     if 'Ed' in dict_algorithm['L_flag_plot']:
