@@ -329,8 +329,8 @@ def Write_DEM_txt(dict_algorithm,dict_sample):
         Output :
             Nothing, but a .txt file is generated (a .txt)
     """
-    file_to_write = open('Debug/txt/PF_'+str(dict_algorithm['i_PF'])+'_ite_'+str(dict_algorithm['i_DEM'])+'.txt','w')
-    file_to_write.write('Iteration PF : '+str(dict_algorithm['i_PF'])+'\n'+\
+    file_to_write = open('Debug/txt/PF_'+str(dict_algorithm['i_PFDEM'])+'_ite_'+str(dict_algorithm['i_DEM'])+'.txt','w')
+    file_to_write.write('Iteration PF : '+str(dict_algorithm['i_PFDEM'])+'\n'+\
                         'Iteration DEM : '+str(dict_algorithm['i_DEM'])+'\n')
     file_to_write.write('\n')
     file_to_write.write('GRAINS LIST\n')
