@@ -703,8 +703,8 @@ class Grain:
             for c in range(len(dict_sample['x_L'])):
                 sum_eta_before = sum_eta_before + save_etai_M[l][c]
                 sum_eta_after = sum_eta_after + self.etai_M[l][c]
-        simulation_report.write_and_print(f'Delta sum eta for g {self.id} = {sum_eta_before - sum_eta_after}\n',
-                                          f'Delta sum eta for g {self.id} = {sum_eta_before - sum_eta_after}')
+        simulation_report.write_and_print(f'Delta sum eta for g {self.id} = {(sum_eta_before - sum_eta_after)/sum_eta_before*100} %\n',
+                                          f'Delta sum eta for g {self.id} = {(sum_eta_before - sum_eta_after)/sum_eta_before*100} %')
 
     #-------------------------------------------------------------------------------
 
