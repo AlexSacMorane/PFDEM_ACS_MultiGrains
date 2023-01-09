@@ -677,6 +677,35 @@ class Grain:
                     self.etai_M[l][c] = (etai_M_old[l][c]*(dy-disp_y_remainder) + etai_M_old[l-1][c]*disp_y_remainder)/dy
                 self.etai_M[0][c] = 0 #no information to translate so put equal to 0
 
+    #---------------------------------------------------------------------------
+
+    def move_grain_rebuild(self,dict_material,dict_sample,simulation_report):
+        '''
+        Move the grain by updating the phase field of the grain.
+
+        A rebuild on the phase field is done. The mass conservation is verified by producing solute.
+
+            Input :
+                itself (a grain)
+                a material dictionnary (a dict)
+                a sample dictionnary (a dictionnary)
+            Output :
+                Nothing but the grain gets an updated attribute (a n_y x n_x numpy array)
+        '''
+        #save previous phase field
+        save_etai_M = self.etai_M.copy()
+        #compute the new phase field
+        self.build_etai_M(dict_material,dict_sample)
+        #compute the delta etai
+        sum_eta_before = 0
+        sum_eta_after = 0
+        for l in range(len(dict_sample['y_L'])):
+            for c in range(len(dict_sample['x_L'])):
+                sum_eta_before = sum_eta_before + save_etai_M[l][c]
+                sum_eta_after = sum_eta_after + self.etai_M[l][c]
+        simulation_report.write_and_print(f'Delta sum eta for g {self.id} = {sum_eta_before - sum_eta_after}\n',
+                                          f'Delta sum eta for g {self.id} = {sum_eta_before - sum_eta_after}')
+
     #-------------------------------------------------------------------------------
 
     def update_geometry_kinetic(self, V, A, W, DT):
