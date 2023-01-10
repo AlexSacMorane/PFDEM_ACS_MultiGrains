@@ -94,8 +94,8 @@ class Contact_gg:
     d_virtual = max(self.g1.r_max,self.g2.r_max)
     ij_min = [0,0]
     d_ij_min = 100*d_virtual #Large
-    for i in range(len(self.g1.l_border[:-1])):
-        for j in range(len(self.g2.l_border[:-1])):
+    for i in L_i_vertices_1:
+        for j in L_i_vertices_2:
             d_ij = np.linalg.norm(self.g2.l_border[:-1][j]-self.g1.l_border[:-1][i]+d_virtual*(self.g2.center-self.g1.center)/np.linalg.norm(self.g2.center-self.g1.center))
             if d_ij < d_ij_min :
                 d_ij_min = d_ij
@@ -358,24 +358,37 @@ def extract_vertices(g, angle_g_to_other_g) :
         Output :
             a list of indices (a list)
     """
-    dtheta = 6*2*math.pi/(len(g.l_border)+1)
-    if dtheta/2<=angle_g_to_other_g and angle_g_to_other_g<2*math.pi-dtheta/2 :
-        L_search = list(abs(np.array(g.l_theta_r[:-1])-angle_g_to_other_g-dtheta/2))
-        i_max = L_search.index(min(L_search))
-        L_search = list(abs(np.array(g.l_theta_r[:-1])-angle_g_to_other_g+dtheta/2))
-        i_min = L_search.index(min(L_search))
-        L_i_vertices = list(range(i_min, i_max+1))
-    elif angle_g_to_other_g<dtheta/2 :
-        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g-dtheta/2+2*math.pi)))
-        i_max = L_search.index(min(L_search))
-        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g+dtheta/2)))
-        i_min = L_search.index(min(L_search))
-        L_i_vertices = list(range(0,i_min+1)) + list(range(i_max,len(g.l_theta_r)-1))
-    elif 2*math.pi-dtheta/2 <= angle_g_to_other_g:
-        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g-dtheta/2)))
-        i_max = L_search.index(min(L_search))
-        L_search = list(abs(np.array(g.l_theta_r[:-1])-(angle_g_to_other_g+dtheta/2-2*math.pi)))
-        i_min = L_search.index(min(L_search))
-        L_i_vertices = list(range(0,i_max+1)) + list(range(i_min,len(g.l_theta_r)-1))
+    dtheta = 3*2*math.pi/len(g.l_border)
+    angle_minus = angle_g_to_other_g - dtheta/2
+    if angle_minus < 0 :
+        angle_minus = angle_minus + 2*math.pi
+    angle_plus  = angle_g_to_other_g + dtheta/2
+    if 2*math.pi <= angle_plus :
+        angle_plus = angle_plus - 2*math.pi
+    i_minus = find_value_in_list(g.l_theta_r.copy(), angle_minus)
+    i_plus = i_minus + find_value_in_list(g.l_theta_r[i_minus:].copy() + g.l_theta_r[:i_minus].copy(), angle_plus)
+
+    L_i_vertices = []
+    for i in range(i_minus, i_plus+1):
+        if i < len(g.l_theta_r):
+            L_i_vertices.append(i)
+        else :
+            L_i_vertices.append(i-len(g.l_theta_r))
 
     return L_i_vertices
+
+#-------------------------------------------------------------------------------
+
+def find_value_in_list(List_to_search, value_to_find) :
+    """
+    Extract the index of the nearest value from a target in a list.
+
+        Input :
+            a list of float (a list)
+            a target (a float)
+        Output :
+            an index (an int)
+    """
+    L_search = list(abs(np.array(List_to_search)-value_to_find))
+    
+    return L_search.index(min(L_search))
