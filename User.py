@@ -150,7 +150,7 @@ def All_parameters():
 
     #List of plot to do
     Debug = True #plot configuration before and after DEM simulation
-    Debug_DEM = False #plot configuration inside DEM
+    Debug_DEM = True #plot configuration inside DEM
     i_print_plot = 300 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sphericity, sum_Ed
     L_flag_plot = ['Config', 'DEM_txt', 'Sphericity', 'sum_Ed', 'Kc', 'Mesh', 'Etai_distribution']
