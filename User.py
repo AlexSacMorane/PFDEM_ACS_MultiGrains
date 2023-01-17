@@ -67,7 +67,7 @@ def All_parameters():
     ny = int(0.6*nx)
 
     #approximatively the number of vertices for one grain during DEM simulation
-    grain_discretisation = 20
+    grain_discretisation = 40
 
     dict_sample = {
     'nx' : nx,
@@ -130,7 +130,7 @@ def All_parameters():
     Ed_level3 = 25
 
     #PF parameters
-    factor_etai = 2.1 #factor reltaed to the minimal distance between grains with same eta
+    factor_etai = 1.7 #factor reltaed to the minimal distance between grains with same eta
 
     #DEM parameters
     dt_DEM_crit = math.pi*min(L_R)/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
