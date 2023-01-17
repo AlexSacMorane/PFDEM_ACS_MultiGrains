@@ -211,7 +211,7 @@ def DEM_loading(dict_algorithm, dict_ic, dict_material, dict_sample, dict_sollic
                 print('i_DEM',dict_ic['i_DEM_IC'],'and Ecin',int(100*Ecin/Ecin_stop),'% and Force',int(100*F/Force_stop),'% and Confinement',int(100*Fv/dict_sollicitation['Vertical_Confinement_Force']),'%')
             else :
                 print('i_DEM',dict_ic['i_DEM_IC'],'and Ecin',int(100*Ecin/Ecin_stop),'% and Confinement',int(100*Fv/dict_sollicitation['Vertical_Confinement_Force']),'%')
-            if dict_ic['Debug_DEM'] and 'Config' in dict_algorithm['L_flag_plot']:
+            if dict_ic['Debug_DEM'] :
                 Plot_Config_Loaded(dict_ic['L_g_tempo'],dict_sample['x_box_min'],dict_sample['x_box_max'],y_min,dict_sample['y_box_max'],dict_ic['i_DEM_IC'])
 
         #Check stop conditions for DEM

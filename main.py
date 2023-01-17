@@ -60,6 +60,9 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     dict_algorithm['i_PFDEM'] = dict_algorithm['i_PFDEM'] + 1
     simulation_report.write_and_print(f"\nITERATION {dict_algorithm['i_PFDEM']} / {dict_algorithm['n_t_PFDEM']}\n\n",f"\nITERATION {dict_algorithm['i_PFDEM']} / {dict_algorithm['n_t_PFDEM']}\n")
     os.mkdir('Output/Ite_'+str(dict_algorithm['i_PFDEM']))
+    if dict_algorithm['Debug_DEM']:
+        os.mkdir('Debug/Configuration/PFDEM_'+str(dict_algorithm['i_PFDEM']))
+        os.mkdir('Debug/txt/PFDEM_'+str(dict_algorithm['i_PFDEM']))
 
     # Saving center to compute a rigid body motion
     L_center_g = []
@@ -136,8 +139,8 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
             print('F_confinement',int(dict_sollicitation['Force_on_upper_wall']),'/',int(dict_sollicitation['Vertical_Confinement_Force']),'('+str(int(100*dict_sollicitation['Force_on_upper_wall']/dict_sollicitation['Vertical_Confinement_Force'])),' %)')
 
             if dict_algorithm['Debug_DEM'] :
-                Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
-                #Owntools.Write.Write_txt(dict_algorithm,dict_sample)
+                Owntools.Plot.Plot_config_DEM(dict_algorithm, dict_sample)
+                Owntools.Write.Write_DEM_txt_DEM(dict_algorithm,dict_sample)
 
         #-----------------------------------------------------------------------------
         # Stop conditions
@@ -414,11 +417,11 @@ if '__main__' == __name__:
         shutil.copy('User.py','../'+dict_algorithm['foldername']+'/User_'+dict_algorithm['namefile']+'_tempo.txt')
 
     #prepare plot
-    if 'Config' in dict_algorithm['L_flag_plot']:
+    if 'Config' in dict_algorithm['L_flag_plot'] or dict_algorithm['Debug_DEM'] or dict_ic['Debug_DEM']:
         os.mkdir('Debug/Configuration')
-        if dict_algorithm['Debug_DEM'] :
+        if dict_ic['Debug_DEM'] :
             os.mkdir('Debug/Configuration/Init')
-    if 'DEM_txt' in dict_algorithm['L_flag_plot']:
+    if 'DEM_txt' in dict_algorithm['L_flag_plot'] or dict_algorithm['Debug_DEM']:
         os.mkdir('Debug/txt')
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Comparison_Init_Current')
@@ -507,6 +510,7 @@ if '__main__' == __name__:
     while not User.Criteria_StopSimulation(dict_algorithm):
 
         iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
+        raise ValueError('Stop !')
         iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
 
     #-------------------------------------------------------------------------------
