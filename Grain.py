@@ -157,9 +157,6 @@ class Grain:
       L_border_old = []
       for y_i in range(len(y_L)):
           L_extract_x = self.etai_M[y_i][:]
-          if id == 1:
-              L_extract_x = list(L_extract_x)
-              L_extract_x.reverse()
           if max(L_extract_x)>0.5 and min(L_extract_x)<0.5:
               y_intersect = y_L[len(y_L)-1-y_i]
               for x_i in range(len(x_L)-1):
