@@ -134,11 +134,11 @@ def All_parameters():
 
     #DEM parameters
     dt_DEM_crit = math.pi*min(L_R)/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
-    dt_DEM = dt_DEM_crit/8 #s time step during DEM simulation
+    dt_DEM = dt_DEM_crit/10 #s time step during DEM simulation
     factor_neighborhood = 1.5 #margin to detect a grain into a neighborhood
     i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
     #Stop criteria of the DEM
-    i_DEM_stop = 3000 #maximum iteration for one DEM simulation
+    i_DEM_stop = 4000 #maximum iteration for one DEM simulation
     Ecin_ratio = 0.0001
     n_window_stop = 50
     dy_box_max_stop = 1
@@ -151,9 +151,9 @@ def All_parameters():
     #List of plot to do
     Debug = True #plot configuration before and after DEM simulation
     Debug_DEM = True #plot configuration inside DEM
-    i_print_plot = 300 #frenquency of the print and plot (if Debug_DEM) in DEM step
+    i_print_plot = 100 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sphericity, sum_Ed
-    L_flag_plot = ['Config', 'DEM_txt', 'Sphericity', 'sum_Ed', 'Kc', 'Mesh', 'Etai_distribution']
+    L_flag_plot = ['Config', 'DEM_txt', 'Kc', 'Etai_distribution']
     #Visual parameters (for plot Config)
     c_min = 0
     c_max = 0.08
