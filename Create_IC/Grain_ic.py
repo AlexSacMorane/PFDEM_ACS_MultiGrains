@@ -142,3 +142,20 @@ class Grain_Tempo:
     dw_i = self.mz/self.inertia
     self.w = self.w + dw_i*dt_DEM
     self.theta = self.theta + self.w*dt_DEM
+    for i_theta_r in range(len(self.l_theta_r)) :
+        theta_r = self.l_theta_r[i_theta_r]
+        theta_r = theta_r + self.w*dt_DEM
+        while theta_r >= 2*math.pi:
+            theta_r = theta_r - 2*math.pi
+        while theta_r < 0 :
+            theta_r = theta_r + 2*math.pi
+        self.l_theta_r[i_theta_r] = theta_r
+    #rigib body rotation
+    for i in range(len(self.l_border)):
+        p = self.l_border[i] - self.center
+        Rot_Matrix = np.array([[math.cos(self.w*dt_DEM), -math.sin(self.w*dt_DEM)],
+                               [math.sin(self.w*dt_DEM),  math.cos(self.w*dt_DEM)]])
+        p = np.dot(Rot_Matrix,p)
+        self.l_border[i] = p + self.center
+        self.l_border_x[i] = p[0] + self.center[0]
+        self.l_border_y[i] = p[1] + self.center[1]
