@@ -660,3 +660,41 @@ def Plot_etai_distribution(dict_sample):
     plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
     plt.savefig('Debug/Etai_distribution.png')
     plt.close(1)
+
+#-------------------------------------------------------------------------------
+
+def Plot_DEM_tracker(dict_tracker):
+    '''
+    Plot the trackers of the DEM step.
+
+        Input :
+            a tracker dictionnary (a dict)
+        Output :
+            Nothing but a .png file is generated (file)
+    '''
+    #look for the name of the new plot
+    template_name = 'Debug/DEM_tracker/PFDEM_'
+    j = 1
+    plotpath = Path(template_name+str(j)+'.png')
+    while plotpath.exists():
+        j = j + 1
+        plotpath = Path(template_name+str(j)+'.png')
+    name = template_name+str(j)+'.png'
+
+
+    plt.figure(1,figsize=(16,9))
+
+    plt.subplot(221)
+    plt.plot(dict_tracker['Ecin'])
+    plt.title('Kinetic energy')
+
+    plt.subplot(222)
+    plt.plot(dict_tracker['y_box_max_DEM'])
+    plt.title('Upper wall position')
+
+    plt.subplot(223)
+    plt.plot(dict_tracker['Force_on_upper_wall'])
+    plt.title('Force on the upper wall')
+
+    plt.savefig(name)
+    plt.close(1)

@@ -219,6 +219,8 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
     if 'Kc' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_kc(dict_sample)
+    if 'DEM_tracker' in dict_algorithm['L_flag_plot']:
+        Owntools.Plot.Plot_DEM_tracker(dict_tracker)
 
     #write data
     Owntools.Write.Write_eta_txt(dict_algorithm, dict_sample)
@@ -431,6 +433,8 @@ if '__main__' == __name__:
         os.mkdir('Debug/Kc')
     if 'Diff_Solute' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/Diff_Solute')
+    if 'DEM_tracker' in dict_algorithm['L_flag_plot']:
+        os.mkdir('Debug/DEM_tracker')
 
     #create the initial configuration
     Create_IC.LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation, simulation_report)
