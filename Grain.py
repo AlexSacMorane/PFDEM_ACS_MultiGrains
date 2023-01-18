@@ -295,11 +295,15 @@ class Grain:
       L_border_x.append(L_border_x[0])
       L_border_y.append(L_border_y[0])
       #reorganize lists
-      L_R.reverse()
-      L_theta_R.reverse()
-      i_min_theta = L_theta_R.index(min(L_theta_R))
-      L_R = L_R[i_min_theta:]+L_R[:i_min_theta]
-      L_theta_R = L_theta_R[i_min_theta:]+L_theta_R[:i_min_theta]
+      i_theta = 0
+      while L_theta_R[i_theta] < 2*math.pi/10 or 2*math.pi*9/10 < L_theta_R[i_theta]:
+          i_theta = i_theta + 1
+      if L_theta_R[i_theta + 1] < L_theta_R[i_theta] :
+          L_R.reverse()
+          L_theta_R.reverse()
+          L_border_x.reverse()
+          L_border_y.reverse()
+          L_border.reverse()
 
       self.r_min = np.min(L_R)
       self.r_max = np.max(L_R)
@@ -312,6 +316,7 @@ class Grain:
       self.center = Center_Mass
       self.l_border_x = L_border_x
       self.l_border_y = L_border_y
+      self.l_border = L_border
 
     #-------------------------------------------------------------------------------
 
