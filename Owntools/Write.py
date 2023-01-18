@@ -345,6 +345,8 @@ def Write_DEM_txt_DEM(dict_algorithm,dict_sample):
         file_to_write.write('\tSurface : '+str(int(grain.surface))+'\n')
         file_to_write.write('\tCoordinate X of the border : '+str(grain.l_border_x)+'\n')
         file_to_write.write('\tCoordinate Y of the border : '+str(grain.l_border_y)+'\n')
+        file_to_write.write('\tL_r : '+str(grain.l_r)+'\n')
+        file_to_write.write('\tL_theta_r : '+str(grain.l_theta_r)+'\n')
         file_to_write.write('<grain_c>\n')
     file_to_write.write('\n')
     file_to_write.write('CONTACTS LIST\n')
