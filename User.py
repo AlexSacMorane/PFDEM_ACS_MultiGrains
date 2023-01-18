@@ -134,7 +134,7 @@ def All_parameters():
 
     #DEM parameters
     dt_DEM_crit = math.pi*min(L_R)/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
-    dt_DEM = dt_DEM_crit/10 #s time step during DEM simulation
+    dt_DEM = dt_DEM_crit/8 #s time step during DEM simulation
     factor_neighborhood = 1.5 #margin to detect a grain into a neighborhood
     i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
     #Stop criteria of the DEM

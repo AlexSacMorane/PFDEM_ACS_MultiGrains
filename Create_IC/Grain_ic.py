@@ -41,8 +41,6 @@ class Grain_Tempo:
     L_border = []
     L_border_x = []
     L_border_y = []
-    L_r = []
-    L_theta_r = []
     #Build the border (for print)
     for i in range(n_border):
         theta = 2*math.pi*i/n_border
@@ -50,8 +48,6 @@ class Grain_Tempo:
         L_border.append(p)
         L_border_x.append(p[0])
         L_border_y.append(p[1])
-        L_r.append(Radius)
-        L_theta_r.append(theta)
     L_border.append(L_border[0])
     L_border_x.append(L_border_x[0])
     L_border_y.append(L_border_y[0])
@@ -67,8 +63,6 @@ class Grain_Tempo:
     self.l_border = L_border
     self.l_border_x = L_border_x
     self.l_border_y = L_border_y
-    self.l_theta_r = L_theta_r
-    self.l_r = L_r
     self.y = dict_material['Y']
     self.nu = dict_material['nu']
     self.g = dict_material['Y']/2/(1+dict_material['nu']) #shear modulus
@@ -142,20 +136,3 @@ class Grain_Tempo:
     dw_i = self.mz/self.inertia
     self.w = self.w + dw_i*dt_DEM
     self.theta = self.theta + self.w*dt_DEM
-    for i_theta_r in range(len(self.l_theta_r)) :
-        theta_r = self.l_theta_r[i_theta_r]
-        theta_r = theta_r + self.w*dt_DEM
-        while theta_r >= 2*math.pi:
-            theta_r = theta_r - 2*math.pi
-        while theta_r < 0 :
-            theta_r = theta_r + 2*math.pi
-        self.l_theta_r[i_theta_r] = theta_r
-    #rigib body rotation
-    for i in range(len(self.l_border)):
-        p = self.l_border[i] - self.center
-        Rot_Matrix = np.array([[math.cos(self.w*dt_DEM), -math.sin(self.w*dt_DEM)],
-                               [math.sin(self.w*dt_DEM),  math.cos(self.w*dt_DEM)]])
-        p = np.dot(Rot_Matrix,p)
-        self.l_border[i] = p + self.center
-        self.l_border_x[i] = p[0] + self.center[0]
-        self.l_border_y[i] = p[1] + self.center[1]

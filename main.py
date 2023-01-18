@@ -514,7 +514,6 @@ if '__main__' == __name__:
     while not User.Criteria_StopSimulation(dict_algorithm):
 
         iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
-        raise ValueError('Stop !')
         iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
 
     #-------------------------------------------------------------------------------

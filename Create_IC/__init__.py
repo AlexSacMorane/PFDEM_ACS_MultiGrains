@@ -512,14 +512,30 @@ def From_LG_tempo_to_usable(dict_ic, dict_material, dict_sample):
     L_g = []
     for grain_tempo in dict_ic['L_g_tempo']:
 
+        L_r = []
+        L_theta_r = []
+        L_border = []
+        L_border_x = []
+        L_border_y = []
+        for i in range(dict_sample['grain_discretisation']):
+            theta = i/dict_sample['grain_discretisation']*2*math.pi
+            L_r.append(grain_tempo.radius)
+            L_theta_r.append(theta)
+            L_border.append(grain_tempo.center + grain_tempo.radius*np.array([math.cos(theta), math.sin(theta)]))
+            L_border_x.append(grain_tempo.center[0] + grain_tempo.radius*math.cos(theta))
+            L_border_y.append(grain_tempo.center[1] + grain_tempo.radius*math.sin(theta))
+        L_border.append(L_border[0])
+        L_border_x.append(L_border_x[0])
+        L_border_y.append(L_border_y[0])
+
         dict_ic_to_real = {
         'Id' : grain_tempo.id,
         'Center' : grain_tempo.center,
-        'L_r' : grain_tempo.l_r,
-        'L_theta_r' : grain_tempo.l_theta_r,
-        'L_border' : grain_tempo.l_border,
-        'L_border_x' : grain_tempo.l_border_x,
-        'L_border_y' : grain_tempo.l_border_y,
+        'L_r' : L_r,
+        'L_theta_r' : L_theta_r,
+        'L_border' : L_border,
+        'L_border_x' : L_border_x,
+        'L_border_y' : L_border_y,
         'Y' : grain_tempo.y,
         'Nu' : grain_tempo.nu,
         'Rho_surf' : grain_tempo.rho_surf,

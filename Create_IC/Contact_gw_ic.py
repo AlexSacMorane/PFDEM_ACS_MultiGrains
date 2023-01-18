@@ -164,7 +164,7 @@ class Contact_gw_Tempo:
        #unlinear stiffness
        twg = np.array([-1, 0])
        self.twg = twg
-       r = np.linalg.norm(self.g.l_border[:-1][self.g.l_border_y.index(min(self.g.l_border_y))] - self.g.center) - self.overlap
+       r = self.g.radius - self.overlap
        Delta_Us = (np.dot(self.g.v,self.twg) - r*self.g.w) * dt_DEM
        self.overlap_tangential = self.overlap_tangential + Delta_Us
        self.ft = self.ft - self.kt*Delta_Us
@@ -177,7 +177,7 @@ class Contact_gw_Tempo:
        #unlinear stiffness
        twg = np.array([1, 0])
        self.twg = twg
-       r = np.linalg.norm(self.g.l_border[:-1][self.g.l_border_y.index(max(self.g.l_border_y))] - self.g.center) - self.overlap
+       r = self.g.radius - self.overlap
        Delta_Us = (np.dot(self.g.v,self.twg) - r*self.g.w) * dt_DEM
        self.overlap_tangential = self.overlap_tangential + Delta_Us
        self.ft = self.ft - self.kt*Delta_Us
@@ -190,7 +190,7 @@ class Contact_gw_Tempo:
        #unlinear stiffness
        twg = np.array([0, 1])
        self.twg = twg
-       r = np.linalg.norm(self.g.l_border[:-1][self.g.l_border_x.index(min(self.g.l_border_x))] - self.g.center) - self.overlap
+       r = self.g.radius - self.overlap
        Delta_Us = (np.dot(self.g.v,self.twg) - r*self.g.w) * dt_DEM
        self.overlap_tangential = self.overlap_tangential + Delta_Us
        self.ft = self.ft - self.kt*Delta_Us
@@ -203,7 +203,7 @@ class Contact_gw_Tempo:
        #linear stiffness
        twg = np.array([0, -1])
        self.twg = twg
-       r = np.linalg.norm(self.g.l_border[:-1][self.g.l_border_x.index(max(self.g.l_border_x))] - self.g.center) - self.overlap
+       r = self.g.radius - self.overlap
        Delta_Us = (np.dot(self.g.v,self.twg) - r*self.g.w) * dt_DEM
        self.overlap_tangential = self.overlap_tangential + Delta_Us
        self.ft = self.ft - self.kt*Delta_Us
@@ -233,10 +233,10 @@ def Update_wall_Neighborhoods(L_g_tempo,factor_neighborhood_IC,x_min,x_max,y_min
     wall_neighborhood = []
     for grain in L_g_tempo:
 
-        p_x_min = min(grain.l_border_x)
-        p_x_max = max(grain.l_border_x)
-        p_y_min = min(grain.l_border_y)
-        p_y_max = max(grain.l_border_y)
+        p_x_min = grain.center[0] - grain.radius
+        p_x_max = grain.center[0] + grain.radius
+        p_y_min = grain.center[1] - grain.radius
+        p_y_max = grain.center[1] + grain.radius
 
         #grain-wall x_min
         if abs(p_x_min-x_min) < factor_neighborhood_IC*grain.radius :
