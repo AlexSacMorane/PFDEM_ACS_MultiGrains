@@ -303,12 +303,25 @@ def Grains_Polyhedral_contact_Neighborhoods_bool(g1,g2):
     Output :
         a Boolean (True if there is a contact)
   """
+  #compute angle between grains
+  g1_to_g2 = self.g2.center - self.g1.center
+  if g1_to_g2[1] >= 0 :
+      angle_g1_to_g2 = math.acos(g1_to_g2[0]/np.linalg.norm(g1_to_g2))
+      angle_g2_to_g1 = angle_g1_to_g2 + math.pi
+  else :
+      angle_g1_to_g2 = math.pi + math.acos(-g1_to_g2[0]/np.linalg.norm(g1_to_g2))
+      angle_g2_to_g1 = angle_g1_to_g2 - math.pi
+
+  #extract
+  L_i_vertices_1 = extract_vertices(self.g1, angle_g1_to_g2)
+  L_i_vertices_2 = extract_vertices(self.g2, angle_g2_to_g1)
+
   #looking for the nearest nodes
   d_virtual = max(g1.r_max,g2.r_max)
   ij_min = [0,0]
   d_ij_min = 100*d_virtual #Large
-  for i in range(len(g1.l_border[:-1])):
-    for j in range(len(g2.l_border[:-1])):
+  for i in L_i_vertices_1:
+    for j in L_i_vertices_2:
         d_ij = np.linalg.norm(g2.l_border[:-1][j]-g1.l_border[:-1][i]+d_virtual*(g2.center-g1.center)/np.linalg.norm(g2.center-g1.center))
         if d_ij < d_ij_min :
             d_ij_min = d_ij
