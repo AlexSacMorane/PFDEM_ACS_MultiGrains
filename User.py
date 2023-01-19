@@ -138,7 +138,7 @@ def All_parameters():
     factor_neighborhood = 1.5 #margin to detect a grain into a neighborhood
     i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
     #Stop criteria of the DEM
-    i_DEM_stop = 4000 #maximum iteration for one DEM simulation
+    i_DEM_stop = 5000 #maximum iteration for one DEM simulation
     Ecin_ratio = 0.0001
     n_window_stop = 100
     dy_box_max_stop = 1
@@ -150,10 +150,10 @@ def All_parameters():
 
     #List of plot to do
     Debug = True #plot configuration before and after DEM simulation
-    Debug_DEM = True #plot configuration inside DEM
+    Debug_DEM = False #plot configuration inside DEM
     i_print_plot = 100 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, DEM_tracker, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Sphericity, sum_Ed
-    L_flag_plot = ['Config', 'DEM_txt', 'Kc', 'Etai_distribution', 'DEM_tracker']
+    L_flag_plot = ['Config', 'DEM_txt', 'Kc', 'DEM_tracker', 'Sphericity', 'sum_Ed']
     #Visual parameters (for plot Config)
     c_min = 0
     c_max = 0.08
@@ -210,7 +210,6 @@ def All_parameters():
     #---------------------------------------------------------------------------
     #External sollicitation parameters
 
-    overlap_target = 10 #overlap verified before each phase field iteration
     chi = 0.5 #coefficient applied to the chemical energy
     gravity = 0
     Vertical_Confinement_Linear_Force = Y*2*R_mean/1000 #µN/µm used to compute the Vertical_Confinement_Force
@@ -218,7 +217,6 @@ def All_parameters():
     contact_gw_for_Emec = False #consider the contact grain - wall to compute Emec
 
     dict_sollicitation = {
-    'overlap_target' : overlap_target,
     'chi' : chi,
     'gravity' : gravity,
     'contact_gw_for_Emec' : contact_gw_for_Emec,
