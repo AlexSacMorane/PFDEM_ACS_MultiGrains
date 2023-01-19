@@ -244,11 +244,11 @@ def Interpolate_solute_out_grains(dict_sample) :
                 if etai.etai_M[l][c] > 0.5 :
                     n_grain = n_grain + 1
             if n_grain == 1:
-                node_available_M[l][c] == False
+                node_available_M[l][c] = False
     #iteration on solute map to see if some solute is in not available position
     for l in range(len(dict_sample['y_L'])):
         for c in range(len(dict_sample['x_L'])):
-            if dict_sample['solute_M'] > 0 and not node_available_M[l][c]:
+            if dict_sample['solute_M'][l][c] > 0 and not node_available_M[l][c]:
                 solute_moved = False
                 size_window = 1
                 while not solute_moved :
@@ -366,7 +366,7 @@ def Interpolate_solute_out_grains(dict_sample) :
                                 #to the left
                                 if left_min_available:
                                     dict_sample['solute_M'][l-i_window][c-size_window] = dict_sample['solute_M'][l-i_window][c-size_window] + dict_sample['solute_M'][l][c]/n_node_available
-                                if left_available:
+                                if left_max_available:
                                     dict_sample['solute_M'][l+i_window][c-size_window] = dict_sample['solute_M'][l+i_window][c-size_window] + dict_sample['solute_M'][l][c]/n_node_available
                                 #to the right
                                 if right_min_available:
