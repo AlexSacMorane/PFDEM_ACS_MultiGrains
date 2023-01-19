@@ -168,16 +168,8 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #Compute and apply rigid boby motion
     #---------------------------------------------------------------------------
 
-    # translation
-    L_rbm_translation = []
-    for i_grain in range(len(dict_sample['L_g'])):
-        L_rbm_translation.append(dict_sample['L_g'][i_grain].center - L_center_g[i_grain])
-        #dict_sample['L_g'][i_grain].move_grain_interpolation(L_rbm_translation[i_grain], dict_sample)
+    for i_grain in range(len(dict_sample['L_g'])):$
         dict_sample['L_g'][i_grain].move_grain_rebuild(dict_material, dict_sample, simulation_report)
-    #rotation
-    L_rbm_rotation = []
-    for i_grain in range(len(dict_sample['L_g'])):
-        L_rbm_rotation.append(0)
 
     #---------------------------------------------------------------------------
     #Recreate the etai
@@ -189,6 +181,9 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #---------------------------------------------------------------------------
     #prepare phase field simulation
     #---------------------------------------------------------------------------
+
+    #Move solute in grains
+    Owntools.Interpolate_solute_out_grains(dict_sample)
 
     #Compute the mechanical energy term
     Owntools.Compute.Compute_Emec(dict_material, dict_sample, dict_sollicitation)
