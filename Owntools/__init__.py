@@ -245,6 +245,7 @@ def Interpolate_solute_out_grains(dict_sample) :
                     n_grain = n_grain + 1
             if n_grain == 1:
                 node_available_M[l][c] = False
+                
     #iteration on solute map to see if some solute is in not available position
     for l in range(len(dict_sample['y_L'])):
         for c in range(len(dict_sample['x_L'])):
