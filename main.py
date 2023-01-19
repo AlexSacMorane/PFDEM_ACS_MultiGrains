@@ -168,7 +168,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #Compute and apply rigid boby motion
     #---------------------------------------------------------------------------
 
-    for i_grain in range(len(dict_sample['L_g'])):$
+    for i_grain in range(len(dict_sample['L_g'])):
         dict_sample['L_g'][i_grain].move_grain_rebuild(dict_material, dict_sample, simulation_report)
 
     #---------------------------------------------------------------------------
