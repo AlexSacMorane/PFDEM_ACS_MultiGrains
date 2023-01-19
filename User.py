@@ -140,7 +140,7 @@ def All_parameters():
     #Stop criteria of the DEM
     i_DEM_stop = 4000 #maximum iteration for one DEM simulation
     Ecin_ratio = 0.0001
-    n_window_stop = 50
+    n_window_stop = 100
     dy_box_max_stop = 1
 
     #Margin for sphericity study
