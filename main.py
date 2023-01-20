@@ -182,6 +182,10 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #prepare phase field simulation
     #---------------------------------------------------------------------------
 
+    #plot
+    if 'Config' in dict_algorithm['L_flag_plot']:
+        Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
+
     #Move solute in grains
     Owntools.Interpolate_solute_out_grains(dict_sample)
 
