@@ -286,9 +286,7 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
 
     #look for the new grains shape
     Etai.PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str, dict_algorithm, dict_material, dict_sample)
-    #for grain in dict_sample['L_g']:
-    #    grain.PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str,dict_algorithm,dict_sample)
-    #    grain.geometric_study(dict_sample)
+
     #look for the new solute shape
     Owntools.PFtoDEM_Multi.solute_PFtoDEM_Multi('Output/Ite_'+str(dict_algorithm['i_PFDEM'])+'/'+dict_algorithm['namefile']+'_'+str(dict_algorithm['i_PFDEM'])+'_other_'+j_str,dict_algorithm,dict_sample)
 
