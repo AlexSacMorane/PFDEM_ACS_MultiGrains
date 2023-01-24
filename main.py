@@ -224,6 +224,8 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
         Owntools.Plot.Plot_kc(dict_sample)
     if 'DEM_tracker' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_DEM_tracker(dict_tracker)
+    if 'YBoxMax' in dict_algorithm['L_flag_plot']:
+         Owntools.Plot.Plot_yboxmax(dict_tracker)
 
     #write data
     Owntools.Write.Write_eta_txt(dict_algorithm, dict_sample)

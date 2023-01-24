@@ -701,6 +701,23 @@ def Plot_DEM_tracker(dict_tracker):
 
 #-------------------------------------------------------------------------------
 
+def Plot_yboxmax(dict_tracker):
+    '''
+    Plot the evolution of the upper wall position.
+
+        Input :
+            a tracker dictionnary (a dict)
+        Output :
+            Nothing but a .png file is generated (file)
+    '''
+    plt.figure(1,figsize=(16,9))
+    plt.plot(dict_tracker['L_y_box_max'])
+    plt.title('Upper wall position')
+    plt.savefig('Debug/Evolution_yboxmax.png')
+    plt.close(1)
+
+#-------------------------------------------------------------------------------
+
 def Plot_porosity(dict_tracker):
     '''
     Plot the evolution of the sample porosity (= grain surface / box surface).
