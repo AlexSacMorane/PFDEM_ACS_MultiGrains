@@ -168,8 +168,12 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #Compute and apply rigid boby motion
     #---------------------------------------------------------------------------
 
+    mean_delta_sum_eta = 0
     for i_grain in range(len(dict_sample['L_g'])):
-        dict_sample['L_g'][i_grain].move_grain_rebuild(dict_material, dict_sample, simulation_report)
+        dict_sample['L_g'][i_grain].move_grain_rebuild(dict_material, dict_sample)
+        mean_delta_sum_eta = mean_delta_sum_eta + abs(dict_sample['L_g'][i_grain].delta_sum_eta)
+    mean_delta_sum_eta = mean_delta_sum_eta/len(dict_sample['L_g'])
+    simulation_report.write_and_print('Mean Delta sum eta = '+str(round(mean_delta_sum_eta,2))+' %\n','Mean Delta sum eta = '+str(round(mean_delta_sum_eta,2))+' %')
 
     #---------------------------------------------------------------------------
     #Recreate the etai
