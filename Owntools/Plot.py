@@ -698,3 +698,20 @@ def Plot_DEM_tracker(dict_tracker):
 
     plt.savefig(name)
     plt.close(1)
+
+#-------------------------------------------------------------------------------
+
+def Plot_porosity(dict_tracker):
+    '''
+    Plot the evolution of the sample porosity (= grain surface / box surface).
+
+        Input :
+            a tracker dictionnary (a dict)
+        Output :
+            Nothing but a .png file is generated (file)
+    '''
+    plt.figure(1,figsize=(16,9))
+    plt.plot(dict_tracker['L_porosity'])
+    plt.title('Evolution of the sample porosity')
+    plt.savefig('Debug/Evolution_porosity.png')
+    plt.close(1)
