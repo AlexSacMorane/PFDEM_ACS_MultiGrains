@@ -300,6 +300,9 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     #postprocess
     #---------------------------------------------------------------------------
 
+    #porosity
+    Owntools.Compute.Compute_porosity(dict_sample)
+
     #Compute the mean sphericities
     area_sphericity_mean, diameter_sphericity_mean, circle_ratio_sphericity_mean, perimeter_sphericity_mean, width_to_length_ratio_sphericity_mean = Owntools.Compute.Compute_mean_sphericity(dict_algorithm, dict_sample)
 
@@ -329,6 +332,7 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     dict_tracker['L_perimeter_sphericity_g0'].append(dict_sample['L_g'][0].perimeter_sphericity)
     dict_tracker['L_width_to_length_ratio_sphericity_g0'].append(dict_sample['L_g'][0].width_to_length_ratio_sphericity)
     dict_tracker['L_y_box_max'].append(dict_sample['y_box_max'])
+    dict_tracker['L_porosity'].append(dict_sample['porosity'])
 
     #Plot trackers
     if 'Eta_c' in dict_algorithm['L_flag_plot'] :
@@ -464,6 +468,8 @@ if '__main__' == __name__:
     area_sphericity_mean, diameter_sphericity_mean, circle_ratio_sphericity_mean, perimeter_sphericity_mean, width_to_length_ratio_sphericity_mean = Owntools.Compute.Compute_mean_sphericity(dict_algorithm, dict_sample)
     #create the solute
     User.Add_solute(dict_sample)
+    #compute the porosity
+    Owntools.Compute.Compute_porosity(dict_sample)
 
     #plot
     if 'Config' in dict_algorithm['L_flag_plot']:
@@ -496,7 +502,8 @@ if '__main__' == __name__:
     'sum_Ed_che_L': [],
     'sum_Ed_mec_L': [],
     'sum_ed_plus_L' : [],
-    'sum_ed_minus_L' : []
+    'sum_ed_minus_L' : [],
+    'L_porosity' : [dict_sample['porosity']]
     }
 
     #-------------------------------------------------------------------------------

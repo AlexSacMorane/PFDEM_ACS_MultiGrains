@@ -227,6 +227,25 @@ def Compute_sum_c(dict_sample):
 
 #-------------------------------------------------------------------------------
 
+def Compute_porosity(dict_sample):
+    '''
+    Compute the porosity (grain surface / box surface) of the sample.
+
+        Input :
+            a sample dictionnary (a dict)
+        Output :
+            Nothing but the dictionnary gets an updated value for the porosity (a float)
+    '''
+    Sg = 0
+    for grain in dict_sample['L_g']:
+        Sg = Sg + grain.surface
+    Sb = (dict_sample['x_box_max']-dict_sample['x_box_min'])*(dict_sample['y_box_max']-dict_sample['y_box_min'])
+
+    #update element in dict
+    dict_sample['porosity'] = Sg/Sb
+
+#-------------------------------------------------------------------------------
+
 def Compute_sum_eta(dict_sample):
     '''
     Compute the quantity of the grain.
