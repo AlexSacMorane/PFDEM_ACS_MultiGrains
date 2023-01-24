@@ -10,10 +10,11 @@ This file contains the different functions used in the simulation.
 #Librairy
 #-------------------------------------------------------------------------------
 
-from pathlib import Path
 import os
 import math
 import numpy as np
+from pathlib import Path
+from scipy.ndimage import binary_dilation
 
 #-------------------------------------------------------------------------------
 
@@ -225,13 +226,14 @@ def Reset_y_max(L_g,Force):
 
 #-------------------------------------------------------------------------------
 
-def Interpolate_solute_out_grains(dict_sample) :
+def Interpolate_solute_out_grains(dict_algorithm, dict_sample) :
     """
     For all node of the mesh, if there is solute in one grain it is moved to the nearest node out of the grain.
 
     A node in multiple grain (contact area) is not considered in a grain a solute can exist.
 
         Input :
+            an algorithm dictionnary (a dict)
             a sample dictionnary (a dict)
         Output :
             Nothing, but the solute map is updated (a ny x nx numpy array)
@@ -247,10 +249,13 @@ def Interpolate_solute_out_grains(dict_sample) :
             if n_grain == 1:
                 node_available_M[l][c] = False
 
+    #dilatation
+    dilated_M = binary_dilation(node_available_M, dict_algorithm['struct_element'])
+
     #iteration on solute map to see if some solute is in not available position
     for l in range(len(dict_sample['y_L'])):
         for c in range(len(dict_sample['x_L'])):
-            if dict_sample['solute_M'][l][c] > 0 and not node_available_M[l][c]:
+            if dict_sample['solute_M'][l][c] > 0 and not dilated_M[l][c]:
                 solute_moved = False
                 size_window = 1
                 while not solute_moved :
@@ -266,23 +271,23 @@ def Interpolate_solute_out_grains(dict_sample) :
                             right_available = False
                             #to the top
                             if l - size_window > 0:
-                                top_available = node_available_M[l-size_window][c]
-                                if node_available_M[l-size_window][c] :
+                                top_available = dilated_M[l-size_window][c]
+                                if dilated_M[l-size_window][c] :
                                     n_node_available = n_node_available + 1
                             #to the down
                             if l + size_window < len(dict_sample['y_L']):
-                                down_available = node_available_M[l+size_window][c]
-                                if node_available_M[l+size_window][c] :
+                                down_available = dilated_M[l+size_window][c]
+                                if dilated_M[l+size_window][c] :
                                     n_node_available = n_node_available + 1
                             #to the left
                             if c - size_window > 0:
-                                left_available = node_available_M[l][c-size_window]
-                                if node_available_M[l][c-size_window] :
+                                left_available = dilated_M[l][c-size_window]
+                                if dilated_M[l][c-size_window] :
                                     n_node_available = n_node_available + 1
                             #to the right
                             if c + size_window < len(dict_sample['x_L']):
-                                right_available = node_available_M[l][c+size_window]
-                                if node_available_M[l][c+size_window] :
+                                right_available = dilated_M[l][c+size_window]
+                                if dilated_M[l][c+size_window] :
                                     n_node_available = n_node_available + 1
 
                             #move solute if et least one node is available
@@ -315,42 +320,42 @@ def Interpolate_solute_out_grains(dict_sample) :
                             #to the top
                             if l - size_window > 0:
                                 if c - i_window > 0 :
-                                    top_min_available = node_available_M[l-size_window][c-i_window]
-                                    if node_available_M[l-size_window][c-i_window] :
+                                    top_min_available = dilated_M[l-size_window][c-i_window]
+                                    if dilated_M[l-size_window][c-i_window] :
                                         n_node_available = n_node_available + 1
                                 if c + i_window < len(dict_sample['x_L']):
-                                    top_max_available = node_available_M[l-size_window][c+i_window]
-                                    if node_available_M[l-size_window][c+i_window] :
+                                    top_max_available = dilated_M[l-size_window][c+i_window]
+                                    if dilated_M[l-size_window][c+i_window] :
                                         n_node_available = n_node_available + 1
                             #to the down
                             if l + size_window < len(dict_sample['y_L']):
                                 if c - i_window > 0 :
-                                    down_min_available = node_available_M[l+size_window][c-i_window]
-                                    if node_available_M[l+size_window][c-i_window] :
+                                    down_min_available = dilated_M[l+size_window][c-i_window]
+                                    if dilated_M[l+size_window][c-i_window] :
                                         n_node_available = n_node_available + 1
                                 if c + i_window < len(dict_sample['x_L']):
-                                    down_max_available = node_available_M[l+size_window][c+i_window]
-                                    if node_available_M[l+size_window][c+i_window] :
+                                    down_max_available = dilated_M[l+size_window][c+i_window]
+                                    if dilated_M[l+size_window][c+i_window] :
                                         n_node_available = n_node_available + 1
                             #to the left
                             if c - size_window > 0:
                                 if l - i_window > 0 :
-                                    left_min_available = node_available_M[l-i_window][c-size_window]
-                                    if node_available_M[l-i_window][c-size_window] :
+                                    left_min_available = dilated_M[l-i_window][c-size_window]
+                                    if dilated_M[l-i_window][c-size_window] :
                                         n_node_available = n_node_available + 1
                                 if l + i_window < len(dict_sample['y_L']):
-                                    left_max_available = node_available_M[l+i_window][c-size_window]
-                                    if node_available_M[l+i_window][c-size_window] :
+                                    left_max_available = dilated_M[l+i_window][c-size_window]
+                                    if dilated_M[l+i_window][c-size_window] :
                                         n_node_available = n_node_available + 1
                             #to the right
                             if c + size_window < len(dict_sample['x_L']):
                                 if l - i_window > 0 :
-                                    right_min_available = node_available_M[l-i_window][c+size_window]
-                                    if node_available_M[l-i_window][c+size_window] :
+                                    right_min_available = dilated_M[l-i_window][c+size_window]
+                                    if dilated_M[l-i_window][c+size_window] :
                                         n_node_available = n_node_available + 1
                                 if l + i_window < len(dict_sample['y_L']):
-                                    right_max_available = node_available_M[l+i_window][c+size_window]
-                                    if node_available_M[l+i_window][c+size_window] :
+                                    right_max_available = dilated_M[l+i_window][c+size_window]
+                                    if dilated_M[l+i_window][c+size_window] :
                                         n_node_available = n_node_available + 1
 
                             #move solute if et least one node is available
