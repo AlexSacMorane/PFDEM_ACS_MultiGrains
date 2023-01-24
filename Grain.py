@@ -386,12 +386,12 @@ class Grain:
           center_circumscribing, radius_circumscribing = FindCircleFromThreePoints(self.l_border[L_ijk_circumscribing[0]],self.l_border[L_ijk_circumscribing[1]],self.l_border[L_ijk_circumscribing[2]])
           Circumscribing_Found = True
           for i_p in range(len(self.l_border)-1):
-              #there is 1% margin here because of the numerical approximation
+              #there is a margin here because of the numerical approximation
               if np.linalg.norm(self.l_border[i_p]-center_circumscribing) > (1+dict_algorithm['sphericity_margin'])*radius_circumscribing and i_p not in L_ijk_circumscribing: #vertex outside the circle computed
                 Circumscribing_Found = False
           #see article for other case
           if not Circumscribing_Found:
-              raise ValueError('This algorithm is not developped for this case...')
+              print('This algorithm is not developped for this case...')
 
       #look for length and width
       length = MaxDistance
@@ -437,13 +437,15 @@ class Grain:
       SurfaceParticle = self.surface
       SurfaceCircumscribing = math.pi*radius_circumscribing**2
       AreaSphericity = SurfaceParticle / SurfaceCircumscribing
-      self.area_sphericity = AreaSphericity
+      if Circumscribing_Found: #else, same value
+          self.area_sphericity = AreaSphericity
 
       #Diameter Sphericity
       DiameterSameAreaParticle = 2*math.sqrt(self.surface/math.pi)
       DiameterCircumscribing = radius_circumscribing*2
       DiameterSphericity = DiameterSameAreaParticle / DiameterCircumscribing
-      self.diameter_sphericity = DiameterSphericity
+      if Circumscribing_Found: #else, same value
+          self.diameter_sphericity = DiameterSphericity
 
       #Circle Ratio Sphericity
       DiameterInscribing = radius_inscribing*2
