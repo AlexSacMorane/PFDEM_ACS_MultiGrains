@@ -158,6 +158,9 @@ def All_parameters():
     c_min = 0
     c_max = 0.08
 
+    #structural matrix to build diffusion map and available node map
+    struct_element = np.array(np.ones((4,4)), dtype = bool)
+
     #Save the simulation
     SaveData = True #Save data or not
     clean_memory = True #delete Data, Input, Output at the end of the simulation
@@ -204,7 +207,8 @@ def All_parameters():
     'dy_box_max_stop' : dy_box_max_stop,
     'foldername' : foldername,
     'n_t_PFDEM' : n_t_PFDEM,
-    'L_flag_plot' : L_flag_plot
+    'L_flag_plot' : L_flag_plot,
+    'struct_element' : struct_element
     }
 
     #---------------------------------------------------------------------------
