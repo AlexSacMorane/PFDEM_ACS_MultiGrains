@@ -186,14 +186,14 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     if 'Config' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
 
-    #Move solute in grains
-    Owntools.Interpolate_solute_out_grains(dict_sample)
+    #Move out solute in grains
+    Owntools.Interpolate_solute_out_grains(dict_algorithm, dict_sample)
 
     #Compute the mechanical energy term
     Owntools.Compute.Compute_Emec(dict_material, dict_sample, dict_sollicitation)
 
     #Compute the solute diffusion
-    Owntools.Compute.Compute_kc_dil(dict_material, dict_sample) #the solute diffusion
+    Owntools.Compute.Compute_kc_dil(dict_algorithm, dict_material, dict_sample) #the solute diffusion
 
     #compute for total energy in the sample and track the value
     Owntools.Compute.Compute_sum_Ed_plus_minus(dict_sample, dict_sollicitation)
