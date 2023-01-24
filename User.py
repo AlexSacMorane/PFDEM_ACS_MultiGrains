@@ -63,7 +63,7 @@ def All_parameters():
     y_box_min = 0 #µm
 
     #spatial discretisation
-    nx = int(30*math.sqrt(N_grain*0.6)) #approx 30 nodes per grain with a mean radius
+    nx = int(60*math.sqrt(N_grain*0.6)) #approx n nodes per grain with a mean radius
     ny = int(0.6*nx)
 
     #approximatively the number of vertices for one grain during DEM simulation
@@ -156,10 +156,10 @@ def All_parameters():
     L_flag_plot = ['Config', 'DEM_txt', 'Kc', 'DEM_tracker', 'Sphericity', 'Porosity', 'YBoxMax']
     #Visual parameters (for plot Config)
     c_min = 0
-    c_max = 0.08
+    c_max = 0.1
 
     #structural matrix to build diffusion map and available node map
-    struct_element = np.array(np.ones((4,4)), dtype = bool)
+    struct_element = np.array(np.ones((6,6)), dtype = bool)
 
     #Save the simulation
     SaveData = True #Save data or not
