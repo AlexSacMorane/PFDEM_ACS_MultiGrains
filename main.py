@@ -158,11 +158,15 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
                 simulation_report.write("DEM loop stopped by steady state reached with "+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+"\n")
 
     #---------------------------------------------------------------------------
-    #Write DEM data in a .txt
+    #Close DEM step
     #---------------------------------------------------------------------------
 
+    #Write DEM data in a .txt
     if 'DEM_txt' in dict_algorithm['L_flag_plot']:
         Owntools.Write.Write_DEM_txt(dict_algorithm,dict_sample)
+
+    simulation_report.tac_tempo(datetime.now(),f"Iteration {dict_algorithm['i_PFDEM']}: dem")
+    simulation_report.tic_tempo(datetime.now())
 
     #---------------------------------------------------------------------------
     #Compute and apply rigid boby motion
