@@ -49,6 +49,8 @@ simulation_report = dict_save['report']
 #Plan the simulation
 #-------------------------------------------------------------------------------
 
+simulation_report.write('\nA crash occurs...\n\n')
+
 #delete last folder
 if Path('Output/Ite_'+str(dict_algorithm['i_PFDEM']+1)).exists():
     shutil.rmtree('Output/Ite_'+str(dict_algorithm['i_PFDEM']+1))
