@@ -37,6 +37,7 @@ The goal of the DEM step is to compute a steady-state configuration. Grains are 
 ## What is next ?
 Some next releases are presented here.
 
+- update the documentation online
 - increase the user experience (homogenize names, correct english)
 - create AI or a guide to select algorithm parameters (as neighborhood update frequency, time step, stop criteria, etc...)
 - add some quick tests to check the script
