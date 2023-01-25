@@ -249,8 +249,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     simulation_report.tic_tempo(datetime.now())
 
     #save
-    if dict_algorithm['SaveData']:
-        Owntools.Save.save_dicts_before_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
+    Owntools.Save.save_dicts_before_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
 
 #-------------------------------------------------------------------------------
 
@@ -352,8 +351,8 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     #tempo save
     #---------------------------------------------------------------------------
 
+    Owntools.Save.save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
     if dict_algorithm['SaveData']:
-        Owntools.Save.save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
         shutil.copy('Debug/Report.txt','../'+dict_algorithm['foldername']+'/Report_'+dict_algorithm['namefile']+'_tempo.txt')
 
     simulation_report.tac_tempo(datetime.now(),f"Iteration {dict_algorithm['i_PFDEM']}: from pf to dem")
