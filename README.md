@@ -37,10 +37,12 @@ The goal of the DEM step is to compute a steady-state configuration. Grains are 
 ## What is next ?
 Some next releases are presented here.
 
-- increase the user experience (homogenize names, correct english)
-- create AI or a guide to select algorithm parameters (as neighborhood update frequency, time step, stop criteria, etc...)
+- update the documentation online
 - add some quick tests to check the script
+- update mesh with strain
+- increase the user experience (homogenize names, correct english)
 - correct the functions P_is_inside() because if the coordinate y = the coordinate of the vertex, the point is considered outside (even  if it is not the case)
+- create AI or a guide to select algorithm parameters (as neighborhood update frequency, time step, stop criteria, etc...)
 - publish an article about the simulation and result
 
 ## Understand User.py

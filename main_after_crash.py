@@ -63,7 +63,7 @@ if 'Diff_Solute' in dict_algorithm['L_flag_plot']:
 #-------------------------------------------------------------------------------
 
 #crash during the phase-field simulation
-elif name_to_load[-10:] == '_before_pf':
+if name_to_load[-10:] == '_before_pf':
     main.iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
 
 while not User.Criteria_StopSimulation(dict_algorithm):
