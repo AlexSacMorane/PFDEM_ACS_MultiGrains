@@ -46,6 +46,85 @@ Some next releases are presented here.
 
 ## Understand User.py
 
-Inputs are sorted in different dictionnaries.
+#### Geometry
 
-description in coming
+- <i>N_grain</i> : the number of the grains
+- <i>L_R</i> : is the list of the radius. It defines the particle size distribution of the grains with the variable <i>L_percentage_R</i>
+- <i>L_percentage_R</i> : is the percentage of total number of grains with a linked radius. It defines the particle size distribution of the grains with the variable <i>L_R</i>
+
+#### Sample
+
+- <i>x_box_min</i> : the minimum on the x axis of the sample
+- <i>x_box_max</i> : the maximum on the x axis of the sample
+- <i>n_x</i> : the number of nodes in the x direction
+- <i>y_box_min</i> : the minimum on the y axis of the sample
+- <i>n_y</i> : the number of nodes in the y direction
+- <i>grain_discretization_square</i> : is the discretization of the grains
+
+#### Material
+
+- <i>Mobility</i> : The mobility of the phase variables
+- <i>kappa_eta</i> : the gradient coefficient for the phase variables
+- <i>kappa_c</i> : the gradient coefficient for the solute
+- <i>Y</i> : the Young modulus
+- <i>nu</i> : the Poisson ratio
+- <i>rho</i> : the density of the grain. A surface density <i>rho_surf</i> is determined as 4/3*<i>rho</i>*<i>R_mean</i>
+- <i>mu_friction_gg</i> : the friction coefficient for grain-grain contact
+- <i>mu_friction_gw</i> : the friction coefficient for grain-wall contact
+- <i>coeff_restitution</i> : the restitution coefficient for contact
+
+#### Algorithm
+
+- <i>np_proc</i> : number of processor used for the simulation
+- <i>n_t_PFDEM</i> : the total number of PFDEM iteration. A PFDEM iteration is composed by one DEM and one phase-field simulations.
+- <i>n_t_PF</i> : approximatively the time step of the phase-field simulation. It defines with <i>dt_PF</i> the total duration of the phase-field simulation
+- <i>dt_PF</i> : the time step used for the phase-field simulation. This value is defined with different values. The selection of the value depend on the total absolute energy energy. Criterias to switch level are defined with <i>Ed_level</i>
+- <i>factor_etai</i> : is a factor related to the minimal distance between grains with same eta
+- <i>dt_DEM</i> : the time step for the DEM simulation
+- <i>i_DEM_stop</i> : the maximum iterations done during a DEM simulation
+- <i>i_update_neighborhoods</i>: the frequency of neighborhood update
+- <i>factor_neighborhood</i> : defines the size of the neighborhood
+- <i>Ecin_ratio</i> : defines a stop criteria for the DEM simulation. The steady-state is assumed when the mean displacement during one DEM step is lower than the ratio of the mean radius
+- <i>n_window_stop</i> : defines a steps window to detect the steady state
+- <i>dy_box_max_stop</i> : in the window defined by <i>n_window_stop</i>, the steady-state is detected if the difference between the maximum and the minimum upper wall position is lower than <i>dy_box_max_stop</i>
+- <i>sphericity_margin</i> : is a margin (because of numerical estimation) for grain sphericity compute
+- <i>n_spatial_inscribing</i> : is a precision (because of numerical estimation) for grain sphericity compute
+- <i>c_min</i> and <i>c_max</i> : are minimum and maximum values for plotting solute concentration
+- <i>L_flag_plot</i> : is the list of plots to do. The different options are available.
+                      - <i>Config</i> : Grain et solute configuration
+                      - <i>DEM_tracker</i> : Tracker during the DEM step
+                      - <i>DEM_txt</i> : A .txt file with DEM information at the end of the DEM step
+                      - <i>Diff_Solute</i> : Diffusion of the solute (not available for the moment!)
+                      - <i>dt</i> : Evolution of the time step used during phase-field iterations. This one depend on the energy introduced in the sample
+                      - <i>Ed</i> : Plot the initial energy map
+                      - <i>Etai_distribution</i> : Plot the initial distribution of the etai
+                      - <i>Eta_c</i> : Plot the evolution of the sum of the etai and the solute
+                      - <i>Init_Current_Shape</i> : Plot the shape comparaison (current vs initial)
+                      - <i>Kc</i> : Diffusion map
+                      - <i>Movie</i> : Movie of the different configurations
+                      - <i>Mesh</i> : Plot the mesh on the initial configuration
+                      - <i>Porosity</i> : Plot the evolution of the sample porosity (Sg/Sbox)
+                      - <i>Sphericity</i> : Evolution of the 2D sphericity of the grains
+                      - <i>sum_Ed</i> : Distribution of the energy in the sample
+                      - <i>YBoxMax</i> : Evolution of the upper wall position
+- <i>struct_element</i> : element used in dilation step to compute node available map
+
+#### Sollicitations
+
+- <i>chi</i> : chemical energy coefficient in the phase-field formulation
+- <i>gravity</i> : gravity applied to grains
+- <i>Vertical_Confinement_Force</i> : confinement force applied on the upper wall
+
+The coefficient <i>alpha</i> applied to the mechanical energy term is computed from a calibration simulation with the function <i>Add_variables_needed</i> 
+
+#### Initial configuration
+
+- <i>n_generation</i> : number of grain generation
+- <i>N_test_max</i> : the maximum number of try to generate a grain without overlap with grains already created
+- <i>factor_ymax_box</i> : define the upper wall position for the grain generation
+- <i>i_update_neighborhoods_gen</i>: frequency of neighborhood update during one generation step.
+- <i>i_update_neighborhoods_com</i>: frequency of neighborhood update during multi generation step.
+- <i>factor_neighborhood_IC</i> : defines the size of the neighborhood
+- <i>i_DEM_stop_IC</i> : the maximum DEM iterations
+- <i>dt_DEM_IC</i> : the DEM time step
+- <i>Ecin_ratio_IC</i> : defines a stop criteria for the DEM simulation. The steady-state is assumed when the mean displacement during one DEM step is lower than the ratio of the mean radius
