@@ -62,6 +62,10 @@ class Grain:
         self.g = self.y/2/(1+self.nu) #shear modulus
         self.rho_surf = dict_ic_to_real['Rho_surf']
         self.mass = dict_ic_to_real['Mass']
+        #kinetic
+        self.theta = 0
+        self.v = np.array([0, 0])
+        self.w = 0
 
         self.build_etai_M(dict_material,dict_sample)
 
@@ -600,86 +604,165 @@ class Grain:
 
     #---------------------------------------------------------------------------
 
-    def move_grain_interpolation(self,displacement,dict_sample):
+    def move_grain_interpolation(self, U, dtheta, dict_material, dict_sample):
         '''
         Move the grain by updating the phase field of the grain.
 
-        An interpolation on the phase field is done. The mass conservation is better than with move_grain_rebuild().
+        A bilinear interpolation on the phase field is done. See https://en.wikipedia.org/wiki/Bilinear_interpolation
+
+        The mass conservation is better than with move_grain_rebuild().
 
             Input :
                 itself (a grain)
                 the displacement asked (a 2 x 1 numpy array)
+                the rotation asked (a float)
+                a material dictionnary (a dict)
                 a sample dictionnary (a dictionnary)
             Output :
                 Nothing but the grain gets an updated attribute (a n_y x n_x numpy array)
         '''
-        #displacement over x
-        dx = dict_sample['x_L'][1]-dict_sample['x_L'][0]
-        n_dx_disp_x = int(abs(displacement[0])//dx)
-        disp_x_remainder = abs(displacement[0])%dx
-        etai_M_old = self.etai_M.copy()
+        #initialization
+        etai_M_init = self.etai_M.copy()
+        sum_eta_before = 0
 
-        if np.sign(displacement[0]) > 0 : # +x direction
-            #dx*n_dx_disp_x translation
-            if n_dx_disp_x > 0:
-                for l in range(len(dict_sample['y_L'])):
-                    self.etai_M[l][:n_dx_disp_x] = 0 #no information to translate so put equal to 0
-                    self.etai_M[l][n_dx_disp_x:] = etai_M_old[l][:-n_dx_disp_x]
-            #disp_x_remainder translation
-            etai_M_old = self.etai_M.copy()
-            for l in range(len(dict_sample['y_L'])):
-                for c in range(1,len(dict_sample['x_L'])):
-                    self.etai_M[l][c] = (etai_M_old[l][c]*(dx-disp_x_remainder) + etai_M_old[l][c-1]*disp_x_remainder)/dx
-                self.etai_M[l][0] = 0 #no information to translate so put equal to 0
+        #extract a spatial zone (#consider the rotation ?)
+        if U[0] >= 0 :
+            x_min = min(self.l_border_x)-dict_material['w'] - U[0]
+            x_max = max(self.l_border_x)+dict_material['w']
+        else :
+            x_min = min(self.l_border_x)-dict_material['w']
+            x_max = max(self.l_border_x)+dict_material['w'] - U[0]
+        if U[1] >= 0:
+            y_min = min(self.l_border_y)-dict_material['w'] - U[1]
+            y_max = max(self.l_border_y)+dict_material['w']
+        else:
+            y_min = min(self.l_border_y)-dict_material['w']
+            y_max = max(self.l_border_y)+dict_material['w'] - U[1]
+        #look for this part inside the global mesh
+        #create search list
+        x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
+        x_L_search_max = abs(np.array(dict_sample['x_L'])-x_max)
+        y_L_search_min = abs(np.array(dict_sample['y_L'])-y_min)
+        y_L_search_max = abs(np.array(dict_sample['y_L'])-y_max)
+        #get index
+        i_x_min = list(x_L_search_min).index(min(x_L_search_min))
+        i_x_max = list(x_L_search_max).index(min(x_L_search_max))
+        i_y_min = list(y_L_search_min).index(min(y_L_search_min))
+        i_y_max = list(y_L_search_max).index(min(y_L_search_max))
 
-        else : # -x direction
-            #dx*n_dx_disp_x translation
-            if n_dx_disp_x > 0:
-                for l in range(len(dict_sample['y_L'])):
-                    self.etai_M[l][-n_dx_disp_x:] = 0 #no information to translate so put equal to 0
-                    self.etai_M[l][:-n_dx_disp_x] = etai_M_old[l][n_dx_disp_x:]
-            #disp_x_remainder translation
-            etai_M_old = self.etai_M.copy()
-            for l in range(len(dict_sample['y_L'])):
-                for c in range(len(dict_sample['x_L'])-1):
-                    self.etai_M[l][c] = (etai_M_old[l][c]*(dx-disp_x_remainder) + etai_M_old[l][c+1]*disp_x_remainder)/dx
-                self.etai_M[l][0] = 0 #no information to translate so put equal to 0
+        #iteration on the mesh
+        for l in range(i_y_min, i_y_max+1):
+            for c in range(i_x_min, i_x_max+1):
+                sum_eta_before = sum_eta_before + etai_M_init[l][c]
 
-        #displacement over y
-        dy = dict_sample['y_L'][1]-dict_sample['y_L'][0]
-        n_dy_disp_y = int(abs(displacement[1])//dy)
-        disp_y_remainder = abs(displacement[1])%dy
-        etai_M_old = self.etai_M.copy()
+                #Interpolation of the rotation
+                p = np.array([dict_sample['x_L'][c], dict_sample['y_L'][l]])
+                pp = p - (self.center - U) #take center before the rigib body motion
+                M_rot = np.array([[math.cos(dtheta), -math.sin(dtheta)],
+                                  [math.sin(dtheta),  math.cos(dtheta)]])
+                pp = np.dot(M_rot, pp)
+                p = pp + self.center - U #take center before the rigib body motion
+                #check the new position in the mesh
+                if p[0] <= min(dict_sample['x_L']) or max(dict_sample['x_L']) <= p[0] or p[1] <= min(dict_sample['y_L']) or max(dict_sample['y_L']) <= p[1] :
+                    self.etai_M[-1-l][c] = 0 #no information because out of the mesh, it is 0
+                else : #look for the nearest nodes
+                    #look on x axis
+                    i_x = 1
+                    while not (dict_sample['x_L'][i_x-1] <= p[0] and p[0] < dict_sample['x_L'][i_x])  :
+                        i_x = i_x + 1
+                    #look on y axis
+                    i_y = 1
+                    while not (dict_sample['y_L'][i_y-1] <= p[1] and p[1] < dict_sample['y_L'][i_y])  :
+                        i_y = i_y + 1
+                    #definition of the nearest nodes
+                    p1  = np.array([dict_sample['x_L'][i_x-1], dict_sample['y_L'][i_y-1]])
+                    p2  = np.array([dict_sample['x_L'][i_x]  , dict_sample['y_L'][i_y-1]])
+                    p12 = np.array([p[0]                     , dict_sample['y_L'][i_y-1]])
+                    p3  = np.array([dict_sample['x_L'][i_x-1], dict_sample['y_L'][i_y]  ])
+                    p4  = np.array([dict_sample['x_L'][i_x]  , dict_sample['y_L'][i_y]  ])
+                    p34 = np.array([p[0]                     , dict_sample['y_L'][i_y]  ])
+                    #definition of value at those nearest nodes
+                    q1  = etai_M_init[-(i_y-1)-1][i_x-1]
+                    q2  = etai_M_init[-(i_y-1)-1][i_x]
+                    q3  = etai_M_init[-i_y-1][i_x-1]
+                    q4  = etai_M_init[-i_y-1][i_x]
+                    #first interpolations, compute intermediate nodes
+                    q12 = (q1*(p2[0]-p[0]) + q2*(p[0]-p1[0]))/(p2[0]-p1[0])
+                    q34 = (q3*(p4[0]-p[0]) + q4*(p[0]-p3[0]))/(p4[0]-p1[0])
+                    #interpolation of p
+                    q = (q12*(p[1]-p34[1]) + q34*(p12[1]-p[1]))/(p12[1]-p34[1])
+                    #update etai_M
+                    self.etai_M[-1-l][c] = q
 
-        if np.sign(displacement[1]) > 0 : # +y direction
-            #dy*n_dy_disp_y translation
-            if n_dy_disp_y > 0:
-                for c in range(len(dict_sample['x_L'])):
-                    for l in range(len(dict_sample['y_L'])-n_dy_disp_y,len(dict_sample['y_L'])):
-                        self.etai_M[l][c] = 0 #no information to translate so put equal to 0
-                    for l in range(len(dict_sample['y_L'])-n_dy_disp_y):
-                        self.etai_M[l][c] = etai_M_old[l+1][c]
-            #disp_y_remainder translation
-            etai_M_old = self.etai_M.copy()
-            for c in range(len(dict_sample['x_L'])):
-                for l in range(len(dict_sample['y_L'])-1):
-                    self.etai_M[l][c] = (etai_M_old[l][c]*(dy-disp_y_remainder) + etai_M_old[l+1][c]*disp_y_remainder)/dy
-                self.etai_M[-1][c] = 0 #no information to translate so put equal to 0
+        #reinitialization
+        etai_M_init = self.etai_M.copy()
+        sum_eta_after = 0
 
-        else : # -y direction
-            #dy*n_dy_disp_y translation
-            if n_dy_disp_y > 0:
-                for c in range(len(dict_sample['x_L'])):
-                    for l in range(n_dy_disp_y):
-                        self.etai_M[l][c] = 0 #no information to translate so put equal to 0
-                    for l in range(n_dy_disp_y, len(dict_sample['y_L'])):
-                        self.etai_M[l][c] = etai_M_old[l-1][c]
-            #disp_y_remainder translation
-            etai_M_old = self.etai_M.copy()
-            for c in range(len(dict_sample['x_L'])):
-                for l in range(1,len(dict_sample['y_L'])):
-                    self.etai_M[l][c] = (etai_M_old[l][c]*(dy-disp_y_remainder) + etai_M_old[l-1][c]*disp_y_remainder)/dy
-                self.etai_M[0][c] = 0 #no information to translate so put equal to 0
+        #extract a spatial zone (#consider the rotation ?)
+        if U[0] >= 0 :
+            x_min = min(self.l_border_x)-dict_material['w'] - U[0]
+            x_max = max(self.l_border_x)+dict_material['w']
+        else :
+            x_min = min(self.l_border_x)-dict_material['w']
+            x_max = max(self.l_border_x)+dict_material['w'] - U[0]
+        if U[1] >= 0:
+            y_min = min(self.l_border_y)-dict_material['w'] - U[1]
+            y_max = max(self.l_border_y)+dict_material['w']
+        else:
+            y_min = min(self.l_border_y)-dict_material['w']
+            y_max = max(self.l_border_y)+dict_material['w'] - U[1]
+        #look for this part inside the global mesh
+        #create search list
+        x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
+        x_L_search_max = abs(np.array(dict_sample['x_L'])-x_max)
+        y_L_search_min = abs(np.array(dict_sample['y_L'])-y_min)
+        y_L_search_max = abs(np.array(dict_sample['y_L'])-y_max)
+        #get index
+        i_x_min = list(x_L_search_min).index(min(x_L_search_min))
+        i_x_max = list(x_L_search_max).index(min(x_L_search_max))
+        i_y_min = list(y_L_search_min).index(min(y_L_search_min))
+        i_y_max = list(y_L_search_max).index(min(y_L_search_max))
+
+        #iteration on the mesh
+        for l in range(i_y_min, i_y_max+1):
+            for c in range(i_x_min, i_x_max+1):
+                #Interpolation of the translation
+                p = np.array([dict_sample['x_L'][c], dict_sample['y_L'][l]])
+                p = p - u
+                #check the new position in the mesh
+                if p[0] <= min(dict_sample['x_L']) or max(dict_sample['x_L']) <= p[0] or p[1] <= min(dict_sample['y_L']) or max(dict_sample['y_L']) <= p[1] :
+                    self.etai_M[-1-l][c] = 0 #no information because out of the mesh, it is 0
+                else : #look for the nearest nodes
+                    #look on x axis
+                    i_x = 1
+                    while not (dict_sample['x_L'][i_x-1] <= p[0] and p[0] < dict_sample['x_L'][i_x])  :
+                        i_x = i_x + 1
+                    #look on y axis
+                    i_y = 1
+                    while not (dict_sample['y_L'][i_y-1] <= p[1] and p[1] < dict_sample['y_L'][i_y])  :
+                        i_y = i_y + 1
+                    #definition of the nearest nodes
+                    p1  = np.array([dict_sample['x_L'][i_x-1], dict_sample['y_L'][i_y-1]])
+                    p2  = np.array([dict_sample['x_L'][i_x]  , dict_sample['y_L'][i_y-1]])
+                    p12 = np.array([p[0]                     , dict_sample['y_L'][i_y-1]])
+                    p3  = np.array([dict_sample['x_L'][i_x-1], dict_sample['y_L'][i_y]  ])
+                    p4  = np.array([dict_sample['x_L'][i_x]  , dict_sample['y_L'][i_y]  ])
+                    p34 = np.array([p[0]                     , dict_sample['y_L'][i_y]  ])
+                    #definition of value at those nearest nodes
+                    q1  = etai_M_init[-(i_y-1)-1][i_x-1]
+                    q2  = etai_M_init[-(i_y-1)-1][i_x]
+                    q3  = etai_M_init[-i_y-1][i_x-1]
+                    q4  = etai_M_init[-i_y-1][i_x]
+                    #first interpolations, compute intermediate nodes
+                    q12 = (q1*(p2[0]-p[0]) + q2*(p[0]-p1[0]))/(p2[0]-p1[0])
+                    q34 = (q3*(p4[0]-p[0]) + q4*(p[0]-p3[0]))/(p4[0]-p1[0])
+                    #interpolation of p
+                    q = (q12*(p[1]-p34[1]) + q34*(p12[1]-p[1]))/(p12[1]-p34[1])
+                    #update etai_M
+                    self.etai_M[-1-l][c] = q
+                    sum_eta_after = sum_eta_after + q
+
+        self.delta_sum_eta = (sum_eta_before - sum_eta_after)/sum_eta_before*100
 
     #---------------------------------------------------------------------------
 
@@ -773,9 +856,6 @@ class Grain:
         self.fy = -dict_sollicitation['gravity']*self.mass
         self.f = np.array([self.fx,self.fy])
         self.mz = 0
-        self.v = np.array([0, 0])
-        self.theta = 0
-        self.w = 0
 
     #-------------------------------------------------------------------------------
 

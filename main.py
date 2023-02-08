@@ -64,10 +64,13 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
         os.mkdir('Debug/Configuration/PFDEM_'+str(dict_algorithm['i_PFDEM']))
         os.mkdir('Debug/txt/PFDEM_'+str(dict_algorithm['i_PFDEM']))
 
-    # Saving center to compute a rigid body motion
+    # Saving center and angle to compute a rigid body motion
     L_center_g = []
     for grain in dict_sample['L_g']:
         L_center_g.append(grain.center.copy())
+    L_theta_g = []
+    for grain in dict_sample['L_g']:
+        L_theta_g.append(grain.theta)
 
     #initial value
     DEM_loop_statut = True
@@ -78,6 +81,11 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     for grain in dict_sample['L_g']:
         Ecin_stop = Ecin_stop + 0.5*grain.mass*(dict_algorithm['Ecin_ratio']*grain.r_mean/dict_algorithm['dt_DEM'])**2/len(dict_sample['L_g'])
     dict_algorithm['Ecin_stop'] = Ecin_stop
+
+    # Initialize the DEM step with 0 speed and 0 angular speed
+    for grain in dict_sample['L_g']:
+        grain.v = np.array([0, 0])
+        grain.w = 0
 
     #Trackers and add element in dict
     dict_tracker['Ecin'] = []
@@ -174,7 +182,9 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
 
     mean_delta_sum_eta = 0
     for i_grain in range(len(dict_sample['L_g'])):
-        dict_sample['L_g'][i_grain].move_grain_rebuild(dict_material, dict_sample)
+        U = dict_sample['L_g'][i_grain].center - L_center_g[i_grain] #translation
+        dtheta = dict_sample['L_g'][i_grain'].theta - L_theta_g[i_grain] #rotation
+        dict_sample['L_g'][i_grain].move_grain_interpolation(U, dtheta, dict_material, dict_sample)
         mean_delta_sum_eta = mean_delta_sum_eta + abs(dict_sample['L_g'][i_grain].delta_sum_eta)
     mean_delta_sum_eta = mean_delta_sum_eta/len(dict_sample['L_g'])
     simulation_report.write_and_print('Mean Delta sum eta = '+str(round(mean_delta_sum_eta,2))+' %\n','Mean Delta sum eta = '+str(round(mean_delta_sum_eta,2))+' %')
