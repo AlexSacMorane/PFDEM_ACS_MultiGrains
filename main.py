@@ -395,6 +395,13 @@ def close_main(dict_algorithm, dict_material, dict_sample, dict_sollicitation, d
 
     #final save
     if dict_algorithm['SaveData']:
+
+        #clean memory
+        if dict_algorithm['clean_memory']:
+            shutil.rmtree('Data')
+            shutil.rmtree('Input')
+            shutil.rmtree('Output')
+
         print()
         print('Copying data, it can take long times...')
 
