@@ -80,8 +80,6 @@ def save_dicts_final(dict_algorithm, dict_material, dict_sample, dict_sollicitat
         Output :
             Nothing but a save file is generated (a file)
     '''
-    os.remove(dict_algorithm['namefile']+'_save_tempo')
-    os.remove(dict_algorithm['namefile']+'_before_pf')
     outfile = open('../'+dict_algorithm['foldername']+'/'+dict_algorithm['namefile']+'_save','wb')
     dict_save = {}
     dict_save['algorithm'] = dict_algorithm
@@ -92,3 +90,5 @@ def save_dicts_final(dict_algorithm, dict_material, dict_sample, dict_sollicitat
     dict_save['report'] = simulation_report
     pickle.dump(dict_save,outfile)
     outfile.close()
+    os.remove(dict_algorithm['namefile']+'_save_tempo')
+    os.remove(dict_algorithm['namefile']+'_save_tempo_before_pf')
