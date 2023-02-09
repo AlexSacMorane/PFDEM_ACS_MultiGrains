@@ -183,7 +183,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     mean_delta_sum_eta = 0
     for i_grain in range(len(dict_sample['L_g'])):
         U = dict_sample['L_g'][i_grain].center - L_center_g[i_grain] #translation
-        dtheta = dict_sample['L_g'][i_grain'].theta - L_theta_g[i_grain] #rotation
+        dtheta = dict_sample['L_g'][i_grain].theta - L_theta_g[i_grain] #rotation
         dict_sample['L_g'][i_grain].move_grain_interpolation(U, dtheta, dict_material, dict_sample)
         mean_delta_sum_eta = mean_delta_sum_eta + abs(dict_sample['L_g'][i_grain].delta_sum_eta)
     mean_delta_sum_eta = mean_delta_sum_eta/len(dict_sample['L_g'])
