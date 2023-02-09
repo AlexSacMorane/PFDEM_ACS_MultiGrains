@@ -728,7 +728,7 @@ class Grain:
             for c in range(i_x_min, i_x_max+1):
                 #Interpolation of the translation
                 p = np.array([dict_sample['x_L'][c], dict_sample['y_L'][l]])
-                p = p - u
+                p = p - U
                 #check the new position in the mesh
                 if p[0] <= min(dict_sample['x_L']) or max(dict_sample['x_L']) <= p[0] or p[1] <= min(dict_sample['y_L']) or max(dict_sample['y_L']) <= p[1] :
                     self.etai_M[-1-l][c] = 0 #no information because out of the mesh, it is 0
