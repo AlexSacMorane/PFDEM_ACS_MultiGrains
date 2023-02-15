@@ -122,9 +122,9 @@ def All_parameters():
     dt_PF_level2 = dt_PF_level1/2
     dt_PF_level3 = dt_PF_level2/2
     #criteria to switch level
-    Ed_level1 = 10
-    Ed_level2 = 20
-    Ed_level3 = 25
+    Ed_level1 = 0.025
+    Ed_level2 = 0.05
+    Ed_level3 = 0.075
 
     #PF parameters
     factor_etai = 1.7 #factor reltaed to the minimal distance between grains with same eta
