@@ -221,14 +221,17 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     dict_tracker['sum_ed_plus_L'].append(dict_sample['sum_ed_plus'])
     dict_tracker['sum_ed_minus_L'].append(dict_sample['sum_ed_minus'])
 
+    #compute absolute total energy per contact node
+    Owntools.Compute.Compute_Ed_abs_node_contact(dict_sample, dict_sollicitation)
+
     #Adaptative time step
-    if abs(dict_sample['sum_ed']) < dict_algorithm['Ed_level1']:
+    if abs(dict_sample['sum_ed_abs_node']) < dict_algorithm['Ed_level1']:
         dict_algorithm['dt_PF'] = dict_algorithm['dt_PF_init']
-    elif dict_algorithm['Ed_level1'] <= abs(dict_sample['sum_ed']) and abs(dict_sample['sum_ed']) < dict_algorithm['Ed_level2']:
+    elif dict_algorithm['Ed_level1'] <= abs(dict_sample['sum_ed_abs_node']) and abs(dict_sample['sum_ed_abs_node']) < dict_algorithm['Ed_level2']:
         dict_algorithm['dt_PF'] = dict_algorithm['dt_PF_level1']
-    elif dict_algorithm['Ed_level2'] <= abs(dict_sample['sum_ed']) and abs(dict_sample['sum_ed']) < dict_algorithm['Ed_level3']:
+    elif dict_algorithm['Ed_level2'] <= abs(dict_sample['sum_ed_abs_node']) and abs(dict_sample['sum_ed_abs_node']) < dict_algorithm['Ed_level3']:
         dict_algorithm['dt_PF'] = dict_algorithm['dt_PF_level2']
-    elif dict_algorithm['Ed_level3'] <= abs(dict_sample['sum_ed']) :
+    elif dict_algorithm['Ed_level3'] <= abs(dict_sample['sum_ed_abs_node']) :
         dict_algorithm['dt_PF'] = dict_algorithm['dt_PF_level3']
 
     #plot
