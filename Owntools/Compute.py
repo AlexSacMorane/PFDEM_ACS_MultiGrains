@@ -266,6 +266,61 @@ def Compute_sum_eta(dict_sample):
 
 #-------------------------------------------------------------------------------
 
+def Compute_Ed_abs_node_contact(dict_sample, dict_sollicitation):
+    '''
+    Compute the absolute total energy in the sample.
+
+    This energy is related to the deformation during the phase-field step.
+
+    Only absolute total energy in the contact zone (eta_i and eta_j > 0.5) is considered for the sum.
+    The sum obtained is divided by the number of nodes in the contact zone.
+
+        Input :
+            a sample dictionnary (a dict)
+        Output :
+            Nothing but the dictionnary gets an updated value for energy inside the sample (three floats)
+    '''
+    sum_ed_abs = 0
+    n_node = 0
+    for contact in dict_sample['L_contact']:
+        #extract a spatial zone
+        x_min = min(min(contact.g1.l_border_x), min(contact.g2.l_border_x))-dict_material['w']
+        x_max = max(max(contact.g1.l_border_x), max(contact.g2.l_border_x))+dict_material['w']
+        y_min = min(min(contact.g1.l_border_y), min(contact.g2.l_border_y))-dict_material['w']
+        y_max = max(max(contact.g1.l_border_y), max(contact.g2.l_border_y))+dict_material['w']
+        #look for this part inside the global mesh
+        #create search list
+        x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
+        x_L_search_max = abs(np.array(dict_sample['x_L'])-x_max)
+        y_L_search_min = abs(np.array(dict_sample['y_L'])-y_min)
+        y_L_search_max = abs(np.array(dict_sample['y_L'])-y_max)
+        #get index
+        i_x_min = list(x_L_search_min).index(min(x_L_search_min))
+        i_x_max = list(x_L_search_max).index(min(x_L_search_max))
+        i_y_min = list(y_L_search_min).index(min(y_L_search_min))
+        i_y_max = list(y_L_search_max).index(min(y_L_search_max))
+        for l in range(i_y_min, i_y_max):
+            for c in range(i_x_min, i_x_max):
+                i_grain = dict_sample['L_g'].index(contact.g1)
+                j_grain = dict_sample['L_g'].index(contact.g2)
+                if dict_sample['L_g'][i_grain].etai_M[-1-l][c] > 0.5 and dict_sample['L_g'][j_grain].etai_M[-1-l][c] > 0.5:
+                    #Emec
+                    Ed_mec = dict_sample['Emec_M'][-1-l][c]
+                    #Eche
+                    Ed_che = dict_sollicitation['chi']*dict_sample['solute_M'][-1-l][c]*(3*dict_sample['L_g'][i_grain].etai_M[-1-l][c]**2-2*dict_sample['L_g'][i_grain].etai_M[-1-l][c]**3+\
+                                                                                         3*dict_sample['L_g'][j_grain].etai_M[-1-l][c]**2-2*dict_sample['L_g'][j_grain].etai_M[-1-l][c]**3)
+                    #Ed
+                    Ed = Ed_mec - Ed_che
+                    #sum
+                    sum_ed_abs = sum_ed_abs + abs(Ed)
+                    n_node = n_node + 1
+    #update elements in dict
+    dict_sample['sum_ed_abs'] = sum_ed_abs
+    dict_sample['n_node'] = n_node
+    dict_sample['sum_ed_abs_node'] = sum_ed_abs/n_node
+
+#-------------------------------------------------------------------------------
+
 def Compute_sum_Ed_plus_minus(dict_sample, dict_sollicitation):
     '''
     Compute the total energy in the sample. This energy is divided in a plus term and a minus term.
