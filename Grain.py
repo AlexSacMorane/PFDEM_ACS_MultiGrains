@@ -71,6 +71,21 @@ class Grain:
 
     #---------------------------------------------------------------------------
 
+    def __eq__(self, other):
+        """
+        Define the equality between two grains.
+
+        To be equal two grains must have the same id.
+
+          Input :
+              two grains (grain)
+          Return
+              A Boolean (bool)
+        """
+        return self.id == other.id
+
+    #---------------------------------------------------------------------------
+
     def build_etai_M(self,dict_material,dict_sample):
         '''
         Build the phase field for one grain.
