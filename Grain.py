@@ -668,7 +668,7 @@ class Grain:
         #iteration on the mesh
         for l in range(i_y_min, i_y_max+1):
             for c in range(i_x_min, i_x_max+1):
-                sum_eta_before = sum_eta_before + etai_M_init[l][c]
+                sum_eta_before = sum_eta_before + etai_M_init[-1-l][c]
 
                 #Interpolation of the rotation
                 p = np.array([dict_sample['x_L'][c], dict_sample['y_L'][l]])
