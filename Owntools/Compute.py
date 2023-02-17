@@ -284,10 +284,10 @@ def Compute_Ed_abs_node_contact(dict_sample, dict_sollicitation):
     n_node = 0
     for contact in dict_sample['L_contact']:
         #extract a spatial zone
-        x_min = min(min(contact.g1.l_border_x), min(contact.g2.l_border_x))-dict_material['w']
-        x_max = max(max(contact.g1.l_border_x), max(contact.g2.l_border_x))+dict_material['w']
-        y_min = min(min(contact.g1.l_border_y), min(contact.g2.l_border_y))-dict_material['w']
-        y_max = max(max(contact.g1.l_border_y), max(contact.g2.l_border_y))+dict_material['w']
+        x_min = min(min(contact.g1.l_border_x), min(contact.g2.l_border_x))
+        x_max = max(max(contact.g1.l_border_x), max(contact.g2.l_border_x))
+        y_min = min(min(contact.g1.l_border_y), min(contact.g2.l_border_y))
+        y_max = max(max(contact.g1.l_border_y), max(contact.g2.l_border_y))
         #look for this part inside the global mesh
         #create search list
         x_L_search_min = abs(np.array(dict_sample['x_L'])-x_min)
