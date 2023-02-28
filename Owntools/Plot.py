@@ -591,18 +591,29 @@ def Plot_sum_Ed(dict_tracker):
 
 #-------------------------------------------------------------------------------
 
-def Plot_dt_used(dict_tracker):
+def Plot_dt_used(dict_sample, dict_tracker):
     '''
     Plot the evolution of the time step used in the phase field simulation.
 
         Input :
+            a sample dictionnary (a dict)
             a tracker dictionnary (a dict)
         Output :
             Nothing but a .png files are generated (files)
     '''
     plt.figure(1,figsize=(16,9))
-    plt.plot(dict_tracker['L_dt'])
+
+    plt.subplot(121)
+    plt.plot(dict_tracker['L_dt'], 'x')
     plt.title('Evolution of the time step used')
+
+    plt.subplot(122)
+    plt.plot(dict_tracker['sum_ed_abs_node_L'], 'x')
+    plt.plot([0, len(dict_tracker['sum_ed_abs_node_L'])-1], [dict_algorithm['Ed_level1'], dict_algorithm['Ed_level1']],'r')
+    plt.plot([0, len(dict_tracker['sum_ed_abs_node_L'])-1], [dict_algorithm['Ed_level2'], dict_algorithm['Ed_level2']],'r')
+    plt.plot([0, len(dict_tracker['sum_ed_abs_node_L'])-1], [dict_algorithm['Ed_level3'], dict_algorithm['Ed_level3']],'r')
+    plt.title('Criteria to switch the dt used')
+
     plt.savefig('Debug/Evolution_dt_used.png')
     plt.close(1)
 

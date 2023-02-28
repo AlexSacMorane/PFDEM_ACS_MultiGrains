@@ -223,6 +223,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
 
     #compute absolute total energy per contact node
     Owntools.Compute.Compute_Ed_abs_node_contact(dict_sample, dict_sollicitation)
+    dict_tracker['sum_ed_abs_node_L'].append(dict_sample['sum_ed_abs_node'])
 
     #Adaptative time step
     if abs(dict_sample['sum_ed_abs_node']) < dict_algorithm['Ed_level1']:
@@ -360,7 +361,7 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     if 'sum_Ed' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_sum_Ed(dict_tracker)
     if 'dt' in dict_algorithm['L_flag_plot'] :
-        Owntools.Plot.Plot_dt_used(dict_tracker)
+        Owntools.Plot.Plot_dt_used(dict_sample, dict_tracker)
     if 'Porosity' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_porosity(dict_tracker)
 
@@ -531,6 +532,7 @@ if '__main__' == __name__:
     'sum_ed_plus_L' : [],
     'sum_ed_minus_L' : [],
     'L_porosity' : [dict_sample['porosity']]
+    'sum_ed_abs_node_L' : []
     }
 
     #-------------------------------------------------------------------------------
