@@ -513,6 +513,7 @@ if '__main__' == __name__:
     'L_t' : [0],
     'L_dt' : [],
     'L_y_box_max' : [dict_sample['y_box_max']],
+    'L_porosity' : [dict_sample['porosity']],
     'L_sum_solute' : [0],
     'L_sum_eta' : [dict_sample['sum_eta']],
     'L_sum_total' : [dict_sample['sum_eta']],
@@ -526,12 +527,11 @@ if '__main__' == __name__:
     'L_circle_ratio_sphericity_mean' : [circle_ratio_sphericity_mean],
     'L_perimeter_sphericity_mean' : [perimeter_sphericity_mean],
     'L_width_to_length_ratio_sphericity_mean' : [width_to_length_ratio_sphericity_mean],
-    'sum_ed_L': [],
     'sum_Ed_che_L': [],
     'sum_Ed_mec_L': [],
+    'sum_ed_L': [],
     'sum_ed_plus_L' : [],
     'sum_ed_minus_L' : [],
-    'L_porosity' : [dict_sample['porosity']]
     'sum_ed_abs_node_L' : []
     }
 
