@@ -36,7 +36,7 @@ def All_parameters():
     #---------------------------------------------------------------------------
     #Geometry parameters
 
-    N_grain = 40 #total number of grains
+    N_grain = 30 #total number of grains
 
     R0 = 350 #µm radius to compute the grain distribution
     L_R = [1.2*R0,1.1*R0,0.9*R0,0.8*R0] #from larger to smaller
@@ -63,11 +63,11 @@ def All_parameters():
     y_box_min = 0 #µm
 
     #spatial discretisation
-    nx = int(60*math.sqrt(N_grain*0.6)) #approx n nodes per grain with a mean radius
+    nx = int(40*math.sqrt(N_grain*0.6)) #approx n nodes per grain with a mean radius
     ny = int(0.6*nx)
 
     #approximatively the number of vertices for one grain during DEM simulation
-    grain_discretisation = 60
+    grain_discretisation = 80
 
     dict_sample = {
     'nx' : nx,
@@ -93,7 +93,7 @@ def All_parameters():
     rho = 2500*10**(-6*3) #density kg/µm3
     rho_surf = 4/3*rho*R_mean #kg/µm2
     mu_friction_gg = 0.5 #grain-grain
-    mu_friction_gw = 0 #grain-wall
+    mu_friction_gw = 0.5 #grain-wall
     coeff_restitution = 0.2 #1 is perfect elastic
 
     dict_material = {
@@ -131,12 +131,12 @@ def All_parameters():
 
     #DEM parameters
     dt_DEM_crit = math.pi*min(L_R)/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
-    dt_DEM = dt_DEM_crit/7 #s time step during DEM simulation
-    factor_neighborhood = 1.5 #margin to detect a grain into a neighborhood
+    dt_DEM = dt_DEM_crit/8 #s time step during DEM simulation
+    factor_neighborhood = 2.5 #margin to detect a grain into a neighborhood
     i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
     #Stop criteria of the DEM
-    i_DEM_stop = 5000 #maximum iteration for one DEM simulation
-    Ecin_ratio = 0.0001
+    i_DEM_stop = 4000 #maximum iteration for one DEM simulation
+    Ecin_ratio = 0.0002
     n_window_stop = 100
     dy_box_max_stop = 35
 
@@ -150,13 +150,13 @@ def All_parameters():
     Debug_DEM = False #plot configuration inside DEM
     i_print_plot = 100 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, DEM_tracker, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Porosity, Sphericity, sum_Ed, YBoxMax
-    L_flag_plot = ['Config', 'DEM_txt', 'Sphericity', 'Porosity', 'YBoxMax', 'Eta_c', 'Movie']
+    L_flag_plot = ['Config', 'DEM_tracker', 'DEM_txt', 'dt', 'sum_Ed', 'Sphericity', 'YBoxMax', 'Eta_c', 'Movie']
     #Visual parameters (for plot Config)
     c_min = 0
     c_max = 0.1
 
     #structural matrix to build diffusion map and available node map
-    struct_element = np.array(np.ones((6,6)), dtype = bool)
+    struct_element = np.array(np.ones((4,4)), dtype = bool)
 
     #Save the simulation
     SaveData = True #Save data or not
