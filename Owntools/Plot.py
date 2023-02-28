@@ -489,7 +489,7 @@ def Plot_init_current_shape(dict_sample):
 
 def Plot_sum_eta_c(dict_tracker):
     '''
-    Plot the trackers.
+    Plot the quantity of material.
 
         Input :
             a tracker dictionnary (a dict)
@@ -499,23 +499,19 @@ def Plot_sum_eta_c(dict_tracker):
     #plot Displacement and sum of c and etai
     plt.figure(1,figsize=(16,9))
 
-    plt.subplot(211)
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_y_box_max'])
-    plt.title('Total displacement done')
-
-    plt.subplot(234)
+    plt.subplot(131)
     plt.plot(dict_tracker['L_t'], dict_tracker['L_sum_eta'])
     plt.title('Sum of etai')
 
-    plt.subplot(235)
+    plt.subplot(132)
     plt.plot(dict_tracker['L_t'], dict_tracker['L_sum_solute'])
     plt.title('Sum of c')
 
-    plt.subplot(236)
+    plt.subplot(133)
     plt.plot(dict_tracker['L_t'], dict_tracker['L_sum_total'])
     plt.title('Sum of etai and c')
 
-    plt.savefig('Debug/Trackers.png')
+    plt.savefig('Debug/Mass_eta_c.png')
     plt.close(1)
 
 #-------------------------------------------------------------------------------
