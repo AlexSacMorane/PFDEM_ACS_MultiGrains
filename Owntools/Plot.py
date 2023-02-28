@@ -714,7 +714,7 @@ def Plot_yboxmax(dict_tracker):
             Nothing but a .png file is generated (file)
     '''
     plt.figure(1,figsize=(16,9))
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_y_box_max'], markers ='x')
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_y_box_max'], marker ='x')
     plt.title('Upper wall position')
     plt.savefig('Debug/Evolution_yboxmax.png')
     plt.close(1)
@@ -731,7 +731,7 @@ def Plot_porosity(dict_tracker):
             Nothing but a .png file is generated (file)
     '''
     plt.figure(1,figsize=(16,9))
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_porosity'], markers ='x')
+    plt.plot(dict_tracker['L_t'], dict_tracker['L_porosity'], marker ='x')
     plt.title('Evolution of the sample porosity')
     plt.savefig('Debug/Evolution_porosity.png')
     plt.close(1)
