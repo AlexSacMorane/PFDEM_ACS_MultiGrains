@@ -63,7 +63,7 @@ def All_parameters():
     y_box_min = 0 #µm
 
     #spatial discretisation
-    nx = int(40*math.sqrt(N_grain*0.6)) #approx n nodes per grain with a mean radius
+    nx = int(30*math.sqrt(N_grain*0.6)) #approx n nodes per grain with a mean radius
     ny = int(0.6*nx)
 
     #approximatively the number of vertices for one grain during DEM simulation
@@ -113,7 +113,7 @@ def All_parameters():
     #Algorithm parameters
 
     np_proc = 4 #number of processor used
-    n_t_PFDEM = 150 #number of cycle PF-DEM
+    n_t_PFDEM = 50 #number of cycle PF-DEM
 
     #Time step for phase field
     n_t_PF = 8
@@ -148,7 +148,7 @@ def All_parameters():
     #List of plot to do
     Debug = True #plot configuration before and after DEM simulation
     Debug_DEM = False #plot configuration inside DEM
-    i_print_plot = 100 #frenquency of the print and plot (if Debug_DEM) in DEM step
+    i_print_plot = 300 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, DEM_tracker, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Porosity, Sphericity, sum_Ed, YBoxMax
     L_flag_plot = ['Config', 'DEM_tracker', 'DEM_txt', 'dt', 'sum_Ed', 'Sphericity', 'YBoxMax', 'Eta_c', 'Movie']
     #Visual parameters (for plot Config)
@@ -156,7 +156,7 @@ def All_parameters():
     c_max = 0.1
 
     #structural matrix to build diffusion map and available node map
-    struct_element = np.array(np.ones((4,4)), dtype = bool)
+    struct_element = np.array(np.ones((3,3)), dtype = bool)
 
     #Save the simulation
     SaveData = True #Save data or not
@@ -307,7 +307,7 @@ def Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollici
     dict_sample['Ed_M'] = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
 
     #compute the phase field width interface
-    dict_material['w'] = math.sqrt((dict_sample['x_L'][4]-dict_sample['x_L'][0])**2+(dict_sample['y_L'][4]-dict_sample['y_L'][0])**2)
+    dict_material['w'] = math.sqrt((dict_sample['x_L'][3]-dict_sample['x_L'][0])**2+(dict_sample['y_L'][3]-dict_sample['y_L'][0])**2)
 
     #Energy barrier of etai
     dict_material['Energy_barrier'] = 20*dict_material['kappa_eta']/(dict_material['w'])**2
