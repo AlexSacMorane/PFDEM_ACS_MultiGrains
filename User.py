@@ -64,7 +64,7 @@ def All_parameters():
 
     #spatial discretisation
     nx = int(30*math.sqrt(N_grain*0.6)) #approx n nodes per grain with a mean radius
-    ny = int(0.6*nx)
+    ny = int(nx/0.6)
 
     #approximatively the number of vertices for one grain during DEM simulation
     grain_discretisation = 80
