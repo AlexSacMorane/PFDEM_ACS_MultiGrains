@@ -561,26 +561,22 @@ def Plot_sum_Ed(dict_tracker):
     '''
     plt.figure(1,figsize=(16,9))
 
-    plt.subplot(331)
+    plt.subplot(221)
     plt.plot(dict_tracker['L_t'][:-1], dict_tracker['sum_Ed_che_L'])
     plt.title('Total chemical energy Ed_che')
 
-    plt.subplot(334)
+    plt.subplot(222)
     plt.plot(dict_tracker['L_t'][:-1], dict_tracker['sum_Ed_mec_L'])
     plt.title('Total mechanical energy Ed_mec')
 
-    plt.subplot(337)
+    plt.subplot(223)
     plt.plot(dict_tracker['L_t'][:-1], dict_tracker['sum_ed_L'])
     plt.title('Total Energy Ed = Ed_mec - Ed_che')
 
-    plt.subplot(132)
+    plt.subplot(224)
     plt.plot(dict_tracker['L_t'][:-1], dict_tracker['sum_ed_plus_L'], label = 'Ed+')
     plt.plot(dict_tracker['L_t'][:-1], dict_tracker['sum_ed_minus_L'], label = 'Ed-')
     plt.title('Repartition of the energy in a + and a -  terms')
-
-    plt.subplot(133)
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_y_box_max'])
-    plt.title('Total displacement done')
 
     plt.savefig('Debug/Evolution_sum_Ed.png')
     plt.close(1)
