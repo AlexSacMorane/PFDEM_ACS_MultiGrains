@@ -276,7 +276,7 @@ def Add_mesh(dict_geometry, dict_sample):
     x_L = np.linspace(x_min,x_max,dict_sample['nx'])
     y_min = dict_sample['y_box_min'] - 0.1*dict_geometry['R_mean']
     y_max = dict_sample['y_box_max'] + 0.1*dict_geometry['R_mean']
-    y_L = np.linspace(y_min,y_max,dict_sample['nx'])
+    y_L = np.linspace(y_min,y_max,dict_sample['ny'])
 
     #add element in dict
     dict_sample['x_L'] = x_L
