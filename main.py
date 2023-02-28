@@ -361,7 +361,7 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     if 'sum_Ed' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_sum_Ed(dict_tracker)
     if 'dt' in dict_algorithm['L_flag_plot'] :
-        Owntools.Plot.Plot_dt_used(dict_sample, dict_tracker)
+        Owntools.Plot.Plot_dt_used(dict_algorithm, dict_sample, dict_tracker)
     if 'Porosity' in dict_algorithm['L_flag_plot'] :
         Owntools.Plot.Plot_porosity(dict_tracker)
 

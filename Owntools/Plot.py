@@ -583,11 +583,12 @@ def Plot_sum_Ed(dict_tracker):
 
 #-------------------------------------------------------------------------------
 
-def Plot_dt_used(dict_sample, dict_tracker):
+def Plot_dt_used(dict_algorithm, dict_sample, dict_tracker):
     '''
     Plot the evolution of the time step used in the phase field simulation.
 
         Input :
+            an algorithm dictionnary (a dict)
             a sample dictionnary (a dict)
             a tracker dictionnary (a dict)
         Output :
