@@ -474,6 +474,7 @@ if '__main__' == __name__:
 
     #Define the mesh
     User.Add_mesh(dict_geometry, dict_sample)
+    simulation_report.write('\nThe mesh used is '+str(len(dict_sample['x_L']))+' x '+str(len(dict_sample['y_L']))+' ( '+str(len(dict_sample['x_L'])*len(dict_sample['y_L']))+' nodes)\n\n')
 
     #Add needed variables
     User.Add_variables_needed(dict_geometry, dict_material, dict_sample, dict_sollicitation)
