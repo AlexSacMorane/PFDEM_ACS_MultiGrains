@@ -518,7 +518,7 @@ def Plot_sum_eta_c(dict_tracker):
 
 def Plot_sphericity(dict_tracker):
     '''
-    Plot the sphericity of the grain 1.
+    Plot the mean sphericity of the grains.
 
         Input :
             a tracker dictionnary (a dict)
@@ -527,16 +527,6 @@ def Plot_sphericity(dict_tracker):
     '''
     plt.figure(1,figsize=(16,9))
 
-    plt.subplot(211)
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_area_sphericity_g0'],label='Area sphericity')
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_diameter_sphericity_g0'],label='Diameter sphericity')
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_circle_ratio_sphericity_g0'],label='Circle sphericity')
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_perimeter_sphericity_g0'],label='Perimeter sphericity')
-    plt.plot(dict_tracker['L_t'], dict_tracker['L_width_to_length_ratio_sphericity_g0'],label='Width to length ratio sphericity')
-    plt.legend()
-    plt.title('2D sphericity of grain 1')
-
-    plt.subplot(212)
     plt.plot(dict_tracker['L_t'], dict_tracker['L_area_sphericity_mean'],label='Area sphericity')
     plt.plot(dict_tracker['L_t'], dict_tracker['L_diameter_sphericity_mean'],label='Diameter sphericity')
     plt.plot(dict_tracker['L_t'], dict_tracker['L_circle_ratio_sphericity_mean'],label='Circle sphericity')
