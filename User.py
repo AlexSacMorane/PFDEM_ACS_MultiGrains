@@ -122,9 +122,9 @@ def All_parameters():
     dt_PF_level2 = dt_PF_level1/2
     dt_PF_level3 = dt_PF_level2/2
     #criteria to switch level
-    Ed_level1 = 0.025
-    Ed_level2 = 0.05
-    Ed_level3 = 0.075
+    Ed_level1 = 0.07
+    Ed_level2 = 0.15
+    Ed_level3 = 0.25
 
     #PF parameters
     factor_etai = 1.7 #factor reltaed to the minimal distance between grains with same eta
@@ -133,7 +133,7 @@ def All_parameters():
     dt_DEM_crit = math.pi*min(L_R)/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
     dt_DEM = dt_DEM_crit/8 #s time step during DEM simulation
     factor_neighborhood = 2.5 #margin to detect a grain into a neighborhood
-    i_update_neighborhoods = 100 #the frequency of the update of the neighborhood of the grains and the walls
+    i_update_neighborhoods = 50 #the frequency of the update of the neighborhood of the grains and the walls
     #Stop criteria of the DEM
     i_DEM_stop = 4000 #maximum iteration for one DEM simulation
     Ecin_ratio = 0.0002
