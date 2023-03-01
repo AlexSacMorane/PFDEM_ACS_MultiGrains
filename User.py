@@ -150,7 +150,7 @@ def All_parameters():
     Debug_DEM = False #plot configuration inside DEM
     i_print_plot = 300 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, DEM_tracker, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Porosity, Sphericity, sum_Ed, YBoxMax
-    L_flag_plot = ['Config', 'DEM_tracker', 'DEM_txt', 'dt', 'sum_Ed', 'Sphericity', 'YBoxMax', 'Eta_c', 'Movie']
+    L_flag_plot = ['Config', 'DEM_tracker', 'DEM_txt', 'dt', 'sum_Ed', 'Sphericity', 'YBoxMax', 'Eta_c', 'Movie', 'Init_Current_Shape']
     #Visual parameters (for plot Config)
     c_min = 0
     c_max = 0.1

@@ -451,7 +451,7 @@ def Plot_kc(dict_sample):
 
 def Plot_init_current_shape(dict_sample):
     '''
-    Plot the comparison between initial and current shape for the grain 1.
+    Plot the comparison between initial and current shape for the grains.
 
         Input :
             a sample dictionnary (a dict)
@@ -468,20 +468,24 @@ def Plot_init_current_shape(dict_sample):
     name = template_name+str(j)+'.png'
 
     #prepare plot
-    L_border_x_init = []
-    L_border_y_init = []
-    for i in range(len(dict_sample['L_g'][0].l_border_x_init)):
-        L_border_x_init.append(dict_sample['L_g'][0].l_border_x_init[i] - dict_sample['L_g'][0].center_init[0])
-        L_border_y_init.append(dict_sample['L_g'][0].l_border_y_init[i] - dict_sample['L_g'][0].center_init[1])
-    L_border_x = []
-    L_border_y = []
-    for i in range(len(dict_sample['L_g'][0].l_border_x)):
-        L_border_x.append(dict_sample['L_g'][0].l_border_x[i] - dict_sample['L_g'][0].center[0])
-        L_border_y.append(dict_sample['L_g'][0].l_border_y[i] - dict_sample['L_g'][0].center[1])
-    #plot
-    plt.figure(1,figsize=(16,9))
-    plt.plot(L_border_x_init,L_border_y_init,'k',label='Initial')
-    plt.plot(L_border_x,L_border_y,label='Current')
+    plt.figure(1,figsize=(14,9))
+
+    for i in range(min(len(dict_sample['L_g']),30)):
+        plt.subplot(5,6,i+1)
+        L_border_x_init = []
+        L_border_y_init = []
+        for j in range(len(dict_sample['L_g'][i].l_border_x_init)):
+            L_border_x_init.append(dict_sample['L_g'][i].l_border_x_init[j] - dict_sample['L_g'][i].center_init[0])
+            L_border_y_init.append(dict_sample['L_g'][i].l_border_y_init[j] - dict_sample['L_g'][i].center_init[1])
+        L_border_x = []
+        L_border_y = []
+        for j in range(len(dict_sample['L_g'][i].l_border_x)):
+            L_border_x.append(dict_sample['L_g'][i].l_border_x[j] - dict_sample['L_g'][i].center[0])
+            L_border_y.append(dict_sample['L_g'][i].l_border_y[j] - dict_sample['L_g'][i].center[1])
+        #plot
+        plt.plot(L_border_x_init,L_border_y_init,'k')
+        plt.plot(L_border_x,L_border_y,'r')
+
     plt.savefig(name)
     plt.close(1)
 
