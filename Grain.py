@@ -823,6 +823,9 @@ class Grain:
                 Nothing, but the position of the grain is updated
         """
         #translation
+        #max_speed
+        if np.linalg.norm(V) > self.r_mean / (DT*1000) :
+            V = V * self.r_mean / (DT*1000) / np.linalg.norm(V)
         self.v = V
         self.a = A
         for i in range(len(self.l_border)):
