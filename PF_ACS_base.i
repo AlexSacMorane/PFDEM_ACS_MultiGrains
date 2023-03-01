@@ -133,7 +133,7 @@
 
 [Executioner]
   type = Transient
-  scheme = 'bdf2'
+  scheme = 'explicit-euler'
 
   # Automatic differentiation provides a _full_ Jacobian in this example
   # so we can safely use NEWTON for a fast solve
