@@ -158,6 +158,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
             DEM_loop_statut = False
             print("DEM loop stopped by too many iterations.")
             simulation_report.write('/!\ End of DEM steps with '+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+'/!\ \n')
+            raise ValueError('Stoop')
         if dict_algorithm['i_DEM'] > max(0.1*dict_algorithm['i_DEM_stop'],dict_algorithm['n_window_stop']) and Ecin < dict_algorithm['Ecin_stop'] and (dict_sollicitation['Vertical_Confinement_Force']*0.95<dict_sollicitation['Force_on_upper_wall'] and dict_sollicitation['Force_on_upper_wall']<dict_sollicitation['Vertical_Confinement_Force']*1.05):
             y_box_max_window = dict_tracker['y_box_max_DEM'][dict_algorithm['i_DEM']+1-dict_algorithm['n_window_stop']:dict_algorithm['i_DEM']+1]
             if max(y_box_max_window) - min(y_box_max_window) < dict_algorithm['dy_box_max_stop']:
@@ -369,6 +370,7 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     #tempo save
     #---------------------------------------------------------------------------
 
+    Owntools.Save.save_dicts_ite(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
     Owntools.Save.save_dicts_tempo(dict_algorithm, dict_material, dict_sample, dict_sollicitation, dict_tracker, simulation_report)
     if dict_algorithm['SaveData']:
         shutil.copy('Debug/Report.txt','../'+dict_algorithm['foldername']+'/Report_'+dict_algorithm['namefile']+'_tempo.txt')
@@ -434,6 +436,9 @@ if '__main__' == __name__:
     if Path('Debug').exists():
         shutil.rmtree('Debug')
     os.mkdir('Debug')
+    if Path('Dicts').exists():
+        shutil.rmtree('Dicts')
+    os.mkdir('Dicts')
 
     #-------------------------------------------------------------------------------
     #Create a simulation
