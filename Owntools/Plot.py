@@ -281,6 +281,62 @@ def Plot_config(dict_algorithm, dict_sample):
 
 #-------------------------------------------------------------------------------
 
+def Plot_config_unlimited(dict_sample):
+    '''
+    Plot the sample configuration.
+
+    The value for c is not limited
+
+        Input :
+            a sample dictionnary (a dict)
+        Output :
+            Nothing but a .png file is generated (a file)
+    '''
+    #look for the name of the new plot
+    template_name = 'Debug/Configuration_Unlimited/Configuration_'
+    j = 0
+    plotpath = Path(template_name+str(j)+'.png')
+    while plotpath.exists():
+        j = j + 1
+        plotpath = Path(template_name+str(j)+'.png')
+    name = template_name+str(j)+'.png'
+
+    #Compute the etai
+    etas_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
+    for etai in dict_sample['L_etai']:
+        etas_M = etas_M + etai.etai_M
+
+    #plot
+    plt.figure(1,figsize=(16,9))
+
+    plt.subplot(121)
+    #solute
+    im = plt.imshow(dict_sample['solute_M'],interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])])
+    plt.colorbar(im)
+    #grains
+    for i in range(len(dict_sample['L_g'])):
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,'r')
+    plt.title('Solute c and grains')
+    plt.axis('equal')
+    plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
+
+    plt.subplot(122)
+    L_color = ['red', 'royalblue', 'forestgreen', 'gold', 'hotpink', 'skyblue', 'chocolate', 'darkkhaki', 'darkorchid', 'silver']
+    #etas
+    im = plt.imshow(etas_M,interpolation='nearest', extent=[min(dict_sample['x_L']),max(dict_sample['x_L']),min(dict_sample['y_L']),max(dict_sample['y_L'])], vmin = 0, vmax = 1)
+    plt.colorbar(im)
+    #grains
+    for i in range(len(dict_sample['L_g'])):
+        plt.plot(dict_sample['L_g'][i].l_border_x,dict_sample['L_g'][i].l_border_y,color=L_color[dict_sample['L_g'][i].etai],linewidth=3)
+    plt.title('Phase field and grains')
+    plt.axis('equal')
+    plt.xlim(min(dict_sample['x_L']),max(dict_sample['x_L']))
+
+    plt.savefig(name)
+    plt.close(1)
+
+#-------------------------------------------------------------------------------
+
 def Plot_config_DEM(dict_algorithm, dict_sample):
     '''
     Plot the sample configuration inside DEM step.

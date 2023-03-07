@@ -204,6 +204,8 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #plot
     if 'Config' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
+        if 'Config_Unlimited' in dict_algorithm['L_flag_plot']:
+            Owntools.Plot.Plot_config_unlimited(dict_sample)
 
     #Move out solute in grains
     Owntools.Interpolate_solute_out_grains(dict_algorithm, dict_sample)
@@ -239,6 +241,8 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #plot
     if 'Config' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
+        if 'Config_Unlimited' in dict_algorithm['L_flag_plot']:
+            Owntools.Plot.Plot_config_unlimited(dict_sample)
     if 'Kc' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_kc(dict_sample)
     if 'DEM_tracker' in dict_algorithm['L_flag_plot']:
@@ -313,6 +317,8 @@ def iteration_main_from_pf(dict_algorithm, dict_material, dict_sample, dict_soll
     #plot
     if 'Config' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
+        if 'Config_Unlimited' in dict_algorithm['L_flag_plot']:
+            Owntools.Plot.Plot_config_unlimited(dict_sample)
     if 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_init_current_shape(dict_sample)
 
@@ -396,6 +402,9 @@ def close_main(dict_algorithm, dict_material, dict_sample, dict_sollicitation, d
     #make movie of the different configuration
     if 'Movie' in dict_algorithm['L_flag_plot'] and 'Config' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_mp4('Debug/Configuration/Configuration_','Debug/Configuration.mp4')
+    #make movie of the init-current shape
+    if 'Movie' in dict_algorithm['L_flag_plot'] and 'Init_Current_Shape' in dict_algorithm['L_flag_plot']:
+        Owntools.Plot.Plot_mp4('Debug/Comparison_Init_Current/Init_Current_Shape_','Debug/Init_Current_Shape.mp4')
 
     simulation_report.end(datetime.now())
 
@@ -459,6 +468,8 @@ if '__main__' == __name__:
     #prepare plot
     if 'Config' in dict_algorithm['L_flag_plot'] or dict_algorithm['Debug_DEM'] or dict_ic['Debug_DEM']:
         os.mkdir('Debug/Configuration')
+        if 'Config_Unlimited' in dict_algorithm['L_flag_plot']:
+            os.mkdir('Debug/Configuration_Unlimited')
         if dict_ic['Debug_DEM'] :
             os.mkdir('Debug/Configuration/Init')
     if 'DEM_txt' in dict_algorithm['L_flag_plot'] or dict_algorithm['Debug_DEM']:
@@ -508,6 +519,8 @@ if '__main__' == __name__:
     #plot
     if 'Config' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_config(dict_algorithm, dict_sample)
+        if 'Config_Unlimited' in dict_algorithm['L_flag_plot']:
+            Owntools.Plot.Plot_config_unlimited(dict_sample)
 
     simulation_report.tac_tempo(datetime.now(),'Initialisation')
 
