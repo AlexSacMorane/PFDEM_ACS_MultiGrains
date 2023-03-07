@@ -485,6 +485,7 @@ def Plot_init_current_shape(dict_sample):
         #plot
         plt.plot(L_border_x_init,L_border_y_init,'k')
         plt.plot(L_border_x,L_border_y,'r')
+        plt.tick_params(left = False, labelleft = False, bottom = False, labelbottom = False)
 
     plt.savefig(name)
     plt.close(1)
