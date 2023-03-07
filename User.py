@@ -117,13 +117,13 @@ def All_parameters():
 
     #Time step for phase field
     n_t_PF = 8
-    dt_PF_init = 0.08
+    dt_PF_init = 0.04
     dt_PF_level1 = dt_PF_init/2
     dt_PF_level2 = dt_PF_level1/2
     dt_PF_level3 = dt_PF_level2/2
     #criteria to switch level
-    Ed_level1 = 0.05
-    Ed_level2 = 0.10
+    Ed_level1 = 0.07
+    Ed_level2 = 0.15
     Ed_level3 = 0.25
 
     #PF parameters
@@ -150,7 +150,7 @@ def All_parameters():
     Debug_DEM = False #plot configuration inside DEM
     i_print_plot = 300 #frenquency of the print and plot (if Debug_DEM) in DEM step
     # Config, Config_Unlimited (need Config to work), DEM_tracker, DEM_txt, Diff_Solute, dt, Ed, Etai_distribution, Eta_c, Init_Current_Shape, Kc, Movie (need Config to work), Mesh, Porosity, Sphericity, sum_Ed, YBoxMax
-    L_flag_plot = ['Config', 'Config_Unlimited' 'DEM_tracker', 'DEM_txt', 'dt', 'Sphericity', 'YBoxMax', 'Eta_c', 'Movie', 'Init_Current_Shape']
+    L_flag_plot = ['Config', 'Config_Unlimited', 'DEM_tracker', 'DEM_txt', 'dt', 'Sphericity', 'YBoxMax', 'Eta_c', 'Movie', 'Init_Current_Shape']
     #Visual parameters (for plot Config)
     c_min = 0
     c_max = 0.1
