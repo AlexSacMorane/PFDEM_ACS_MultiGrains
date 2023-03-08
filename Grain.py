@@ -14,6 +14,7 @@ The new class is about the grains
 import numpy as np
 import math
 import random
+from scipy.ndimage import binary_dilation
 
 #Own  functions and classes
 import Owntools
@@ -612,10 +613,20 @@ class Grain:
         i_y_min = list(y_L_search_min).index(min(y_L_search_min))
         i_y_max = list(y_L_search_max).index(min(y_L_search_max))
 
+        #Filter
+        filter = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))), dtype = bool)
+        for l in range(i_y_min,i_y_max+1):
+            for c in range(i_x_min,i_x_max+1):
+                if self.etai_M[-1-l][c] > 0.1:
+                    filter[-1-l][c] = True
+        struc_element = np.array(np.ones(5,5),dtype = bool)
+        filter = binary_dilation(filter, struc_element)
+
         self.etai_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
         for l in range(i_y_min,i_y_max+1):
             for c in range(i_x_min,i_x_max+1):
-                self.etai_M[-1-l][c] = etai_M[-1-l][c]
+                if filter[-1-l][c] :
+                    self.etai_M[-1-l][c] = etai_M[-1-l][c]
 
     #---------------------------------------------------------------------------
 
