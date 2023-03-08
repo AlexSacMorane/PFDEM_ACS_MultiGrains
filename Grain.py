@@ -619,7 +619,7 @@ class Grain:
             for c in range(i_x_min,i_x_max+1):
                 if self.etai_M[-1-l][c] > 0.1:
                     filter[-1-l][c] = True
-        struc_element = np.array(np.ones(5,5),dtype = bool)
+        struc_element = np.array(np.ones((5,5)),dtype = bool)
         filter = binary_dilation(filter, struc_element)
 
         self.etai_M = np.array(np.zeros((len(dict_sample['y_L']),len(dict_sample['x_L']))))
