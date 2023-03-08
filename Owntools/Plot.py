@@ -581,6 +581,57 @@ def Plot_porosity(dict_tracker):
     plt.title('Evolution of the sample porosity')
     plt.savefig('Debug/Evolution_porosity.png')
     plt.close(1)
+
+#-------------------------------------------------------------------------------
+
+def Plot_distribution_c(dict_sample):
+    """
+    Plot the distribution in the sample of the concentration c
+
+        Input :
+            a sample dictionnary (a dict)
+        Output :
+            Nothing, but a .png file is generated (file)
+    """
+    #look for the name of the new plot
+    template_name = 'Debug/Distribution_c/Distribution_c_'
+    j = 1
+    plotpath = Path(template_name+str(j)+'.png')
+    while plotpath.exists():
+        j = j + 1
+        plotpath = Path(template_name+str(j)+'.png')
+    name = template_name+str(j)+'.png'
+
+    #compute the distribution
+    max_value = dict_sample['solute_M']
+    L_value = np.arange(0.01, max_value+0.02,0.02)
+    n_value = np.zeros(len(L_value))
+    for l in range(len(dict_sample['y_L'])):
+        for c in range(len(dict_sample['x_L'])):
+            i_value = 0
+            while dict_sample['solute_M'][l][c] > L_value[i_value] :
+                i_value = i_value + 1
+            n_value[i_value] = n_value[i_value] + 1
+
+    #Post proccess the distribution
+    L_i_toremove = []
+    for i_value in range(len(n_value)):
+        if n_value[i_value] == 0:
+            L_i_toremove.append(i_value)
+    L_i_toremove.reverse()
+    for i in L_i_toremove:
+        L_value.pop(i)
+        n_value.pop(i)
+
+    #plot
+    plt.figure(1,figsize=(16,9))
+    plt.plot(L_value, n_value, marker ='x')
+    plt.title('Distribution of the solute values')
+    plt.xlabel('Solute concentration')
+    plt.ylabel('Number of occurences')
+    plt.savefig(name)
+    plt.close(1)
+
 #-------------------------------------------------------------------------------
 
 def Plot_Diffusion_Solute(dict_algorithm, dict_material, dict_sample):

@@ -264,6 +264,9 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
     #look for the initial external energy sources
     if 'Ed' in dict_algorithm['L_flag_plot']:
         Owntools.Plot.Plot_Ed(dict_sample, dict_sollicitation)
+    #plot distribution of c
+    if 'Distribution_c' in dict_algorithm['L_flag_plot']:
+        Owntools.Plot.Plot_distribution_c(dict_sample)
 
     #create i
     Owntools.Write.Write_i(dict_algorithm, dict_material, dict_sample, dict_sollicitation)
@@ -484,6 +487,8 @@ if '__main__' == __name__:
         os.mkdir('Debug/Diff_Solute')
     if 'DEM_tracker' in dict_algorithm['L_flag_plot']:
         os.mkdir('Debug/DEM_tracker')
+    if 'Distribution_c' in dict_algorithm['L_flag_plot']:
+        os.mkdir('Debug/Distribution_c')
 
     #create the initial configuration
     Create_IC.LG_tempo(dict_algorithm, dict_geometry, dict_ic, dict_material, dict_sample, dict_sollicitation, simulation_report)
