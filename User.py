@@ -127,7 +127,7 @@ def All_parameters():
     Ed_level3 = 0.25
 
     #PF parameters
-    factor_etai = 1.7 #factor reltaed to the minimal distance between grains with same eta
+    factor_etai = 1.7 #factor related to the minimal distance between grains with same eta
 
     #DEM parameters
     dt_DEM_crit = math.pi*min(L_R)/(0.16*nu+0.88)*math.sqrt(rho*(2+2*nu)/Y) #s critical time step from O'Sullivan 2011
@@ -135,7 +135,7 @@ def All_parameters():
     factor_neighborhood = 2.5 #margin to detect a grain into a neighborhood
     i_update_neighborhoods = 50 #the frequency of the update of the neighborhood of the grains and the walls
     #Stop criteria of the DEM
-    i_DEM_stop = 4000 #maximum iteration for one DEM simulation
+    i_DEM_stop = 1500 #maximum iteration for one DEM simulation
     Ecin_ratio = 0.0002
     n_window_stop = 100
     dy_box_max_stop = 35
@@ -215,7 +215,7 @@ def All_parameters():
 
     chi = 0.5 #coefficient applied to the chemical energy
     gravity = 0
-    Vertical_Confinement_Linear_Force = Y*2*R_mean/1000 #µN/µm used to compute the Vertical_Confinement_Force
+    Vertical_Confinement_Linear_Force = Y*2*R_mean/100 #µN/µm used to compute the Vertical_Confinement_Force
     Vertical_Confinement_Force = Vertical_Confinement_Linear_Force*(x_box_max-x_box_min) #µN
     contact_gw_for_Emec = False #consider the contact grain - wall to compute Emec
 

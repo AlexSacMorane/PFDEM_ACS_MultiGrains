@@ -159,7 +159,7 @@ def iteration_main_until_pf(dict_algorithm, dict_material, dict_sample, dict_sol
             print("DEM loop stopped by too many iterations.")
             simulation_report.write('/!\ End of DEM steps with '+str(dict_algorithm['i_DEM']+1)+' iterations / '+str(dict_algorithm['i_DEM_stop']+1)+'/!\ \n')
             raise ValueError('Stoop')
-        if dict_algorithm['i_DEM'] > max(0.1*dict_algorithm['i_DEM_stop'],dict_algorithm['n_window_stop']) and Ecin < dict_algorithm['Ecin_stop'] and (dict_sollicitation['Vertical_Confinement_Force']*0.95<dict_sollicitation['Force_on_upper_wall'] and dict_sollicitation['Force_on_upper_wall']<dict_sollicitation['Vertical_Confinement_Force']*1.05):
+        if dict_algorithm['i_DEM'] > max(0.4*dict_algorithm['i_DEM_stop'],dict_algorithm['n_window_stop']) and Ecin < dict_algorithm['Ecin_stop'] and (dict_sollicitation['Vertical_Confinement_Force']*0.95<dict_sollicitation['Force_on_upper_wall'] and dict_sollicitation['Force_on_upper_wall']<dict_sollicitation['Vertical_Confinement_Force']*1.05):
             y_box_max_window = dict_tracker['y_box_max_DEM'][dict_algorithm['i_DEM']+1-dict_algorithm['n_window_stop']:dict_algorithm['i_DEM']+1]
             if max(y_box_max_window) - min(y_box_max_window) < dict_algorithm['dy_box_max_stop']:
                 DEM_loop_statut = False
