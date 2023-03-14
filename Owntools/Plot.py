@@ -603,7 +603,7 @@ def Plot_distribution_c(dict_sample):
     name = template_name+str(j)+'.png'
 
     #compute the distribution
-    max_value = dict_sample['solute_M']
+    max_value = np.max(dict_sample['solute_M'])
     L_value = np.arange(0.01, max_value+0.02,0.02)
     n_value = np.zeros(len(L_value))
     for l in range(len(dict_sample['y_L'])):
