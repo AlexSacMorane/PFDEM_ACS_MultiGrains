@@ -614,6 +614,8 @@ def Plot_distribution_c(dict_sample):
             n_value[i_value] = n_value[i_value] + 1
 
     #Post proccess the distribution
+    L_value = list(L_value)
+    n_value = list(n_value)
     L_i_toremove = []
     for i_value in range(len(n_value)):
         if n_value[i_value] == 0:
