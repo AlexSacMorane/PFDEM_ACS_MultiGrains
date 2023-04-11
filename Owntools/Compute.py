@@ -14,7 +14,6 @@ import numpy as np
 import math
 import random
 from scipy.ndimage import binary_dilation
-import matplotlib.pyplot as plt #to delete
 
 #-------------------------------------------------------------------------------
 
